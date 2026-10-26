@@ -26,7 +26,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 img { -webkit-user-drag: none; user-select: none; }
 
 /* ---------- the film: one sticky stage driven by scroll ---------- */
-.film { position: relative; width: var(--col); margin: 0 auto; height: calc(var(--vh) * 1100); }
+.film { position: relative; width: var(--col); margin: 0 auto; height: calc(var(--vh) * 1200); }
 .stage {
   position: sticky; top: 0;
   height: calc(var(--vh) * 100);
@@ -225,44 +225,53 @@ img { -webkit-user-drag: none; user-select: none; }
 .nt-r2 { height: 76%; right: -34%; bottom: -26%; }
 .nt-b { width: 150%; left: -25%; bottom: -16%; }
 
-/* ---------- envelope ---------- */
-.envelope { z-index: 8; perspective: 1100px; }
-.env-front, .env-flap::before {
-  background: #a6b096 url("assets/paper-sage.jpg") center top / auto calc(var(--vh) * 58);
+/* ---------- envelope: wine damask pocket fold ---------- */
+.envelope { z-index: 8; perspective: 1500px; perspective-origin: 50% 45%; }
+.env-back { position: absolute; inset: 0; background: #3f111b radial-gradient(ellipse at 50% 40%, #5c1a27, #2e0b13 85%); }
+.card { position: absolute; inset: 3.2% 5.5%; transform-origin: 50% 46%; }
+.card-paper {
+  position: absolute; inset: 0;
+  background: #f4eee3 url("assets/paper-cream.jpg") center / cover;
+  filter: url(#deckle) drop-shadow(0 14px 22px rgba(20, 4, 8, .45));
 }
-.env-front { position: absolute; inset: 0; }
-.env-front::after { /* soft fold shading */
-  content: ""; position: absolute; inset: 0;
-  background:
-    linear-gradient(to bottom, rgba(40, 50, 30, .22), rgba(40, 50, 30, 0) 14%),
-    linear-gradient(120deg, rgba(255, 255, 255, .08), rgba(0, 0, 0, .06));
-}
-.env-front-l { clip-path: polygon(0 0, 50% 46%, 50% 100%, 0 100%); }
-.env-front-r { clip-path: polygon(50% 46%, 100% 0, 100% 100%, 50% 100%); }
-.env-flap {
-  position: absolute; left: 0; right: 0; top: 0; height: 47%;
-  transform-origin: 50% 0;
-  filter: drop-shadow(0 6px 7px rgba(30, 40, 22, .4));
-  z-index: 2;
-}
-.env-flap::before {
-  content: ""; position: absolute; inset: 0;
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  box-shadow: inset 0 0 40px rgba(255, 255, 255, .15);
-}
+.card-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #6e2333; }
+.card-text p { margin: 0; }
+.card-k { font-size: .9rem; letter-spacing: .5em; text-transform: uppercase; font-weight: 500; margin-right: -.5em !important; color: #8b4a57; }
+.card-big { font-size: clamp(2.3rem, 11.5vw, 3rem); letter-spacing: .18em; text-transform: uppercase; font-weight: 500; line-height: 1.15; margin: .25rem -.18em .25rem 0 !important; }
+.card-rule { display: block; width: 54px; height: 1px; margin: 1.6rem 0 1.1rem; background: linear-gradient(90deg, transparent, #b58a4c, transparent); }
+.card-names { font-family: var(--script); font-size: 2.4rem; color: #8f4361; }
+
+.flap { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+.flap .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flap .face svg { position: absolute; inset: 0; display: block; overflow: visible; }
+.flap .front { filter: drop-shadow(0 3px 5px rgba(20, 3, 8, .55)) drop-shadow(0 12px 22px rgba(20, 3, 8, .3)); }
+#flapL .back, #flapR .back { transform: rotateY(180deg); }
+#flapT .back, #flapB .back { transform: rotateX(180deg); }
+#flapR { transform-origin: 100% 50%; }
+#flapL { transform-origin: 0 50%; }
+#flapT { transform-origin: 50% 0; }
+#flapB { transform-origin: 50% 100%; }
+
 .seal {
-  position: absolute; z-index: 3; left: 50%; top: 46%;
-  width: min(34vw, 150px); aspect-ratio: 1; translate: -50% -50%;
-  filter: drop-shadow(0 6px 8px rgba(70, 30, 40, .45));
+  position: absolute; z-index: 2; width: min(31vw, 132px); aspect-ratio: 1;
+  translate: -50% -50%;
+  filter: drop-shadow(0 5px 6px rgba(30, 6, 10, .55));
+  border-radius: 50%; overflow: hidden;
 }
 .seal svg { width: 100%; height: 100%; display: block; overflow: visible; }
-.seal-mono { font-family: var(--script); font-size: 30px; fill: #9a5462; }
-.seal-mono-hi { fill: #ecbcc3; opacity: .7; }
+.seal-mono { font-family: var(--script); font-size: 30px; fill: #7d5a22; }
+.seal-mono-hi { fill: #fff0c2; opacity: .75; }
+.seal-glint {
+  position: absolute; inset: 0; border-radius: 50%; pointer-events: none; mix-blend-mode: screen;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 250, 225, .85) 50%, transparent 62%) -160% 0 / 260% 100% no-repeat;
+  animation: glintSeal 4s ease-in-out infinite;
+}
+@keyframes glintSeal { 0%, 60% { background-position: -160% 0; } 100% { background-position: 160% 0; } }
 .hint {
-  position: absolute; z-index: 3; left: 0; right: 0; bottom: calc(var(--vh) * 6 + env(safe-area-inset-bottom));
-  margin: 0; text-align: center; color: #f6f3ea;
-  font-size: .78rem; letter-spacing: .4em; text-transform: uppercase; font-weight: 600;
-  text-shadow: 0 1px 6px rgba(30, 40, 20, .45);
+  position: absolute; z-index: 3; left: 0; right: 0; bottom: calc(var(--vh) * 5 + env(safe-area-inset-bottom));
+  margin: 0; text-align: center; color: #f1d9a6;
+  font-size: .76rem; letter-spacing: .42em; text-transform: uppercase; font-weight: 600;
+  text-shadow: 0 1px 8px rgba(20, 3, 8, .8);
 }
 .hint i { display: block; width: 1px; height: 34px; margin: 10px auto 0; background: currentColor; transform-origin: top; animation: cue 1.8s ease-in-out infinite; }
 @keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
@@ -302,5 +311,5 @@ img { -webkit-user-drag: none; user-select: none; }
 .thanks p { margin: .4rem 0 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  .wis, .plant, .dance, .veil, .hem, .hint i, .bg, .rays, .meadow, .meadow-front, .frame-tree, .grade::after, .btn-card::after { animation: none; }
+  .wis, .plant, .dance, .veil, .hem, .hint i, .seal-glint, .bg, .rays, .meadow, .meadow-front, .frame-tree, .grade::after, .btn-card::after { animation: none; }
 }

@@ -2,7 +2,7 @@
 
 A phone-first invitation that plays like a film as you scroll. No tapping is needed until the RSVP button.
 
-1. A sage embossed envelope with a wax seal. The seal lifts and the flap opens.
+1. A wine damask pocket envelope with a gold wax seal. The right flap swings open with the seal, then the left, top and bottom flaps fold away to reveal a deckled "You're cordially invited" card.
 2. The camera flies through the trees.
 3. A lake scene with the couple. Wisteria drops in from the top and a bed of flowers rises from the bottom.
 4. Four text panels, each animated the same way: names → date and countdown → venue → RSVP. Meanwhile the light warms toward sunset.
@@ -49,4 +49,4 @@ All images are public domain or CC0, from Wikimedia Commons:
 - Rose and bouquet: Pierre-Joseph Redouté: public domain
 - Wisteria: Heinrich Witte, *Flora* (1868), *Wisteria sinensis*: public domain
 - Trees and shrubs: *Arbres d'ornement*, Larousse du XXe siècle (1932): CC0
-- Envelope emboss: *Les Travaux de la Manufacture*, The Metropolitan Museum of Art: CC0
+- Envelope damask: embossed from the Redouté and Larousse plates above

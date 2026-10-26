@@ -8,9 +8,9 @@
 <meta property="og:title" content="The Wedding of Rashed & Rahaf">
 <meta property="og:description" content="Sunday, 20 December 2026 · Four Seasons Hotel, Abu Dhabi">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#a6b096">
+<meta name="theme-color" content="#5e1a27">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23b86f7d'/%3E%3Ctext x='32' y='41' font-size='22' text-anchor='middle' fill='%23f6dfe2' font-family='serif'%3ER%26R%3C/text%3E%3C/svg%3E">
-<link rel="preload" as="image" href="assets/paper-sage.jpg">
+<link rel="preload" as="image" href="assets/damask-wine.jpg">
 <link rel="preload" as="image" href="assets/bg-lake.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,16 +26,10 @@
       <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
     <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
-    <!-- wax: irregular edge + glossy relief -->
-    <filter id="wax" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="9" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="shape"/>
-      <feGaussianBlur in="shape" stdDeviation="2.2" result="b"/>
-      <feSpecularLighting in="b" surfaceScale="4" specularConstant=".9" specularExponent="22" lighting-color="#fff4f2" result="spec">
-        <feDistantLight azimuth="235" elevation="48"/>
-      </feSpecularLighting>
-      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
-      <feComposite in="shape" in2="specIn" operator="arithmetic" k1="0" k2="1" k3=".55" k4="0"/>
+    <!-- torn, deckled paper edge -->
+    <filter id="deckle" x="-3%" y="-3%" width="106%" height="106%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="6" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </defs>
 </svg>
@@ -242,22 +236,59 @@
       <img class="nt nt-b" src="assets/palm-bush.webp" alt="">
     </div>
 
-    <!-- the envelope -->
+    <!-- the envelope: a wine damask pocket fold with a gold seal -->
     <div class="layer envelope" id="envelope">
-      <div class="env-inside"></div>
-      <div class="env-front env-front-l"></div>
-      <div class="env-front env-front-r"></div>
-      <div class="env-flap" id="flap"></div>
-      <div class="seal" id="seal" aria-hidden="true">
-        <svg viewBox="0 0 120 120">
-          <g filter="url(#wax)">
-            <circle cx="60" cy="60" r="46" fill="#bf7884"/>
-          </g>
-          <circle cx="60" cy="60" r="31" fill="none" stroke="#a5616d" stroke-width="2.2" opacity=".8"/>
-          <circle cx="60" cy="60" r="34" fill="none" stroke="#e7b3ba" stroke-width="1" opacity=".55"/>
-          <text x="61" y="72" text-anchor="middle" class="seal-mono seal-mono-hi">R&amp;R</text>
-          <text x="60" y="71" text-anchor="middle" class="seal-mono">R&amp;R</text>
-        </svg>
+      <div class="env-back"></div>
+      <div class="card" id="card">
+        <div class="card-paper"></div>
+        <div class="card-text" id="cardText">
+          <p class="card-k split">You're</p>
+          <p class="card-big split">Cordially</p>
+          <p class="card-k split">Invited</p>
+          <span class="card-rule fade"></span>
+          <p class="card-names split">Rashed &amp; Rahaf</p>
+        </div>
+      </div>
+      <div class="flap" id="flapB" data-side="b"><div class="face front"></div><div class="face back"></div></div>
+      <div class="flap" id="flapT" data-side="t"><div class="face front"></div><div class="face back"></div></div>
+      <div class="flap" id="flapL" data-side="l"><div class="face front"></div><div class="face back"></div></div>
+      <div class="flap" id="flapR" data-side="r">
+        <div class="face front">
+          <div class="seal" id="seal" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <defs>
+                <radialGradient id="gGold" cx="38%" cy="32%" r="75%">
+                  <stop offset="0" stop-color="#fff4cf"/><stop offset=".28" stop-color="#ecd08e"/>
+                  <stop offset=".62" stop-color="#c49a4c"/><stop offset="1" stop-color="#7a5823"/>
+                </radialGradient>
+                <radialGradient id="gGoldIn" cx="60%" cy="65%" r="70%">
+                  <stop offset="0" stop-color="#f3dc9e"/><stop offset=".6" stop-color="#cfa75a"/><stop offset="1" stop-color="#9a7533"/>
+                </radialGradient>
+                <filter id="goldWax" x="-20%" y="-20%" width="140%" height="140%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="21" result="n"/>
+                  <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+                  <feGaussianBlur in="shape" stdDeviation="2" result="b"/>
+                  <feSpecularLighting in="b" surfaceScale="5" specularConstant="1.1" specularExponent="26" lighting-color="#fff6dc" result="spec">
+                    <feDistantLight azimuth="225" elevation="50"/>
+                  </feSpecularLighting>
+                  <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+                  <feComposite in="shape" in2="specIn" operator="arithmetic" k1="0" k2="1" k3=".7" k4="0"/>
+                </filter>
+              </defs>
+              <g filter="url(#goldWax)"><circle cx="60" cy="60" r="47" fill="url(#gGold)"/></g>
+              <circle cx="60" cy="60" r="33" fill="url(#gGoldIn)"/>
+              <circle cx="60" cy="60" r="33" fill="none" stroke="#8a6526" stroke-width="2.4" opacity=".7"/>
+              <circle cx="60" cy="60" r="35.5" fill="none" stroke="#fff1c4" stroke-width="1" opacity=".6"/>
+              <g fill="#a47d36" opacity=".9">
+                <circle cx="60" cy="31" r="1.6"/><circle cx="60" cy="89" r="1.6"/><circle cx="31" cy="60" r="1.6"/><circle cx="89" cy="60" r="1.6"/>
+              </g>
+              <text x="60.8" y="70.8" text-anchor="middle" class="seal-mono seal-mono-hi">R&amp;R</text>
+              <text x="60" y="70" text-anchor="middle" class="seal-mono">R&amp;R</text>
+            </svg>
+            <i class="seal-glint"></i>
+          </div>
+        </div>
+        <div class="face back"></div>
       </div>
       <p class="hint" id="hint"><span>Scroll to open</span><i></i></p>
     </div>
