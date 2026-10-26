@@ -220,9 +220,14 @@ function buildEnvelope() {
     const flap = $(`[data-side="${side}"]`);
     const svg = fill => `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
       <defs><pattern id="dm-${side}" patternUnits="userSpaceOnUse" width="${W * 1.4}" height="${H * 1.3}" patternTransform="translate(${offset[side]})">
-        <image href="assets/damask-wine.jpg" width="${W * 1.4}" height="${H * 1.3}" preserveAspectRatio="xMidYMid slice"/></pattern></defs>
+        <image href="assets/damask-wine.jpg" width="${W * 1.4}" height="${H * 1.3}" preserveAspectRatio="xMidYMid slice"/></pattern>
+        <linearGradient id="foil-${side}" x1="0" y1="0" x2="${W}" y2="${H}" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#8a6a32"/><stop offset=".3" stop-color="#f3dc9c"/><stop offset=".5" stop-color="#b98d45"/>
+          <stop offset=".72" stop-color="#f7e6b4"/><stop offset="1" stop-color="#94703a"/>
+        </linearGradient></defs>
       <path d="${shapes[side]}" fill="${fill}" style="filter:brightness(${tone[side]})"/>
-      <path d="${shapes[side]}" fill="none" stroke="rgba(255,214,200,.18)" stroke-width="1.2"/>
+      <path d="${shapes[side]}" fill="none" stroke="rgba(30,4,10,.45)" stroke-width="3"/>
+      <path d="${shapes[side]}" fill="none" stroke="url(#foil-${side})" stroke-width="1.5"/>
     </svg>`;
     const front = $('.front', flap), back = $('.back', flap);
     $$(':scope > svg', front).forEach(n => n.remove());
