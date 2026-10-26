@@ -247,35 +247,99 @@
           <div class="seal" id="seal" aria-hidden="true">
             <svg viewBox="0 0 120 120">
               <defs>
-                <radialGradient id="gGold" cx="38%" cy="32%" r="75%">
-                  <stop offset="0" stop-color="#fff4cf"/><stop offset=".28" stop-color="#ecd08e"/>
-                  <stop offset=".62" stop-color="#c49a4c"/><stop offset="1" stop-color="#7a5823"/>
-                </radialGradient>
-                <radialGradient id="gGoldIn" cx="60%" cy="65%" r="70%">
-                  <stop offset="0" stop-color="#f3dc9e"/><stop offset=".6" stop-color="#cfa75a"/><stop offset="1" stop-color="#9a7533"/>
-                </radialGradient>
-                <filter id="goldWax" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="21" result="n"/>
-                  <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G" result="shape"/>
-                  <feGaussianBlur in="shape" stdDeviation="2" result="b"/>
-                  <feSpecularLighting in="b" surfaceScale="5" specularConstant="1.1" specularExponent="26" lighting-color="#fff6dc" result="spec">
-                    <feDistantLight azimuth="225" elevation="50"/>
-                  </feSpecularLighting>
-                  <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
-                  <feComposite in="shape" in2="specIn" operator="arithmetic" k1="0" k2="1" k3=".7" k4="0"/>
+                <!-- the same poured-wax outline is used for the body and to mask the shine -->
+                <filter id="waxEdge" x="-20%" y="-20%" width="140%" height="140%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="21" result="n"/>
+                  <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
                 </filter>
+                <!-- metal-wax relief: brightness in the drawing is height, lit as gold -->
+                <filter id="waxRelief" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+                  <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="h0"/>
+                  <feGaussianBlur in="h0" stdDeviation=".9" result="h"/>
+                  <feComponentTransfer in="SourceAlpha" result="body"><feFuncA type="discrete" tableValues="0 1 1 1 1 1 1 1"/></feComponentTransfer>
+                  <feDiffuseLighting in="h" surfaceScale="7" diffuseConstant="1.05" lighting-color="#e6cf9c" result="dif">
+                    <feDistantLight azimuth="225" elevation="52"/>
+                  </feDiffuseLighting>
+                  <feSpecularLighting in="h" surfaceScale="7" specularConstant="1" specularExponent="40" lighting-color="#fff6e2" result="spec">
+                    <feDistantLight azimuth="225" elevation="52"/>
+                  </feSpecularLighting>
+                  <feFlood flood-color="#8c6c3a" result="deep"/>
+                  <feComposite in="dif" in2="deep" operator="arithmetic" k1=".95" k2=".22" k3=".1" k4="0" result="metal"/>
+                  <feComposite in="metal" in2="spec" operator="arithmetic" k2="1" k3=".85" result="lit"/>
+                  <feComposite in="lit" in2="body" operator="in"/>
+                </filter>
+                <linearGradient id="shine" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0" stop-color="#fff8e1" stop-opacity="0"/><stop offset=".5" stop-color="#fffaf0" stop-opacity=".75"/><stop offset="1" stop-color="#fff8e1" stop-opacity="0"/>
+                </linearGradient>
+                <mask id="waxMask" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+                  <g filter="url(#waxEdge)" fill="#fff">
+                    <circle cx="60" cy="60" r="46"/><circle cx="97" cy="70" r="7"/><circle cx="27" cy="88" r="6"/><circle cx="84" cy="22" r="5"/>
+                  </g>
+                </mask>
               </defs>
-              <g filter="url(#goldWax)"><circle cx="60" cy="60" r="47" fill="url(#gGold)"/></g>
-              <circle cx="60" cy="60" r="33" fill="url(#gGoldIn)"/>
-              <circle cx="60" cy="60" r="33" fill="none" stroke="#8a6526" stroke-width="2.4" opacity=".7"/>
-              <circle cx="60" cy="60" r="35.5" fill="none" stroke="#fff1c4" stroke-width="1" opacity=".6"/>
-              <g fill="#a47d36" opacity=".9">
-                <circle cx="60" cy="31" r="1.6"/><circle cx="60" cy="89" r="1.6"/><circle cx="31" cy="60" r="1.6"/><circle cx="89" cy="60" r="1.6"/>
+
+              <g filter="url(#waxRelief)">
+                <!-- poured body, a few overflows at the edge -->
+                <g filter="url(#waxEdge)" fill="#bdbdbd">
+                  <circle cx="60" cy="60" r="46"/><circle cx="97" cy="70" r="7"/><circle cx="27" cy="88" r="6"/><circle cx="84" cy="22" r="5"/>
+                </g>
+                <!-- raised rim where the stamp pushed the wax out -->
+                <circle cx="60" cy="60" r="37.5" fill="none" stroke="#f2f2f2" stroke-width="6"/>
+                <!-- pressed field -->
+                <circle cx="60" cy="60" r="34" fill="#6e6e6e"/>
+                <circle cx="60" cy="60" r="32.6" fill="none" stroke="#a8a8a8" stroke-width=".9"/>
+                <!-- raised laurel and monogram -->
+                <g fill="#d8d8d8">
+                  <ellipse cx="56.7" cy="86.3" rx="3.4" ry="1.5" transform="rotate(180 56.7 86.3)"/>
+                  <ellipse cx="53.2" cy="89.7" rx="3.4" ry="1.5" transform="rotate(250 53.2 89.7)"/>
+                  <ellipse cx="49.8" cy="84.5" rx="3.3" ry="1.4" transform="rotate(196 49.8 84.5)"/>
+                  <ellipse cx="45.5" cy="86.8" rx="3.3" ry="1.4" transform="rotate(266 45.5 86.8)"/>
+                  <ellipse cx="43.6" cy="80.9" rx="3.2" ry="1.4" transform="rotate(211 43.6 80.9)"/>
+                  <ellipse cx="38.9" cy="82.0" rx="3.2" ry="1.4" transform="rotate(281 38.9 82.0)"/>
+                  <ellipse cx="38.6" cy="75.7" rx="3.0" ry="1.3" transform="rotate(226 38.6 75.7)"/>
+                  <ellipse cx="33.8" cy="75.5" rx="3.0" ry="1.3" transform="rotate(296 33.8 75.5)"/>
+                  <ellipse cx="35.2" cy="69.4" rx="2.9" ry="1.3" transform="rotate(242 35.2 69.4)"/>
+                  <ellipse cx="30.6" cy="68.0" rx="2.9" ry="1.3" transform="rotate(312 30.6 68.0)"/>
+                  <ellipse cx="33.6" cy="62.5" rx="2.8" ry="1.2" transform="rotate(258 33.6 62.5)"/>
+                  <ellipse cx="29.5" cy="59.8" rx="2.8" ry="1.2" transform="rotate(328 29.5 59.8)"/>
+                  <ellipse cx="33.9" cy="55.3" rx="2.7" ry="1.2" transform="rotate(273 33.9 55.3)"/>
+                  <ellipse cx="30.7" cy="51.7" rx="2.7" ry="1.2" transform="rotate(343 30.7 51.7)"/>
+                  <ellipse cx="36.1" cy="48.5" rx="2.6" ry="1.1" transform="rotate(288 36.1 48.5)"/>
+                  <ellipse cx="34.0" cy="44.1" rx="2.6" ry="1.1" transform="rotate(358 34.0 44.1)"/>
+                  <ellipse cx="40.0" cy="42.6" rx="2.4" ry="1.1" transform="rotate(304 40.0 42.6)"/>
+                  <ellipse cx="39.2" cy="37.8" rx="2.4" ry="1.1" transform="rotate(374 39.2 37.8)"/>
+                  <ellipse cx="45.4" cy="37.9" rx="2.3" ry="1.0" transform="rotate(320 45.4 37.9)"/>
+                  <ellipse cx="45.9" cy="33.0" rx="2.3" ry="1.0" transform="rotate(390 45.9 33.0)"/>
+                  <ellipse cx="65.9" cy="85.9" rx="3.4" ry="1.5" transform="rotate(110 65.9 85.9)"/>
+                  <ellipse cx="63.8" cy="90.2" rx="3.4" ry="1.5" transform="rotate(180 63.8 90.2)"/>
+                  <ellipse cx="72.6" cy="83.3" rx="3.3" ry="1.4" transform="rotate(94 72.6 83.3)"/>
+                  <ellipse cx="71.7" cy="88.1" rx="3.3" ry="1.4" transform="rotate(164 71.7 88.1)"/>
+                  <ellipse cx="78.4" cy="79.1" rx="3.2" ry="1.4" transform="rotate(79 78.4 79.1)"/>
+                  <ellipse cx="78.8" cy="84.0" rx="3.2" ry="1.4" transform="rotate(149 78.8 84.0)"/>
+                  <ellipse cx="82.8" cy="73.5" rx="3.0" ry="1.3" transform="rotate(64 82.8 73.5)"/>
+                  <ellipse cx="84.5" cy="78.1" rx="3.0" ry="1.3" transform="rotate(134 84.5 78.1)"/>
+                  <ellipse cx="85.6" cy="66.9" rx="2.9" ry="1.3" transform="rotate(48 85.6 66.9)"/>
+                  <ellipse cx="88.5" cy="70.9" rx="2.9" ry="1.3" transform="rotate(118 88.5 70.9)"/>
+                  <ellipse cx="86.5" cy="59.8" rx="2.8" ry="1.2" transform="rotate(32 86.5 59.8)"/>
+                  <ellipse cx="90.3" cy="62.8" rx="2.8" ry="1.2" transform="rotate(102 90.3 62.8)"/>
+                  <ellipse cx="85.5" cy="52.8" rx="2.7" ry="1.2" transform="rotate(17 85.5 52.8)"/>
+                  <ellipse cx="90.0" cy="54.6" rx="2.7" ry="1.2" transform="rotate(87 90.0 54.6)"/>
+                  <ellipse cx="82.6" cy="46.2" rx="2.6" ry="1.1" transform="rotate(1 82.6 46.2)"/>
+                  <ellipse cx="87.5" cy="46.8" rx="2.6" ry="1.1" transform="rotate(72 87.5 46.8)"/>
+                  <ellipse cx="78.1" cy="40.6" rx="2.4" ry="1.1" transform="rotate(-14 78.1 40.6)"/>
+                  <ellipse cx="83.0" cy="39.9" rx="2.4" ry="1.1" transform="rotate(56 83.0 39.9)"/>
+                  <ellipse cx="72.3" cy="36.5" rx="2.3" ry="1.0" transform="rotate(-30 72.3 36.5)"/>
+                  <ellipse cx="76.8" cy="34.5" rx="2.3" ry="1.0" transform="rotate(40 76.8 34.5)"/>
+                </g>
+                <text x="60" y="67.5" text-anchor="middle" class="seal-mono" fill="#f0f0f0">R<tspan class="seal-amp" dx=".5" dy="-1">&amp;</tspan><tspan dx=".5" dy="1">R</tspan></text>
+                <circle cx="60" cy="84.5" r="1.4" fill="#d8d8d8"/>
               </g>
-              <text x="60.8" y="70.8" text-anchor="middle" class="seal-mono seal-mono-hi">R&amp;R</text>
-              <text x="60" y="70" text-anchor="middle" class="seal-mono">R&amp;R</text>
+
+              <!-- a slow shine that only ever touches the wax -->
+              <g mask="url(#waxMask)">
+                <rect class="seal-shine" x="-60" y="-10" width="46" height="140" fill="url(#shine)" transform="rotate(20 60 60)"/>
+              </g>
             </svg>
-            <i class="seal-glint"></i>
           </div>
         </div>
         <div class="face back"></div>

@@ -221,13 +221,17 @@ function buildEnvelope() {
     const svg = fill => `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
       <defs><pattern id="dm-${side}" patternUnits="userSpaceOnUse" width="${W * 1.4}" height="${H * 1.3}" patternTransform="translate(${offset[side]})">
         <image href="assets/damask-wine.jpg" width="${W * 1.4}" height="${H * 1.3}" preserveAspectRatio="xMidYMid slice"/></pattern>
-        <linearGradient id="foil-${side}" x1="0" y1="0" x2="${W}" y2="${H}" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#8a6a32"/><stop offset=".3" stop-color="#f3dc9c"/><stop offset=".5" stop-color="#b98d45"/>
-          <stop offset=".72" stop-color="#f7e6b4"/><stop offset="1" stop-color="#94703a"/>
-        </linearGradient></defs>
+        <linearGradient id="light-${side}" x1="0" y1="0" x2="${W}" y2="${H}" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#fff2ea" stop-opacity=".10"/><stop offset=".45" stop-color="#fff2ea" stop-opacity="0"/>
+          <stop offset="1" stop-color="#12030a" stop-opacity=".28"/>
+        </linearGradient>
+        <radialGradient id="lift-${side}" cx="${tip[side][0]}" cy="${tip[side][1]}" r="${Math.max(W, H) * 0.55}" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#fff0ea" stop-opacity=".07"/><stop offset="1" stop-color="#12030a" stop-opacity=".12"/>
+        </radialGradient></defs>
       <path d="${shapes[side]}" fill="${fill}" style="filter:brightness(${tone[side]})"/>
-      <path d="${shapes[side]}" fill="none" stroke="rgba(30,4,10,.45)" stroke-width="3"/>
-      <path d="${shapes[side]}" fill="none" stroke="url(#foil-${side})" stroke-width="1.5"/>
+      <path d="${shapes[side]}" fill="url(#light-${side})"/>
+      <path d="${shapes[side]}" fill="url(#lift-${side})"/>
+      <path d="${shapes[side]}" fill="none" stroke="rgba(255,226,220,.13)" stroke-width=".8"/>
     </svg>`;
     const front = $('.front', flap), back = $('.back', flap);
     $$(':scope > svg', front).forEach(n => n.remove());
