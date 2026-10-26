@@ -207,7 +207,7 @@ function buildEnvelope() {
     }
     return d;
   };
-  const tip = { t: [W / 2, H * 0.41], b: [W / 2, H * 0.6], l: [W * 0.6, H * 0.5], r: [W * 0.4, H * 0.5] };
+  const tip = { t: [W / 2, H * 0.41], b: [W / 2, H * 0.6], l: [W * 0.56, H * 0.5], r: [W * 0.44, H * 0.5] };
   const shapes = {
     t: `M0 0 L${W} 0` + scallop(W, 0, ...tip.t) + scallop(...tip.t, 0, 0) + 'Z',
     b: `M${W} ${H} L0 ${H}` + scallop(0, H, ...tip.b) + scallop(...tip.b, W, H) + 'Z',
@@ -230,10 +230,10 @@ function buildEnvelope() {
     // the inside of each flap is plain wine paper
     back.innerHTML = svg('#6a2331').replace(/<defs>[\s\S]*?<\/defs>/, '');
   }
-  // the seal sits on the tip of the right flap
+  // the seal sits dead centre, over the tip of the right flap
   const seal = $('#seal');
-  seal.style.left = `${tip.r[0] + r * 0.6}px`;
-  seal.style.top = `${tip.r[1]}px`;
+  seal.style.left = `${W / 2}px`;
+  seal.style.top = `${H / 2}px`;
 }
 buildEnvelope();
 let lastW = innerWidth;
@@ -290,7 +290,7 @@ if (!hasGsap) {
       scrub: reduceMotion ? true : 1.1,
       onUpdate() {
         // petals and butterflies arrive once the garden is revealed
-        air.density = (film.time() - 18) / 5;
+        air.density = (film.time() - 13) / 5;
         // only the panel fully on screen can be tapped, in either scroll direction
         const t = film.time();
         const i = SHOW.findIndex((s, k) => t > s + 1.6 && t < HIDE[k]);
@@ -304,67 +304,61 @@ if (!hasGsap) {
     .to('#hint', { opacity: 0, duration: 1 }, 0)
     .to('#seal', { scale: 1.08, duration: 1.4, ease: 'power1.out' }, 0.2)
     .to('#flapR', { rotationY: 168, duration: 3, ease: 'power2.inOut' }, 1.4)
+    .to('#liner', { opacity: 0, duration: 2.2, ease: 'power1.in' }, 1.8)
     .to('#flapL', { rotationY: -168, duration: 3, ease: 'power2.inOut' }, 2.3)
     .to('#flapT', { rotationX: 172, duration: 2.6, ease: 'power2.inOut' }, 4.1)
     .to('#flapB', { rotationX: -172, duration: 2.6, ease: 'power2.inOut' }, 4.4)
     .to('.flap', { opacity: 0, duration: 0.8 }, 6.4)
-    .fromTo('#card', { scale: 0.94, y: 14 }, { scale: 1, y: 0, duration: 4, ease: 'power2.out' }, 3.4);
-  textIn(film, $('#cardText'), 5.6);
-
-  // the card drifts toward us and dissolves into the garden
-  film
-    .to('#cardText', { opacity: 0, y: -24, filter: 'blur(8px)', duration: 1.6, ease: 'power1.in' }, 9.8)
-    .to('#card', { scale: 1.7, opacity: 0, filter: 'blur(6px)', duration: 2.8, ease: 'power2.in' }, 10)
-    .to('.env-back', { opacity: 0, duration: 2.2, ease: 'power1.in' }, 10.4)
-    .set('#envelope', { visibility: 'hidden' }, 12.8)
-    .fromTo('#scene', { scale: 1.45 }, { scale: 1.25, duration: 3, ease: 'none' }, 8)
-    .fromTo('#near', { scale: 1.12 }, { scale: 1.2, duration: 3, ease: 'none' }, 8);
+    .set('#envelope', { visibility: 'hidden' }, 7.3)
+    // the garden waits just behind the flaps, slowly drifting closer
+    .fromTo('#scene', { scale: 1.45 }, { scale: 1.25, duration: 4, ease: 'none' }, 2)
+    .fromTo('#near', { scale: 1.12 }, { scale: 1.2, duration: 4, ease: 'none' }, 2);
 
   // 2 — the camera flies through the trees
   film
-    .to('#scene', { scale: 1.06, duration: 6, ease: 'power2.out' }, 12)
-    .to('.nt-l1', { xPercent: -80, yPercent: 10, scale: 1.6, filter: 'blur(5px) brightness(.8)', duration: 5, ease: 'power2.in' }, 12.4)
-    .to('.nt-r1', { xPercent: 80, yPercent: 8, scale: 1.6, filter: 'blur(5px) brightness(.8)', duration: 5, ease: 'power2.in' }, 12.2)
-    .to('.nt-l2', { xPercent: -90, yPercent: 30, scale: 1.8, filter: 'blur(6px) brightness(.8)', duration: 4.6, ease: 'power2.in' }, 12.8)
-    .to('.nt-r2', { xPercent: 90, yPercent: 30, scale: 1.8, filter: 'blur(6px) brightness(.8)', duration: 4.6, ease: 'power2.in' }, 13)
-    .to('.nt-b', { yPercent: 70, scale: 1.5, filter: 'blur(6px)', duration: 4.6, ease: 'power2.in' }, 13)
-    .set('#near', { visibility: 'hidden' }, 18);
+    .to('#scene', { scale: 1.06, duration: 6, ease: 'power2.out' }, 7)
+    .to('.nt-l1', { xPercent: -80, yPercent: 10, scale: 1.6, filter: 'blur(5px) brightness(.8)', duration: 5, ease: 'power2.in' }, 7.4)
+    .to('.nt-r1', { xPercent: 80, yPercent: 8, scale: 1.6, filter: 'blur(5px) brightness(.8)', duration: 5, ease: 'power2.in' }, 7.2)
+    .to('.nt-l2', { xPercent: -90, yPercent: 30, scale: 1.8, filter: 'blur(6px) brightness(.8)', duration: 4.6, ease: 'power2.in' }, 7.8)
+    .to('.nt-r2', { xPercent: 90, yPercent: 30, scale: 1.8, filter: 'blur(6px) brightness(.8)', duration: 4.6, ease: 'power2.in' }, 8)
+    .to('.nt-b', { yPercent: 70, scale: 1.5, filter: 'blur(6px)', duration: 4.6, ease: 'power2.in' }, 8)
+    .set('#near', { visibility: 'hidden' }, 13);
 
   // 3 — settle on the couple, then pull back: wisteria drops, flowers rise
   film
-    .to('#scene', { scale: 1, duration: 4, ease: 'power1.inOut' }, 18)
-    .to('.frame-tree', { opacity: 1, duration: 2 }, 18.5)
-    .fromTo('.frame-l', { xPercent: -40 }, { xPercent: 0, duration: 4, ease: 'power2.out' }, 18.5)
-    .fromTo('.frame-r', { xPercent: 40 }, { xPercent: 0, duration: 4, ease: 'power2.out' }, 18.5)
-    .to('.wis', { yPercent: 0, duration: 4, stagger: 0.35, ease: 'power2.out' }, 20)
-    .to('.plant.row-0', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 20.5)
-    .to('.plant.row-1', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 21.1)
-    .to('.plant.row-2', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 21.7)
-    .to('.plant.row-3', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 22.3)
-    .to('.haze', { opacity: 1, duration: 3 }, 22);
+    .to('#scene', { scale: 1, duration: 4, ease: 'power1.inOut' }, 13)
+    .to('.frame-tree', { opacity: 1, duration: 2 }, 13.5)
+    .fromTo('.frame-l', { xPercent: -40 }, { xPercent: 0, duration: 4, ease: 'power2.out' }, 13.5)
+    .fromTo('.frame-r', { xPercent: 40 }, { xPercent: 0, duration: 4, ease: 'power2.out' }, 13.5)
+    .to('.wis', { yPercent: 0, duration: 4, stagger: 0.35, ease: 'power2.out' }, 15)
+    .to('.plant.row-0', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 15.5)
+    .to('.plant.row-1', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 16.1)
+    .to('.plant.row-2', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 16.7)
+    .to('.plant.row-3', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 17.3)
+    .to('.haze', { opacity: 1, duration: 3 }, 17);
 
   // 4 — the words, one panel at a time; the sky moves toward sunset
-  const SHOW = [24, 36, 47, 58];
-  const HIDE = [32.5, 43.5, 54.5, 99];
+  const SHOW = [19, 31, 42, 53];
+  const HIDE = [27.5, 38.5, 49.5, 99];
   const ids = ['#p-names', '#p-date', '#p-venue', '#p-rsvp'];
   ids.forEach((id, i) => {
     textIn(film, $(id), SHOW[i]);
     if (HIDE[i] < 99) textOut(film, $(id), HIDE[i]);
   });
   film
-    .to('#scene', { scale: 1.04, duration: 30, ease: 'none' }, 32)
-    .to('.tint-gold', { opacity: 1, duration: 10, ease: 'none' }, 36)
-    .to('.tint-dusk', { opacity: 0.75, duration: 10, ease: 'none' }, 50)
-    .to({}, { duration: 4 }, 64); // a little hold at the end so the RSVP sits still
+    .to('#scene', { scale: 1.04, duration: 30, ease: 'none' }, 27)
+    .to('.tint-gold', { opacity: 1, duration: 10, ease: 'none' }, 31)
+    .to('.tint-dusk', { opacity: 0.75, duration: 10, ease: 'none' }, 45)
+    .to({}, { duration: 4 }, 59); // a little hold at the end so the RSVP sits still
 
   // slow camera drift while the words play: near layers move more than far ones
   film
-    .to('.far', { yPercent: -6, duration: 40, ease: 'none' }, 24)
-    .to('.frame-l', { xPercent: -10, yPercent: 3, duration: 40, ease: 'none' }, 24)
-    .to('.frame-r', { xPercent: 10, yPercent: 3, duration: 40, ease: 'none' }, 24)
-    .to('.wis', { yPercent: -8, duration: 40, ease: 'none' }, 28)
-    .to('.plant.row-2, .plant.row-3', { yPercent: 8, duration: 40, ease: 'none' }, 28)
-    .to('#couple', { scale: 1.12, duration: 40, ease: 'none' }, 24);
+    .to('.far', { yPercent: -6, duration: 40, ease: 'none' }, 19)
+    .to('.frame-l', { xPercent: -10, yPercent: 3, duration: 40, ease: 'none' }, 19)
+    .to('.frame-r', { xPercent: 10, yPercent: 3, duration: 40, ease: 'none' }, 19)
+    .to('.wis', { yPercent: -8, duration: 40, ease: 'none' }, 23)
+    .to('.plant.row-2, .plant.row-3', { yPercent: 8, duration: 40, ease: 'none' }, 23)
+    .to('#couple', { scale: 1.12, duration: 40, ease: 'none' }, 19);
 }
 
 /* ---------- RSVP ---------- */

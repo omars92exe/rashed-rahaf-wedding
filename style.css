@@ -26,7 +26,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 img { -webkit-user-drag: none; user-select: none; }
 
 /* ---------- the film: one sticky stage driven by scroll ---------- */
-.film { position: relative; width: var(--col); margin: 0 auto; height: calc(var(--vh) * 1200); }
+.film { position: relative; width: var(--col); margin: 0 auto; height: calc(var(--vh) * 1150); }
 .stage {
   position: sticky; top: 0;
   height: calc(var(--vh) * 100);
@@ -227,20 +227,7 @@ img { -webkit-user-drag: none; user-select: none; }
 
 /* ---------- envelope: wine damask pocket fold ---------- */
 .envelope { z-index: 8; perspective: 1500px; perspective-origin: 50% 45%; }
-.env-back { position: absolute; inset: 0; background: #3f111b radial-gradient(ellipse at 50% 40%, #5c1a27, #2e0b13 85%); }
-.card { position: absolute; inset: 3.2% 5.5%; transform-origin: 50% 46%; }
-.card-paper {
-  position: absolute; inset: 0;
-  background: #f4eee3 url("assets/paper-cream.jpg") center / cover;
-  filter: url(#deckle) drop-shadow(0 14px 22px rgba(20, 4, 8, .45));
-}
-.card-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #6e2333; }
-.card-text p { margin: 0; }
-.card-k { font-size: .9rem; letter-spacing: .5em; text-transform: uppercase; font-weight: 500; margin-right: -.5em !important; color: #8b4a57; }
-.card-big { font-size: clamp(2.3rem, 11.5vw, 3rem); letter-spacing: .18em; text-transform: uppercase; font-weight: 500; line-height: 1.15; margin: .25rem -.18em .25rem 0 !important; }
-.card-rule { display: block; width: 54px; height: 1px; margin: 1.6rem 0 1.1rem; background: linear-gradient(90deg, transparent, #b58a4c, transparent); }
-.card-names { font-family: var(--script); font-size: 2.4rem; color: #8f4361; }
-
+.env-liner { position: absolute; inset: 0; background: #3a0f18 radial-gradient(ellipse at 50% 50%, #5a1826, #2c0a12 80%); }
 .flap { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
 .flap .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .flap .face svg { position: absolute; inset: 0; display: block; overflow: visible; }

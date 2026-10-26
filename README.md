@@ -2,7 +2,7 @@
 
 A phone-first invitation that plays like a film as you scroll. No tapping is needed until the RSVP button.
 
-1. A wine damask pocket envelope with a gold wax seal. The right flap swings open with the seal, then the left, top and bottom flaps fold away to reveal a deckled "You're cordially invited" card.
+1. A wine damask pocket envelope with a gold wax seal. The right flap swings open with the seal, then the left, top and bottom flaps fold away, revealing the garden behind.
 2. The camera flies through the trees.
 3. A lake scene with the couple. Wisteria drops in from the top and a bed of flowers rises from the bottom.
 4. Four text panels, each animated the same way: names → date and countdown → venue → RSVP. Meanwhile the light warms toward sunset.
