@@ -65,8 +65,8 @@ img { -webkit-user-drag: none; user-select: none; }
 .far-4 { height: 10%; right: 18%; bottom: 19.5%; }
 .meadow { left: -5%; bottom: 0; width: 110%; height: 23%; object-fit: cover; object-position: 50% 0; }
 .couple-slot {
-  position: absolute; z-index: 2; left: 50%; bottom: 7.4%; height: 14%; aspect-ratio: 230 / 250; transform: translateX(-70%);
-  filter: saturate(.82) contrast(.92) brightness(1.02) sepia(.12);
+  position: absolute; z-index: 2; left: 50%; bottom: 6.2%; height: 19%; aspect-ratio: 230 / 250; transform: translateX(-70%);
+  filter: saturate(.9) contrast(.96);
   transform-origin: 50% 100%;
 }
 .backlight {
