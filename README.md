@@ -1,20 +1,37 @@
 # Rashed & Rahaf — wedding invitation
 
-A phone-first invitation that plays like a film as you scroll. No tapping is needed until the RSVP button.
+A phone-first invitation in sage, ivory and soft burgundy, structured like The Digital Yes "Fresco" demo but with its own artwork.
 
-1. A wine damask pocket envelope with a gold wax seal. The right flap swings open with the seal, then the left, top and bottom flaps fold away, revealing the garden behind.
-2. The camera flies through the trees.
-3. A lake scene with the couple. Wisteria drops in from the top and a bed of flowers rises from the bottom.
-4. Four text panels, each animated the same way: names → date and countdown → venue → RSVP. Meanwhile the light warms toward sunset.
+1. **Envelope** — ivory paper tied with a sage linen ribbon and a burgundy wax seal. Tap the bow or scroll: the bow unties, the ribbon slides away, the flap lifts and the card rises.
+2. **Hero** — a torn ivory card over a Sargent garden painting: names, date, venue. A personal link (`?to=Name`) adds "Dear Name," at the top.
+3. **Countdown** in a sage linen frame with flowers that bloom in.
+4. **A Note from Us**, then a painted garden band.
+5. **The Celebration** — olive section with an ornate frame that draws itself, venue, time and map.
+6. **The Evening** — the night's program as a timeline.
+7. **Dress Code** — the couple under a floral arch and the colour palette.
+8. **Wedding Gift** — a flower wreath, bank details sheet with copy buttons, optional online gift link.
+9. **Invite a Guest** — type a name to share a personal invitation link (share sheet or WhatsApp).
+10. **RSVP** — numbered questions, guests counter, message.
+11. **Closing** — arched painting, names and a PDF download of the invitation.
+
+## Edit before sharing
+
+In `CONFIG` at the top of `script.js`:
+
+- `bank`: the couple's real account name, bank and IBAN (placeholders now)
+- `giftLink`: optional online gift / payment page; leave `''` to hide the button
+- `venueShort`, `venuePlace`, `mapsUrl`, `date`, `whatsapp`
+
+In `index.html`: the "A Note from Us" text, the program times in "The Evening", and the dress code wording.
+
+The PDF is made from `tools/invitation-card.html`; after editing it run `tools/make-pdf.sh` (uses Google Chrome on the Mac).
 
 ## Files
 
 - `index.html`, `style.css`, `script.js`: the site (no build step)
-- `assets/`: painted layers, cut out to transparent WebP (credits below)
-- `functions/api/rsvp.js`: saves replies to Cloudflare KV
-- `functions/api/rsvps.js`: lists replies for the hosts
-
-Wedding details (date, venue line, Maps link, WhatsApp fallback) are in `CONFIG` at the top of `script.js`. Text lives in the `.panel` sections of `index.html`. The flower bed layout is the `BED` list in `script.js`.
+- `assets/`: artwork, textures and the invitation PDF
+- `functions/api/rsvp.js`, `functions/api/rsvps.js`: RSVP storage on Cloudflare
+- `tools/`: scripts that fetched and cut out the artwork, made the textures and the PDF
 
 ## Deploy (GitHub → Cloudflare Pages)
 
@@ -23,30 +40,17 @@ Wedding details (date, venue line, Maps link, WhatsApp fallback) are in `CONFIG`
 3. Build settings: Framework preset **None**, build command empty, build output directory `/`.
 4. **Storage & Databases → KV**: create a namespace `wedding-rsvps`. In the Pages project → **Settings → Bindings → Add → KV namespace**, set variable name `RSVPS` and namespace `wedding-rsvps`.
 5. **Settings → Variables and Secrets**: add a secret `ADMIN_KEY` set to a long random value.
-6. Redeploy (Deployments → Retry) so the binding takes effect.
-7. **Custom domains**: add your domain.
+6. Redeploy so the binding takes effect, then add your custom domain.
 
-To see replies, open `https://<your-domain>/api/rsvps?key=<ADMIN_KEY>`. Every push to `main` redeploys automatically.
-
-## Upgrading the images with AI
-
-Every layer is a separate file in `assets/`. To swap one, generate a PNG with a **transparent background**, save it as WebP under the same name, and roughly match the aspect ratio. Suggested prompts:
-
-- `bg-lake.jpg`: "Soft impressionist oil painting, portrait 9:16, pastel sunset sky with peach and lavender clouds, misty blue mountains, calm lake, no people, no buildings, visible brush strokes"
-- `meadow.webp`: "Impressionist oil-painted green meadow grass, horizontal strip, transparent background above the grass tips"
-- `tree-*.webp`, `spruce-*.webp`: "Single realistic vintage botanical illustration of a [weeping willow / olive tree / flowering chestnut], full tree, isolated on transparent background, soft natural colours"
-- `wisteria-*.webp`: "Hanging wisteria racemes, [white / lilac], realistic botanical painting, hanging from the top edge, isolated on transparent background"
-- `lily-*.webp`, `rose.webp`, `bouquet.webp`: "Realistic Redouté-style botanical painting of [pink lilies / garden roses / peonies], full stem with leaves, isolated on transparent background"
-- To show the real venue: "Four Seasons Hotel Abu Dhabi at golden hour, soft oil-painting style, isolated building on transparent background", then add it to the scene behind the trees.
+To see replies, open `https://<your-domain>/api/rsvps?key=<ADMIN_KEY>`.
 
 ## Image credits
 
-All images are public domain or CC0, from Wikimedia Commons:
+All public domain or CC0, from Wikimedia Commons:
 
-- Background: John Ferguson Weir, *Lake Leman (Lake Geneva), Switzerland*: public domain
-- Meadow: *Alpine Landscape at Sunset* (SM 1559): public domain mark
-- Lilies: Pierre-Joseph Redouté, *Les Liliacées* (*Lilium superbum*, *Lilium martagon*): public domain
-- Rose and bouquet: Pierre-Joseph Redouté: public domain
-- Wisteria: Heinrich Witte, *Flora* (1868), *Wisteria sinensis*: public domain
-- Trees and shrubs: *Arbres d'ornement*, Larousse du XXe siècle (1932): CC0
-- Envelope damask: embossed from the Redouté and Larousse plates above
+- Paintings: John Singer Sargent, *Villa di Marlia, Lucca* (A Fountain; the garden; The Balustrade), 1910
+- Jasmine: *Jasminum officinale*, Curtis's Botanical Magazine, 1787
+- Olive: *Olea europaea*, Köhler's Medizinal-Pflanzen, 1887
+- Roses: Pierre-Joseph Redouté, *Rosa alba foliacea* and *Rosa muscosa alba*; bouquet by Redouté
+- Wisteria: Heinrich Witte, *Flora* (1868)
+- Paper, linen and torn-edge textures are generated (`tools/textures.py`)

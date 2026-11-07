@@ -13,6 +13,9 @@ export async function onRequestPost({ request, env }) {
     return json({ error: 'Invalid request' }, 400);
   }
 
+  // a hidden 'website' field catches spam bots; quietly accept and drop
+  if (body.website) return json({ ok: true });
+
   const name = String(body.name || '').trim().slice(0, 100);
   if (!name) return json({ error: 'Name is required' }, 400);
 

@@ -2,10 +2,18 @@
 const CONFIG = {
   // Celebration start, UAE time (+04:00)
   date: '2026-12-20T19:00:00+04:00',
-  venue: 'Abu Dhabi · Al Maryah Island',
+  venueShort: 'Four Seasons Hotel, Abu Dhabi',
+  venuePlace: 'Al Maryah Island · Abu Dhabi',
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Four+Seasons+Hotel+Abu+Dhabi+at+Al+Maryah+Island',
-  // Fallback if the RSVP storage isn't set up: replies open WhatsApp to this number.
-  // International format, digits only, e.g. '9715XXXXXXXX'. Leave '' to disable.
+  // Shown under "View bank details". Replace with the couple's real details before sharing.
+  bank: [
+    ['Account name', 'Rashed —'],
+    ['Bank', 'Bank name'],
+    ['IBAN', 'AE00 0000 0000 0000 0000 000'],
+  ],
+  // Optional online gift / payment page (a link from the couple's bank or a gift registry). '' hides the button.
+  giftLink: '',
+  // Fallback if RSVP storage isn't set up: replies open WhatsApp to this number (digits only). '' disables it.
   whatsapp: '',
 };
 
@@ -13,424 +21,398 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hasGsap = !!(window.gsap && window.ScrollTrigger);
+const rand = (a, b) => a + Math.random() * (b - a);
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 
-$('#venuePlace').textContent = CONFIG.venue;
+/* ---------- Details from CONFIG ---------- */
+$$('[data-venue-short]').forEach(el => { el.textContent = CONFIG.venueShort; el.innerHTML = el.innerHTML.replace(', ', ',<br>'); });
+$$('[data-venue-place]').forEach(el => (el.textContent = CONFIG.venuePlace));
 $('#mapLink').href = CONFIG.mapsUrl;
-$('#couple').appendChild($('#coupleTpl').content.cloneNode(true));
+if (CONFIG.giftLink) { $('#giftLink').href = CONFIG.giftLink; $('#giftLink').hidden = false; }
 
-/* ---------- Flower bed: back row → front row ---------- */
-// x / w are % of the stage width, h is % of the stage height
-const BED = [
-  { src: 'shrub-rhodo', row: 0, x: -14, w: 62 },
-  { src: 'shrub-oleander', row: 0, x: 58, w: 56, flip: true },
-  { src: 'shrub-judas', row: 0, x: 26, w: 48 },
-  { src: 'lily-pink', row: 1, x: -10, h: 40 },
-  { src: 'lily-orange', row: 1, x: 70, h: 42, flip: true },
-  { src: 'shrub-pink', row: 1, x: 34, w: 34 },
-  { src: 'rose', row: 2, x: -22, h: 30 },
-  { src: 'lily-orange', row: 2, x: 12, h: 26 },
-  { src: 'bouquet', row: 2, x: 66, h: 28 },
-  { src: 'lily-pink', row: 2, x: 52, h: 20, flip: true },
-  { src: 'shrub-rhodo', row: 3, x: -18, w: 58 },
-  { src: 'shrub-pink', row: 3, x: 66, w: 52, flip: true },
-];
-const bed = $('#bed');
-BED.forEach((p, i) => {
-  const img = new Image();
-  img.src = `assets/${p.src}.webp`;
-  img.alt = '';
-  img.decoding = 'async';
-  img.className = `plant row-${p.row}${p.flip ? ' flip' : ''}`;
-  img.style.left = `${p.x}%`;
-  img.style.bottom = `${-2 - p.row * 1.5}%`;
-  if (p.h) img.style.height = `${p.h}%`;
-  if (p.w) img.style.width = `${p.w}%`;
-  img.style.animationDelay = `${-i * 0.7}s`;
-  bed.appendChild(img);
-});
-
-/* ---------- Text: split into letters so every line animates the same way ---------- */
-$$('.split').forEach(el => {
-  const text = el.textContent;
-  el.setAttribute('aria-label', text);
-  el.textContent = '';
-  for (const word of text.split(/(\s+)/)) {
-    if (!word) continue;
-    if (/^\s+$/.test(word)) { el.append(' '); continue; }
-    const w = document.createElement('span');
-    w.style.display = 'inline-block';
-    w.setAttribute('aria-hidden', 'true');
-    for (const c of word) {
-      const s = document.createElement('span');
-      s.className = 'ch';
-      s.textContent = c;
-      w.appendChild(s);
-    }
-    el.appendChild(w);
-  }
-});
-
-/* ---------- Ambient life: lake glints, petals, light motes, butterflies ---------- */
-const sparkles = $('#sparkles');
-for (let i = 0; i < 14; i++) {
-  const g = document.createElement('i');
-  g.style.cssText = `left:${8 + Math.random() * 84}%;top:${Math.random() * 100}%;animation-delay:${-Math.random() * 3.4}s;animation-duration:${2.6 + Math.random() * 2}s`;
-  sparkles.appendChild(g);
+// A personal invitation: ?to=Name greets the guest by name
+const guestName = (new URLSearchParams(location.search).get('to') || '').trim().slice(0, 60);
+if (guestName) {
+  $('#dear').textContent = `Dear ${guestName},`;
+  $('#dear').hidden = false;
+  $('#rName').value = guestName;
 }
 
-const air = (() => {
-  const cv = $('#air');
-  const ctx = cv.getContext('2d');
-  const PETAL = ['#f6cdd4', '#fbe3e6', '#fff6f0', '#eab0bd', '#e2d3ee', '#fff1d6'];
-  let W = 0, H = 0, density = 0, last = 0, wind = 0;
-  const petals = [], motes = [];
-  const flies = $$('.bfly').map((el, i) => ({ el, seed: i * 17.3 + 3, x: 0, y: 0 }));
+$('#couple').appendChild($('#coupleTpl').content.cloneNode(true));
 
-  function resize() {
+/* ---------- Split headings into letters (every heading animates the same way) ---------- */
+function splitText(el) {
+  const walk = node => {
+    for (const child of [...node.childNodes]) {
+      if (child.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        for (const word of child.textContent.split(/(\s+)/)) {
+          if (!word) continue;
+          if (/^\s+$/.test(word)) { frag.append(word); continue; }
+          const w = document.createElement('span');
+          w.style.display = 'inline-block';
+          for (const c of word) {
+            const s = document.createElement('span');
+            s.className = 'ch';
+            s.textContent = c;
+            w.appendChild(s);
+          }
+          frag.appendChild(w);
+        }
+        child.replaceWith(frag);
+      } else if (child.nodeType === 1) walk(child);
+    }
+  };
+  el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+  walk(el);
+}
+$$('.split').forEach(splitText);
+
+/* ---------- Ornate frame for the celebration card, drawn to fit ---------- */
+const LEAF = 'M0 0 C4 -5 12 -5 16 0 C12 5 4 5 0 0Z';
+function buildOrnate() {
+  const svg = $('.ornate-svg');
+  const { width: W, height: H } = svg.getBoundingClientRect();
+  if (!W) return;
+  const corner = `
+    <path class="draw" d="M12 58 C12 32 28 14 54 12 C70 11 78 21 74 31 C71 39 60 38 60 30 C60 25 66 24 68 27"/>
+    <path class="draw" d="M58 12 C32 12 14 28 12 54 C11 70 21 78 31 74 C39 71 38 60 30 60 C25 60 24 66 27 68"/>
+    <path class="draw" d="M54 12 C76 5 98 14 120 9"/>
+    <path class="draw" d="M12 54 C5 76 14 98 9 120"/>
+    <use href="#leafShape" transform="translate(88 7) rotate(-14)"/>
+    <use href="#leafShape" transform="translate(104 12) rotate(16) scale(.8)"/>
+    <use href="#leafShape" transform="translate(7 88) rotate(104)"/>
+    <use href="#leafShape" transform="translate(12 104) rotate(74) scale(.8)"/>
+    <circle cx="30" cy="30" r="3.2"/>`;
+  const sprig = `
+    <path class="draw" d="M-46 0 C-30 -10 -14 -10 0 0 C14 -10 30 -10 46 0"/>
+    <use href="#leafShape" transform="translate(-40 -3) rotate(-30)"/>
+    <use href="#leafShape" transform="translate(-24 -8) rotate(-10) scale(.85)"/>
+    <use href="#leafShape" transform="translate(40 -3) rotate(210)"/>
+    <use href="#leafShape" transform="translate(24 -8) rotate(190) scale(.85)"/>
+    <circle cx="0" cy="-2" r="4.5"/><circle cx="0" cy="-2" r="1.6" fill="var(--olive-deep)"/>`;
+  const r = 18, i = 14;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.innerHTML = `
+    <defs><path id="leafShape" d="${LEAF}"/></defs>
+    <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+      <rect class="draw" x="3" y="3" width="${W - 6}" height="${H - 6}"/>
+      <path class="draw" d="M${i + r} ${i} H${W - i - r} A${r} ${r} 0 0 0 ${W - i} ${i + r} V${H - i - r} A${r} ${r} 0 0 0 ${W - i - r} ${H - i}
+        H${i + r} A${r} ${r} 0 0 0 ${i} ${H - i - r} V${i + r} A${r} ${r} 0 0 0 ${i + r} ${i}Z"/>
+    </g>
+    <g fill="currentColor" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+      ${[[0, 0, 1, 1], [W, 0, -1, 1], [0, H, 1, -1], [W, H, -1, -1]].map(([x, y, sx, sy]) =>
+        `<g transform="translate(${x} ${y}) scale(${sx} ${sy})" class="o-corner">${corner}</g>`).join('')}
+      <g transform="translate(${W / 2} ${i - 2})" class="o-sprig">${sprig}</g>
+      <g transform="translate(${W / 2} ${H - i + 2}) scale(1 -1)" class="o-sprig">${sprig}</g>
+    </g>`;
+  $$('.draw', svg).forEach(p => { p.setAttribute('pathLength', '1'); p.setAttribute('fill', 'none'); });
+}
+
+/* ---------- Flower wreath around the gift note ---------- */
+function buildWreath() {
+  const wreath = $('#wreath');
+  const kinds = ['olive', 'jasmine', 'rose-white', 'olive', 'rose-blush', 'jasmine', 'olive', 'bouquet'];
+  const N = 16, R = 134;
+  for (let k = 0; k < N; k++) {
+    const a = (k / N) * Math.PI * 2 - Math.PI / 2;
+    const img = new Image();
+    img.src = `assets/${kinds[k % kinds.length]}.webp`;
+    img.alt = '';
+    img.className = 'bloom';
+    const size = kinds[k % kinds.length] === 'olive' ? 74 : 60;
+    img.style.width = `${size}px`;
+    img.style.transform = `translate(-50%, -50%) translate(${Math.cos(a) * R}px, ${Math.sin(a) * R}px) rotate(${(a * 180) / Math.PI + 90 + rand(-12, 12)}deg)`;
+    wreath.appendChild(img);
+  }
+}
+buildWreath();
+
+/* ---------- Countdown ---------- */
+const target = new Date(CONFIG.date).getTime();
+const cd = Object.fromEntries($$('.cd-unit b').map(b => [b.dataset.u, b]));
+let countdownLive = !hasGsap || reduceMotion;
+function parts() {
+  let diff = Math.max(0, target - Date.now());
+  const d = Math.floor(diff / 864e5); diff -= d * 864e5;
+  const h = Math.floor(diff / 36e5); diff -= h * 36e5;
+  const m = Math.floor(diff / 6e4); diff -= m * 6e4;
+  return { d, h, m, s: Math.floor(diff / 1e3) };
+}
+function tick() {
+  if (!countdownLive) return;
+  const p = parts();
+  cd.d.textContent = p.d;
+  cd.h.textContent = String(p.h).padStart(2, '0');
+  cd.m.textContent = String(p.m).padStart(2, '0');
+  cd.s.textContent = String(p.s).padStart(2, '0');
+}
+tick();
+setInterval(tick, 1000);
+
+/* ---------- Petals drifting through the page ---------- */
+(() => {
+  if (reduceMotion) return;
+  const cv = $('#petals');
+  const ctx = cv.getContext('2d');
+  const COLORS = ['#fbf6ee', '#f4e3e2', '#ead2d4', '#f7efe2', '#d9c2c6'];
+  let W, H, last = 0;
+  const items = [];
+  const resize = () => {
     const dpr = Math.min(2, devicePixelRatio || 1);
     W = cv.clientWidth; H = cv.clientHeight;
     cv.width = W * dpr; cv.height = H * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  const petal = (anywhere) => ({
-    x: Math.random() * W, y: anywhere ? Math.random() * H : -20,
-    s: 3 + Math.random() * 6, z: Math.random(),
-    vy: 16 + Math.random() * 26, ph: Math.random() * 6.3, sw: 0.6 + Math.random() * 1.2,
-    rot: Math.random() * 6.3, vr: (Math.random() - 0.5) * 2.4, flip: Math.random() * 6.3,
-    c: PETAL[(Math.random() * PETAL.length) | 0],
+  };
+  const spawn = anywhere => ({
+    x: Math.random() * W, y: anywhere ? Math.random() * H : -20, s: rand(4, 8), z: Math.random(),
+    vy: rand(14, 30), ph: rand(0, 6.3), sw: rand(0.5, 1.2), rot: rand(0, 6.3), vr: rand(-1.2, 1.2), flip: rand(0, 6.3),
+    leaf: Math.random() < 0.28, c: COLORS[(Math.random() * COLORS.length) | 0],
   });
-  const mote = () => ({ x: Math.random() * W, y: H * (0.25 + Math.random() * 0.6), r: 1 + Math.random() * 2.2, ph: Math.random() * 6.3, sp: 0.2 + Math.random() * 0.5 });
-
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000 || 0);
     last = now;
     ctx.clearRect(0, 0, W, H);
-    wind = Math.sin(now / 3200) * 14 + Math.sin(now / 1300) * 5;
-
-    const want = Math.round(density * 34);
-    while (petals.length < want) petals.push(petal(petals.length < want / 2));
-    while (motes.length < Math.round(density * 18)) motes.push(mote());
-
-    // drifting light motes (soft bokeh)
-    for (const m of motes.slice(0, Math.round(density * 18))) {
-      m.ph += dt * m.sp;
-      const x = m.x + Math.sin(m.ph * 1.3) * 18, y = m.y + Math.cos(m.ph) * 12;
-      const a = (0.25 + 0.25 * Math.sin(m.ph * 2)) * density;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, m.r * 5);
-      g.addColorStop(0, `rgba(255,244,214,${a})`);
-      g.addColorStop(1, 'rgba(255,244,214,0)');
-      ctx.fillStyle = g;
-      ctx.fillRect(x - m.r * 5, y - m.r * 5, m.r * 10, m.r * 10);
-    }
-
-    // falling petals, tumbling in the breeze
-    for (let i = petals.length - 1; i >= 0; i--) {
-      const p = petals[i];
-      const sp = 0.55 + p.z * 0.75;
-      p.ph += dt * p.sw;
-      p.y += p.vy * sp * dt;
-      p.x += (Math.sin(p.ph) * 22 + wind) * sp * dt;
-      p.rot += p.vr * dt;
-      p.flip += dt * 2.6;
-      if (p.y > H + 20 || p.x < -30 || p.x > W + 30) {
-        if (petals.length > want) { petals.splice(i, 1); continue; }
-        Object.assign(p, petal(false), { x: Math.random() * W });
-      }
+    const wind = Math.sin(now / 3500) * 10;
+    for (const p of items) {
+      const sp = 0.6 + p.z * 0.6;
+      p.ph += dt * p.sw; p.y += p.vy * sp * dt; p.x += (Math.sin(p.ph) * 18 + wind) * sp * dt;
+      p.rot += p.vr * dt; p.flip += dt * 2.2;
+      if (p.y > H + 20) Object.assign(p, spawn(false));
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rot);
-      ctx.scale(1, 0.25 + Math.abs(Math.cos(p.flip)) * 0.75);
-      ctx.globalAlpha = (0.55 + p.z * 0.45) * Math.min(1, density * 1.5);
-      ctx.fillStyle = p.c;
+      ctx.scale(1, 0.3 + Math.abs(Math.cos(p.flip)) * 0.7);
+      ctx.globalAlpha = 0.55 + p.z * 0.4;
+      ctx.fillStyle = p.leaf ? '#8e9a74' : p.c;
       ctx.beginPath();
-      ctx.moveTo(0, -p.s);
-      ctx.bezierCurveTo(p.s * 0.9, -p.s * 0.6, p.s * 0.7, p.s * 0.8, 0, p.s);
-      ctx.bezierCurveTo(-p.s * 0.7, p.s * 0.8, -p.s * 0.9, -p.s * 0.6, 0, -p.s);
-      ctx.fill();
-      ctx.globalAlpha *= 0.5;
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.ellipse(-p.s * 0.2, -p.s * 0.2, p.s * 0.22, p.s * 0.5, 0.3, 0, 6.3);
+      if (p.leaf) { ctx.ellipse(0, 0, p.s * 1.3, p.s * 0.42, 0, 0, 6.3); }
+      else {
+        ctx.moveTo(0, -p.s);
+        ctx.bezierCurveTo(p.s * 0.9, -p.s * 0.6, p.s * 0.7, p.s * 0.8, 0, p.s);
+        ctx.bezierCurveTo(-p.s * 0.7, p.s * 0.8, -p.s * 0.9, -p.s * 0.6, 0, -p.s);
+      }
       ctx.fill();
       ctx.restore();
     }
-
-    // butterflies wander over the meadow
-    const t = now / 1000;
-    for (const f of flies) {
-      const k = f.seed;
-      f.x = W * (0.5 + 0.38 * Math.sin(t * 0.21 + k) * Math.cos(t * 0.09 + k * 2));
-      f.y = H * (0.6 + 0.12 * Math.sin(t * 0.33 + k * 1.7) + 0.03 * Math.sin(t * 3.1 + k));
-      const dir = Math.cos(t * 0.21 + k) >= 0 ? 1 : -1;
-      f.el.style.transform = `translate(${f.x}px, ${f.y}px) scaleX(${dir}) rotate(${Math.sin(t * 2 + k) * 12}deg)`;
-      f.el.style.opacity = density;
-    }
-
     if (!document.hidden) requestAnimationFrame(frame);
   }
   resize();
   addEventListener('resize', resize);
+  for (let k = 0; k < 16; k++) items.push(spawn(true));
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { last = performance.now(); requestAnimationFrame(frame); } });
-  if (!reduceMotion) requestAnimationFrame(frame);
-  return { set density(v) { density = Math.max(0, Math.min(1, v)); } };
+  requestAnimationFrame(frame);
 })();
 
-/* ---------- Countdown ---------- */
-const target = new Date(CONFIG.date).getTime();
-const cd = Object.fromEntries($$('#countdown b').map(b => [b.dataset.u, b]));
-function tick() {
-  let diff = Math.max(0, target - Date.now());
-  const d = Math.floor(diff / 864e5); diff -= d * 864e5;
-  const h = Math.floor(diff / 36e5); diff -= h * 36e5;
-  const m = Math.floor(diff / 6e4);
-  cd.d.textContent = d;
-  cd.h.textContent = String(h).padStart(2, '0');
-  cd.m.textContent = String(m).padStart(2, '0');
-}
-tick();
-setInterval(tick, 15000);
-
-/* ---------- Envelope flaps: scalloped edges drawn to fit the screen ---------- */
-function buildEnvelope() {
-  const box = $('#envelope').getBoundingClientRect();
-  const W = box.width, H = box.height, r = Math.max(7, W / 44);
-  // arcs from the current point to (bx,by); travelling clockwise, sweep 1 bulges outward
-  const scallop = (ax, ay, bx, by) => {
-    const n = Math.max(3, Math.round(Math.hypot(bx - ax, by - ay) / (r * 2)));
-    let d = '';
-    for (let i = 1; i <= n; i++) {
-      const x = ax + ((bx - ax) * i) / n, y = ay + ((by - ay) * i) / n;
-      d += ` A ${r * 1.08} ${r * 1.08} 0 0 1 ${x.toFixed(1)} ${y.toFixed(1)}`;
-    }
-    return d;
+/* ---------- Opening the envelope: tap the bow, or scroll/swipe ---------- */
+const intro = $('#intro');
+let opened = false;
+function openEnvelope() {
+  if (opened) return;
+  opened = true;
+  removeOpenTriggers();
+  const done = () => {
+    intro.remove();
+    document.body.classList.remove('sealed');
+    if (hasGsap) ScrollTrigger.refresh();
   };
-  const tip = { t: [W / 2, H * 0.41], b: [W / 2, H * 0.6], l: [W * 0.56, H * 0.5], r: [W * 0.44, H * 0.5] };
-  const shapes = {
-    t: `M0 0 L${W} 0` + scallop(W, 0, ...tip.t) + scallop(...tip.t, 0, 0) + 'Z',
-    b: `M${W} ${H} L0 ${H}` + scallop(0, H, ...tip.b) + scallop(...tip.b, W, H) + 'Z',
-    l: `M0 ${H} L0 0` + scallop(0, 0, ...tip.l) + scallop(...tip.l, 0, H) + 'Z',
-    r: `M${W} 0 L${W} ${H}` + scallop(W, H, ...tip.r) + scallop(...tip.r, W, 0) + 'Z',
-  };
-  const tone = { t: 0.9, b: 0.82, l: 1, r: 1.08 };
-  const offset = { t: '0 0', b: `${-W * 0.2} ${-H * 0.1}`, l: `${-W * 0.1} ${-H * 0.05}`, r: `${-W * 0.3} ${-H * 0.15}` };
-  for (const side of ['t', 'b', 'l', 'r']) {
-    const flap = $(`[data-side="${side}"]`);
-    const svg = fill => `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-      <defs><pattern id="dm-${side}" patternUnits="userSpaceOnUse" width="${W * 1.4}" height="${H * 1.3}" patternTransform="translate(${offset[side]})">
-        <image href="assets/damask-wine.jpg" width="${W * 1.4}" height="${H * 1.3}" preserveAspectRatio="xMidYMid slice"/></pattern>
-        <linearGradient id="light-${side}" x1="0" y1="0" x2="${W}" y2="${H}" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#fff2ea" stop-opacity=".10"/><stop offset=".45" stop-color="#fff2ea" stop-opacity="0"/>
-          <stop offset="1" stop-color="#12030a" stop-opacity=".28"/>
-        </linearGradient>
-        <radialGradient id="lift-${side}" cx="${tip[side][0]}" cy="${tip[side][1]}" r="${Math.max(W, H) * 0.55}" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#fff0ea" stop-opacity=".07"/><stop offset="1" stop-color="#12030a" stop-opacity=".12"/>
-        </radialGradient></defs>
-      <path d="${shapes[side]}" fill="${fill}" style="filter:brightness(${tone[side]})"/>
-      <path d="${shapes[side]}" fill="url(#light-${side})"/>
-      <path d="${shapes[side]}" fill="url(#lift-${side})"/>
-      <path d="${shapes[side]}" fill="none" stroke="rgba(255,226,220,.13)" stroke-width=".8"/>
-    </svg>`;
-    const front = $('.front', flap), back = $('.back', flap);
-    $$(':scope > svg', front).forEach(n => n.remove());
-    front.insertAdjacentHTML('afterbegin', svg(`url(#dm-${side})`));
-    // the inside of each flap is plain wine paper
-    back.innerHTML = svg('#6a2331').replace(/<defs>[\s\S]*?<\/defs>/, '');
-  }
-  // the seal sits dead centre, over the tip of the right flap
-  const seal = $('#seal');
-  seal.style.left = `${W / 2}px`;
-  seal.style.top = `${H / 2}px`;
+  if (!hasGsap || reduceMotion) { done(); heroIn(); return; }
+  gsap.timeline({ onComplete: done })
+    .to('#introHint', { opacity: 0, duration: 0.3 }, 0)
+    .to('.bow-seal', { scale: 0.6, opacity: 0, transformOrigin: '150px 113px', duration: 0.5, ease: 'power2.in' }, 0)
+    .to('.bow-loop-l', { rotation: -40, scale: 0.4, x: -30, opacity: 0, duration: 0.8, ease: 'power2.in' }, 0.15)
+    .to('.bow-loop-r', { rotation: 40, scale: 0.4, x: 30, opacity: 0, duration: 0.8, ease: 'power2.in' }, 0.15)
+    .to('.bow-tail-l, .bow-tail-r, .bow-knot', { opacity: 0, y: 18, duration: 0.6, ease: 'power1.in' }, 0.25)
+    .to('#ribbonTop', { yPercent: -105, duration: 0.9, ease: 'power3.in' }, 0.45)
+    .to('#ribbonBottom', { yPercent: 105, duration: 0.9, ease: 'power3.in' }, 0.45)
+    .to('#envFlap', { rotationX: 178, duration: 1.1, ease: 'power2.inOut' }, 1.05)
+    .set('#envFlap', { zIndex: 1 }, 1.6)
+    .to('#envCard', { yPercent: -16, duration: 1, ease: 'power2.out' }, 1.75)
+    .to('.env-pocket', { yPercent: 70, duration: 1.1, ease: 'power2.in' }, 2.25)
+    .to('#envFlap, .env-back', { opacity: 0, duration: 0.8 }, 2.4)
+    .to('#envCard', { scale: 1.08, opacity: 0, duration: 0.9, ease: 'power1.in' }, 2.6)
+    .to(intro, { backgroundColor: 'rgba(227,223,210,0)', duration: 0.6 }, 2.8)
+    .call(heroIn, null, 2.85);
 }
-buildEnvelope();
-let lastW = innerWidth;
-addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; buildEnvelope(); } });
+const onWheel = e => { if (e.deltaY > 4) openEnvelope(); };
+let touchY = null;
+const onTouchStart = e => { touchY = e.touches[0].clientY; };
+const onTouchMove = e => { if (touchY !== null && touchY - e.touches[0].clientY > 24) openEnvelope(); };
+const onKey = e => { if (['ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) openEnvelope(); };
+function removeOpenTriggers() {
+  removeEventListener('wheel', onWheel);
+  removeEventListener('touchstart', onTouchStart);
+  removeEventListener('touchmove', onTouchMove);
+  removeEventListener('keydown', onKey);
+}
+addEventListener('wheel', onWheel, { passive: true });
+addEventListener('touchstart', onTouchStart, { passive: true });
+addEventListener('touchmove', onTouchMove, { passive: true });
+addEventListener('keydown', onKey);
+$('#bow').addEventListener('click', openEnvelope);
+$('.bow svg > g').classList.add('bow-idle');
 
-/* ---------- The scroll film ---------- */
-if (!hasGsap) {
-  // No animation library: show the finished scene with all the details
-  $('#envelope').hidden = true;
-  $('#near').hidden = true;
-  $$('.panel').forEach(p => { p.style.visibility = 'visible'; p.style.position = 'relative'; p.classList.add('live'); });
-  $('.words').style.cssText = 'position:relative;overflow:auto;padding-top:8%';
+function heroIn() {
+  if (!hasGsap || reduceMotion) return;
+  gsap.timeline()
+    .from('.hero-bg img', { scale: 1.14, duration: 2.4, ease: 'power2.out' }, 0)
+    .from('#heroCard', { y: 40, opacity: 0, scale: 0.94, duration: 1.4, ease: 'power3.out' }, 0.1)
+    .from('.hero-flora-a', { x: -80, y: -60, rotation: -40, opacity: 0, duration: 1.8, ease: 'power3.out' }, 0.2)
+    .from('.hero-flora-b', { x: -70, y: 70, opacity: 0, duration: 1.6, ease: 'power3.out' }, 0.35)
+    .from('.hero-flora-c', { x: 70, y: 70, opacity: 0, duration: 1.6, ease: 'power3.out' }, 0.45)
+    .from('.hero-names .ch', { opacity: 0, yPercent: 60, filter: 'blur(8px)', stagger: 0.06, duration: 1.1, ease: 'power2.out' }, 0.6)
+    .from('.hero-card > *:not(.hero-names)', { opacity: 0, y: 14, stagger: 0.12, duration: 0.9, ease: 'power2.out' }, 1)
+    .from('.hero-day img', { scale: 0, rotation: 0, stagger: 0.12, duration: 1, ease: 'back.out(2)' }, 1.4)
+    .from('.scroll-cue', { opacity: 0, y: 12, duration: 0.8 }, 2);
+}
+
+/* ---------- Scroll reveals ---------- */
+buildOrnate();
+if (!hasGsap || reduceMotion) {
+  document.documentElement.classList.add('static');
 } else {
   gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.config({ ignoreMobileResize: true });
 
-  const chars = panel => $$('.ch', panel);
-  const fades = panel => $$('.fade', panel);
+  // headings: letters rise out of a soft blur
+  $$('.sec .split, .closing .split').forEach(el => {
+    gsap.from($$('.ch', el), {
+      opacity: 0, yPercent: 70, filter: 'blur(8px)', stagger: 0.045, duration: 1.1, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+    });
+  });
+  // text and buttons
+  ScrollTrigger.batch('.rv', {
+    start: 'top 90%', once: true,
+    onEnter: els => gsap.fromTo(els, { opacity: 0, y: 26, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.1, stagger: 0.12, ease: 'power2.out' }),
+  });
+  gsap.set('.rv', { opacity: 0 });
 
-  // Same entrance/exit for every line of text: letters rise out of a soft blur
-  function textIn(tl, panel, at) {
-    tl.set(panel, { visibility: 'visible' }, at)
-      .fromTo(chars(panel),
-        { opacity: 0, yPercent: 60, filter: 'blur(10px)' },
-        { opacity: 1, yPercent: 0, filter: 'blur(0px)', duration: 1.4, stagger: 0.045, ease: 'power2.out' }, at)
-      .fromTo(fades(panel),
-        { opacity: 0, y: 16, filter: 'blur(6px)' },
-        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1, ease: 'power2.out' }, at + 1.4)
-      ;
-  }
-  function textOut(tl, panel, at) {
-    tl.to(chars(panel), { opacity: 0, yPercent: -40, filter: 'blur(8px)', duration: 0.9, stagger: 0.015, ease: 'power1.in' }, at)
-      .to(fades(panel), { opacity: 0, y: -10, filter: 'blur(6px)', duration: 0.6 }, at)
-      .set(panel, { visibility: 'hidden' }, at + 1.6);
-  }
-  // Only the panel on screen can be tapped
-  let livePanel = null;
-  function setLive(panel) {
-    if (livePanel === panel) return;
-    $$('.panel').forEach(p => p.classList.toggle('live', p === panel));
-    livePanel = panel;
-  }
+  // flowers bloom into place around frames
+  $$('.cd-frame, .dress-art, .wreath, .closing-arch').forEach(box => {
+    gsap.from($$('.bloom', box), {
+      opacity: 0, scale: 0.5, rotation: '-=25', duration: 1.4, stagger: 0.09, ease: 'back.out(1.6)',
+      scrollTrigger: { trigger: box, start: 'top 80%', once: true },
+    });
+  });
 
-  gsap.set('.wis', { yPercent: -105 });
-  gsap.set('.plant', { yPercent: 110 });
-  gsap.set('.frame-tree', { opacity: 0 });
-
-  const film = gsap.timeline({
-    defaults: { ease: 'power1.inOut' },
-    scrollTrigger: {
-      trigger: '#film',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: reduceMotion ? true : 1.1,
-      onUpdate() {
-        // petals and butterflies arrive once the garden is revealed
-        air.density = (film.time() - 13) / 5;
-        // only the panel fully on screen can be tapped, in either scroll direction
-        const t = film.time();
-        const i = SHOW.findIndex((s, k) => t > s + 1.6 && t < HIDE[k]);
-        setLive(i >= 0 ? $(ids[i]) : null);
-      },
+  // countdown counts up the first time it appears
+  ScrollTrigger.create({
+    trigger: '.cd-frame', start: 'top 75%', once: true,
+    onEnter: () => {
+      const p = parts();
+      const o = { d: 0, h: 0, m: 0, s: 0 };
+      gsap.to(o, {
+        ...p, duration: 2, ease: 'power3.out',
+        onUpdate: () => {
+          cd.d.textContent = Math.round(o.d);
+          cd.h.textContent = String(Math.round(o.h)).padStart(2, '0');
+          cd.m.textContent = String(Math.round(o.m)).padStart(2, '0');
+          cd.s.textContent = String(Math.round(o.s)).padStart(2, '0');
+        },
+        onComplete: () => { countdownLive = true; tick(); },
+      });
     },
   });
 
-  // 1 — the envelope opens: right flap with the seal, left flap, then top and bottom
-  film
-    .to('#hint', { opacity: 0, duration: 1 }, 0)
-    .to('#seal', { scale: 1.08, duration: 1.4, ease: 'power1.out' }, 0.2)
-    .to('#flapR', { rotationY: 168, duration: 3, ease: 'power2.inOut' }, 1.4)
-    .to('#liner', { opacity: 0, duration: 2.2, ease: 'power1.in' }, 1.8)
-    .to('#flapL', { rotationY: -168, duration: 3, ease: 'power2.inOut' }, 2.3)
-    .to('#flapT', { rotationX: 172, duration: 2.6, ease: 'power2.inOut' }, 4.1)
-    .to('#flapB', { rotationX: -172, duration: 2.6, ease: 'power2.inOut' }, 4.4)
-    .to('.flap', { opacity: 0, duration: 0.8 }, 6.4)
-    .set('#envelope', { visibility: 'hidden' }, 7.3)
-    // the garden waits just behind the flaps, slowly drifting closer
-    .fromTo('#scene', { scale: 1.45 }, { scale: 1.25, duration: 4, ease: 'none' }, 2)
-    .fromTo('#near', { scale: 1.12 }, { scale: 1.2, duration: 4, ease: 'none' }, 2);
+  // the ornate frame draws itself in
+  const drawFrame = () => {
+    const paths = $$('.ornate-svg .draw');
+    gsap.fromTo(paths, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.2, stagger: 0.04, ease: 'power2.inOut' });
+    gsap.fromTo('.ornate-svg use, .ornate-svg circle', { opacity: 0, scale: 0, transformOrigin: 'center', transformBox: 'fill-box' },
+      { opacity: 1, scale: 1, duration: 0.8, stagger: 0.03, delay: 1, ease: 'back.out(2)' });
+  };
+  ScrollTrigger.create({ trigger: '.ornate', start: 'top 78%', once: true, onEnter: drawFrame });
 
-  // 2 — the camera flies through the trees
-  film
-    .to('#scene', { scale: 1.06, duration: 6, ease: 'power2.out' }, 7)
-    .to('.nt-l1', { xPercent: -80, yPercent: 10, scale: 1.6, filter: 'blur(5px) brightness(.8)', duration: 5, ease: 'power2.in' }, 7.4)
-    .to('.nt-r1', { xPercent: 80, yPercent: 8, scale: 1.6, filter: 'blur(5px) brightness(.8)', duration: 5, ease: 'power2.in' }, 7.2)
-    .to('.nt-l2', { xPercent: -90, yPercent: 30, scale: 1.8, filter: 'blur(6px) brightness(.8)', duration: 4.6, ease: 'power2.in' }, 7.8)
-    .to('.nt-r2', { xPercent: 90, yPercent: 30, scale: 1.8, filter: 'blur(6px) brightness(.8)', duration: 4.6, ease: 'power2.in' }, 8)
-    .to('.nt-b', { yPercent: 70, scale: 1.5, filter: 'blur(6px)', duration: 4.6, ease: 'power2.in' }, 8)
-    .set('#near', { visibility: 'hidden' }, 13);
+  // the painted band glides as you pass
+  gsap.fromTo('.band-img', { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.band', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.fromTo('.closing-img', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.closing-arch', start: 'top bottom', end: 'bottom 60%', scrub: true } });
 
-  // 3 — settle on the couple, then pull back: wisteria drops, flowers rise
-  film
-    .to('#scene', { scale: 1, duration: 4, ease: 'power1.inOut' }, 13)
-    .to('.frame-tree', { opacity: 1, duration: 2 }, 13.5)
-    .fromTo('.frame-l', { xPercent: -40 }, { xPercent: 0, duration: 4, ease: 'power2.out' }, 13.5)
-    .fromTo('.frame-r', { xPercent: 40 }, { xPercent: 0, duration: 4, ease: 'power2.out' }, 13.5)
-    .to('.wis', { yPercent: 0, duration: 4, stagger: 0.35, ease: 'power2.out' }, 15)
-    .to('.plant.row-0', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 15.5)
-    .to('.plant.row-1', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 16.1)
-    .to('.plant.row-2', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 16.7)
-    .to('.plant.row-3', { yPercent: 0, duration: 3.6, stagger: 0.2, ease: 'power2.out' }, 17.3)
-    .to('.haze', { opacity: 1, duration: 3 }, 17);
-
-  // 4 — the words, one panel at a time; the sky moves toward sunset
-  const SHOW = [19, 31, 42, 53];
-  const HIDE = [27.5, 38.5, 49.5, 99];
-  const ids = ['#p-names', '#p-date', '#p-venue', '#p-rsvp'];
-  ids.forEach((id, i) => {
-    textIn(film, $(id), SHOW[i]);
-    if (HIDE[i] < 99) textOut(film, $(id), HIDE[i]);
+  // timeline: the line grows and each moment slides in from its side
+  gsap.fromTo('.timeline', { '--grow': 0 }, { '--grow': 1, ease: 'none', scrollTrigger: { trigger: '.timeline', start: 'top 80%', end: 'bottom 70%', scrub: true } });
+  $$('.tl-item').forEach((li, k) => {
+    gsap.from($('.tl-text', li), { opacity: 0, x: k % 2 ? 40 : -40, duration: 1, ease: 'power2.out', scrollTrigger: { trigger: li, start: 'top 85%', once: true } });
+    gsap.from($('.tl-icon', li), { opacity: 0, scale: 0.4, rotation: -30, duration: 1.1, ease: 'back.out(1.8)', scrollTrigger: { trigger: li, start: 'top 85%', once: true } });
   });
-  film
-    .to('#scene', { scale: 1.04, duration: 30, ease: 'none' }, 27)
-    .to('.tint-gold', { opacity: 1, duration: 10, ease: 'none' }, 31)
-    .to('.tint-dusk', { opacity: 0.75, duration: 10, ease: 'none' }, 45)
-    .to({}, { duration: 4 }, 59); // a little hold at the end so the RSVP sits still
 
-  // slow camera drift while the words play: near layers move more than far ones
-  film
-    .to('.far', { yPercent: -6, duration: 40, ease: 'none' }, 19)
-    .to('.frame-l', { xPercent: -10, yPercent: 3, duration: 40, ease: 'none' }, 19)
-    .to('.frame-r', { xPercent: 10, yPercent: 3, duration: 40, ease: 'none' }, 19)
-    .to('.wis', { yPercent: -8, duration: 40, ease: 'none' }, 23)
-    .to('.plant.row-2, .plant.row-3', { yPercent: 8, duration: 40, ease: 'none' }, 23)
-    .to('#couple', { scale: 1.12, duration: 40, ease: 'none' }, 19);
+  // the day marker gently beats
+  gsap.to('.days .today', { scale: 1.08, duration: 0.8, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 }
+let lastW = innerWidth;
+addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; buildOrnate(); } });
+
+/* ---------- Bank details ---------- */
+const bankSheet = $('#bankSheet');
+$('#bankList').innerHTML = CONFIG.bank.map(([k, v]) =>
+  `<div><span><dt>${k}</dt><dd>${v}</dd></span><button type="button" data-copy="${v}">Copy</button></div>`).join('');
+$('#openBank').addEventListener('click', () => { $('#copyNote').textContent = ''; bankSheet.showModal(); });
+bankSheet.addEventListener('click', async e => {
+  if (e.target === bankSheet || e.target.closest('[data-close]')) return bankSheet.close();
+  const btn = e.target.closest('[data-copy]');
+  if (!btn) return;
+  try {
+    await navigator.clipboard.writeText(btn.dataset.copy);
+    $('#copyNote').textContent = 'Copied';
+  } catch {
+    $('#copyNote').textContent = btn.dataset.copy;
+  }
+});
+
+/* ---------- Invite a guest: a personal link to share ---------- */
+$('#inviteForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = $('#inviteName').value.trim();
+  const note = $('#inviteNote');
+  const url = new URL(location.pathname, location.origin);
+  if (name) url.searchParams.set('to', name);
+  const text = `${name ? `Dear ${name}, ` : ''}you are warmly invited to the wedding of Rashed & Rahaf on Sunday, 20 December 2026.`;
+  if (navigator.share) {
+    try { await navigator.share({ title: 'The Wedding of Rashed & Rahaf', text, url: url.href }); note.textContent = 'Invitation shared'; }
+    catch { /* the guest closed the share sheet */ }
+  } else {
+    window.open(`https://wa.me/?text=${encodeURIComponent(`${text}\n${url.href}`)}`, '_blank', 'noopener');
+    note.textContent = 'Opening WhatsApp…';
+  }
+});
 
 /* ---------- RSVP ---------- */
-const dialog = $('#rsvpDialog');
 const form = $('#rsvpForm');
-const statusEl = $('#formStatus');
-const guestsField = $('#guestsField');
-
-$('#openRsvp').addEventListener('click', () => {
-  form.hidden = false;
-  $('#thanks').hidden = true;
-  statusEl.textContent = '';
-  dialog.showModal();
-});
-$('#closeRsvp').addEventListener('click', () => dialog.close());
-$('#doneRsvp').addEventListener('click', () => dialog.close());
-dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
-form.addEventListener('change', () => {
-  guestsField.hidden = form.elements.attending.value === 'no';
-});
-
+const note = $('#rsvpNote');
+let guests = 1;
+$$('[data-step]', form).forEach(b => b.addEventListener('click', () => {
+  guests = Math.min(10, Math.max(1, guests + Number(b.dataset.step)));
+  $('#guests').textContent = guests;
+}));
+form.addEventListener('change', () => { $('#guestsQ').hidden = form.elements.attending.value === 'no'; });
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(form));
   data.name = (data.name || '').trim();
-  if (!data.name) {
-    statusEl.textContent = 'Please write your name.';
-    form.elements.name.focus();
-    return;
-  }
-  if (data.attending === 'no') data.guests = '0';
-  const btn = form.querySelector('[type=submit]');
+  data.guests = data.attending === 'no' ? 0 : guests;
+  if (!data.name) { note.textContent = 'Please write your name.'; $('#rName').focus(); return; }
+  const btn = $('[type=submit]', form);
   btn.disabled = true;
-  statusEl.textContent = 'Sending…';
+  note.textContent = 'Sending…';
   try {
-    const res = await fetch('/api/rsvp', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    const res = await fetch('/api/rsvp', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
     if (!res.ok) throw new Error(res.status);
-    showThanks(data);
+    thanks(data);
   } catch {
     if (CONFIG.whatsapp) {
-      const text = `RSVP — Rashed & Rahaf\nName: ${data.name}\nAttending: ${data.attending === 'yes' ? 'Yes' : 'No'}\nGuests: ${data.guests}` +
-        (data.message ? `\nNote: ${data.message}` : '');
+      const text = `RSVP — Rashed & Rahaf\nName: ${data.name}\nAttending: ${data.attending === 'yes' ? 'Yes' : 'No'}\nGuests: ${data.guests}` + (data.message ? `\nNote: ${data.message}` : '');
       window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
-      showThanks(data);
+      thanks(data);
     } else {
-      statusEl.textContent = 'Sorry, replies could not be sent right now. Please try again later.';
+      note.textContent = 'Sorry, your reply could not be sent right now. Please try again later.';
     }
   } finally {
     btn.disabled = false;
   }
 });
-
-function showThanks(data) {
-  form.hidden = true;
-  $('#thanksMsg').textContent = data.attending === 'yes'
-    ? `We can't wait to celebrate with you, ${data.name}.`
-    : `You will be missed, ${data.name}. Thank you for letting us know.`;
-  $('#thanks').hidden = false;
-  statusEl.textContent = '';
-  form.reset();
-  guestsField.hidden = false;
+function thanks(data) {
+  form.innerHTML = `<p class="lead lead-italic" style="text-align:center">${data.attending === 'yes'
+    ? 'Thank you, we cannot wait to celebrate with you.'
+    : 'Thank you for letting us know. You will be missed.'}</p>`;
 }

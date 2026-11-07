@@ -8,29 +8,43 @@
 <meta property="og:title" content="The Wedding of Rashed & Rahaf">
 <meta property="og:description" content="Sunday, 20 December 2026 · Four Seasons Hotel, Abu Dhabi">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#5e1a27">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23b86f7d'/%3E%3Ctext x='32' y='41' font-size='22' text-anchor='middle' fill='%23f6dfe2' font-family='serif'%3ER%26R%3C/text%3E%3C/svg%3E">
-<link rel="preload" as="image" href="assets/damask-wine.jpg">
-<link rel="preload" as="image" href="assets/bg-lake.jpg">
+<meta name="theme-color" content="#f6f1e6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%235c6b45'/%3E%3Ctext x='32' y='41' font-size='22' text-anchor='middle' fill='%23f6f1e6' font-family='serif'%3ER%26R%3C/text%3E%3C/svg%3E">
+<link rel="preload" as="image" href="assets/env-ivory.jpg">
+<link rel="preload" as="image" href="assets/hero-garden.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Pinyon+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="sealed">
 
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
-    <filter id="figure" x="-20%" y="-10%" width="140%" height="120%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="3" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+    <!-- frayed fabric edge for the ribbon -->
+    <filter id="fray" x="-10%" y="-2%" width="120%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9 0.06" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
     <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
-    <!-- torn, deckled paper edge -->
-    <filter id="deckle" x="-3%" y="-3%" width="106%" height="106%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="6" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+    <!-- soft-burgundy wax: poured edge + glossy relief -->
+    <filter id="wax" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="21" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+      <feGaussianBlur in="shape" stdDeviation="2" result="b"/>
+      <feSpecularLighting in="b" surfaceScale="4" specularConstant=".8" specularExponent="26" lighting-color="#fff2f0" result="spec">
+        <feDistantLight azimuth="225" elevation="50"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feComposite in="shape" in2="specIn" operator="arithmetic" k1="0" k2="1" k3=".55" k4="0"/>
     </filter>
+    <linearGradient id="ribbonShade" x1="0" x2="1">
+      <stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".25" stop-color="#fff" stop-opacity=".12"/>
+      <stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/>
+    </linearGradient>
+    <pattern id="linen" width="160" height="160" patternUnits="userSpaceOnUse">
+      <image href="assets/linen-sage.jpg" width="160" height="160"/>
+    </pattern>
   </defs>
 </svg>
 
@@ -142,244 +156,263 @@
   </svg>
 </template>
 
-<main class="film" id="film">
-  <div class="stage" id="stage">
+<canvas class="petals" id="petals" aria-hidden="true"></canvas>
 
-    <!-- painted landscape -->
-    <div class="layer scene" id="scene">
-      <img class="bg" src="assets/bg-lake.jpg" alt="" decoding="async">
-      <div class="rays"></div>
-      <div class="sparkles" id="sparkles"></div>
-      <div class="tint tint-gold"></div>
-      <div class="tint tint-dusk"></div>
-      <div class="haze"></div>
-
-      <img class="far far-1" src="assets/spruce-a.webp" alt="">
-      <img class="far far-2" src="assets/tree-green-c.webp" alt="">
-      <img class="far far-3" src="assets/spruce-b.webp" alt="">
-      <img class="far far-4" src="assets/tree-green-a.webp" alt="">
-
-      <img class="meadow" src="assets/meadow.webp" alt="">
-      <div class="backlight"></div>
-      <div class="couple-slot" id="couple"></div>
-      <img class="meadow-front" src="assets/meadow.webp" alt="">
-
-      <img class="frame-tree frame-l" src="assets/tree-green-b.webp" alt="">
-      <img class="frame-tree frame-r" src="assets/tree-pink.webp" alt="">
+<!-- ============ THE ENVELOPE ============ -->
+<div class="intro" id="intro">
+  <div class="env" id="env">
+    <div class="env-back"></div>
+    <div class="env-card" id="envCard">
+      <p class="env-card-k">The wedding of</p>
+      <p class="env-card-names">Rashed &amp; Rahaf</p>
     </div>
-
-    <!-- hanging wisteria (drops in from the top) -->
-    <div class="layer wisteria" id="wisteria" aria-hidden="true">
-      <img class="wis w1" src="assets/wisteria-purple.webp" alt="">
-      <img class="wis w2" src="assets/wisteria-white.webp" alt="">
-      <img class="wis w4" src="assets/wisteria-white.webp" alt="">
-      <img class="wis w5" src="assets/wisteria-purple.webp" alt="">
+    <div class="env-pocket">
+      <img class="env-art env-art-a" src="assets/jasmine.webp" alt="">
+      <img class="env-art env-art-b" src="assets/rose-white.webp" alt="">
     </div>
-
-    <!-- flower bed (rises from the bottom), built by script.js -->
-    <div class="layer bed" id="bed" aria-hidden="true"></div>
-
-    <!-- living air: petals, light motes, butterflies -->
-    <canvas class="layer air" id="air" aria-hidden="true"></canvas>
-    <div class="layer flutter" id="flutter" aria-hidden="true">
-      <div class="bfly"><i></i><i></i></div>
-      <div class="bfly bfly-2"><i></i><i></i></div>
+    <div class="env-flap" id="envFlap">
+      <div class="env-flap-face front"><img class="env-art env-art-c" src="assets/olive.webp" alt=""></div>
+      <div class="env-flap-face back"></div>
     </div>
-
-    <!-- one colour grade over every layer so the collage reads as one painting -->
-    <div class="layer grade" aria-hidden="true"></div>
-
-    <!-- words -->
-    <div class="layer words">
-      <section class="panel" id="p-names" aria-label="The wedding of Rashed and Rahaf">
-        <p class="kicker split">The Wedding of</p>
-        <h1 class="script split">Rashed</h1>
-        <p class="amp split">&amp;</p>
-        <h1 class="script split">Rahaf</h1>
-        <p class="note split">together with their families, request the pleasure of your company</p>
-      </section>
-
-      <section class="panel" id="p-date" aria-label="Date">
-        <p class="kicker split">Save the Date</p>
-        <p class="script script-sm split">Sunday</p>
-        <p class="big split">20 · 12 · 2026</p>
-        <p class="note split">the twentieth of December</p>
-        <div class="countdown fade" id="countdown">
-          <div><b data-u="d">--</b><small>Days</small></div>
-          <div><b data-u="h">--</b><small>Hours</small></div>
-          <div><b data-u="m">--</b><small>Minutes</small></div>
-        </div>
-      </section>
-
-      <section class="panel" id="p-venue" aria-label="Venue">
-        <p class="kicker split">The Celebration</p>
-        <p class="script script-sm split">Four Seasons Hotel</p>
-        <p class="place split" id="venuePlace">Abu Dhabi · Al Maryah Island</p>
-        <p class="note split">evening reception from seven o'clock</p>
-        <a class="btn-card fade" id="mapLink" href="#" target="_blank" rel="noopener"><span>View on the map</span></a>
-      </section>
-
-      <section class="panel" id="p-rsvp" aria-label="RSVP">
-        <p class="kicker split">Will you join us?</p>
-        <p class="script split">Kindly Reply</p>
-        <p class="note split">by the twentieth of November</p>
-        <button class="btn-card btn-card-main fade" id="openRsvp" type="button"><span>R · S · V · P</span><small>reply to the invitation</small></button>
-      </section>
-    </div>
-
-    <!-- trees the camera flies through -->
-    <div class="layer near" id="near" aria-hidden="true">
-      <img class="nt nt-l1" src="assets/tree-green-a.webp" alt="">
-      <img class="nt nt-r1" src="assets/tree-green-c.webp" alt="">
-      <img class="nt nt-l2" src="assets/spruce-b.webp" alt="">
-      <img class="nt nt-r2" src="assets/tree-green-b.webp" alt="">
-      <img class="nt nt-b" src="assets/palm-bush.webp" alt="">
-    </div>
-
-    <!-- the envelope: a wine damask pocket fold with a gold seal -->
-    <div class="layer envelope" id="envelope">
-      <div class="env-liner" id="liner"></div>
-      <div class="flap" id="flapB" data-side="b"><div class="face front"></div><div class="face back"></div></div>
-      <div class="flap" id="flapT" data-side="t"><div class="face front"></div><div class="face back"></div></div>
-      <div class="flap" id="flapL" data-side="l"><div class="face front"></div><div class="face back"></div></div>
-      <div class="flap" id="flapR" data-side="r">
-        <div class="face front">
-          <div class="seal" id="seal" aria-hidden="true">
-            <svg viewBox="0 0 120 120">
-              <defs>
-                <!-- the same poured-wax outline is used for the body and to mask the shine -->
-                <filter id="waxEdge" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="21" result="n"/>
-                  <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
-                </filter>
-                <!-- metal-wax relief: brightness in the drawing is height, lit as gold -->
-                <filter id="waxRelief" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-                  <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="h0"/>
-                  <feGaussianBlur in="h0" stdDeviation=".9" result="h"/>
-                  <feComponentTransfer in="SourceAlpha" result="body"><feFuncA type="discrete" tableValues="0 1 1 1 1 1 1 1"/></feComponentTransfer>
-                  <feDiffuseLighting in="h" surfaceScale="7" diffuseConstant="1.05" lighting-color="#e6cf9c" result="dif">
-                    <feDistantLight azimuth="225" elevation="52"/>
-                  </feDiffuseLighting>
-                  <feSpecularLighting in="h" surfaceScale="7" specularConstant="1" specularExponent="40" lighting-color="#fff6e2" result="spec">
-                    <feDistantLight azimuth="225" elevation="52"/>
-                  </feSpecularLighting>
-                  <feFlood flood-color="#8c6c3a" result="deep"/>
-                  <feComposite in="dif" in2="deep" operator="arithmetic" k1=".95" k2=".22" k3=".1" k4="0" result="metal"/>
-                  <feComposite in="metal" in2="spec" operator="arithmetic" k2="1" k3=".85" result="lit"/>
-                  <feComposite in="lit" in2="body" operator="in"/>
-                </filter>
-                <linearGradient id="shine" x1="0" x2="1" y1="0" y2="0">
-                  <stop offset="0" stop-color="#fff8e1" stop-opacity="0"/><stop offset=".5" stop-color="#fffaf0" stop-opacity=".75"/><stop offset="1" stop-color="#fff8e1" stop-opacity="0"/>
-                </linearGradient>
-                <mask id="waxMask" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
-                  <g filter="url(#waxEdge)" fill="#fff">
-                    <circle cx="60" cy="60" r="46"/><circle cx="97" cy="70" r="7"/><circle cx="27" cy="88" r="6"/><circle cx="84" cy="22" r="5"/>
-                  </g>
-                </mask>
-              </defs>
-
-              <g filter="url(#waxRelief)">
-                <!-- poured body, a few overflows at the edge -->
-                <g filter="url(#waxEdge)" fill="#bdbdbd">
-                  <circle cx="60" cy="60" r="46"/><circle cx="97" cy="70" r="7"/><circle cx="27" cy="88" r="6"/><circle cx="84" cy="22" r="5"/>
-                </g>
-                <!-- raised rim where the stamp pushed the wax out -->
-                <circle cx="60" cy="60" r="37.5" fill="none" stroke="#f2f2f2" stroke-width="6"/>
-                <!-- pressed field -->
-                <circle cx="60" cy="60" r="34" fill="#6e6e6e"/>
-                <circle cx="60" cy="60" r="32.6" fill="none" stroke="#a8a8a8" stroke-width=".9"/>
-                <!-- raised laurel and monogram -->
-                <g fill="#d8d8d8">
-                  <ellipse cx="56.7" cy="86.3" rx="3.4" ry="1.5" transform="rotate(180 56.7 86.3)"/>
-                  <ellipse cx="53.2" cy="89.7" rx="3.4" ry="1.5" transform="rotate(250 53.2 89.7)"/>
-                  <ellipse cx="49.8" cy="84.5" rx="3.3" ry="1.4" transform="rotate(196 49.8 84.5)"/>
-                  <ellipse cx="45.5" cy="86.8" rx="3.3" ry="1.4" transform="rotate(266 45.5 86.8)"/>
-                  <ellipse cx="43.6" cy="80.9" rx="3.2" ry="1.4" transform="rotate(211 43.6 80.9)"/>
-                  <ellipse cx="38.9" cy="82.0" rx="3.2" ry="1.4" transform="rotate(281 38.9 82.0)"/>
-                  <ellipse cx="38.6" cy="75.7" rx="3.0" ry="1.3" transform="rotate(226 38.6 75.7)"/>
-                  <ellipse cx="33.8" cy="75.5" rx="3.0" ry="1.3" transform="rotate(296 33.8 75.5)"/>
-                  <ellipse cx="35.2" cy="69.4" rx="2.9" ry="1.3" transform="rotate(242 35.2 69.4)"/>
-                  <ellipse cx="30.6" cy="68.0" rx="2.9" ry="1.3" transform="rotate(312 30.6 68.0)"/>
-                  <ellipse cx="33.6" cy="62.5" rx="2.8" ry="1.2" transform="rotate(258 33.6 62.5)"/>
-                  <ellipse cx="29.5" cy="59.8" rx="2.8" ry="1.2" transform="rotate(328 29.5 59.8)"/>
-                  <ellipse cx="33.9" cy="55.3" rx="2.7" ry="1.2" transform="rotate(273 33.9 55.3)"/>
-                  <ellipse cx="30.7" cy="51.7" rx="2.7" ry="1.2" transform="rotate(343 30.7 51.7)"/>
-                  <ellipse cx="36.1" cy="48.5" rx="2.6" ry="1.1" transform="rotate(288 36.1 48.5)"/>
-                  <ellipse cx="34.0" cy="44.1" rx="2.6" ry="1.1" transform="rotate(358 34.0 44.1)"/>
-                  <ellipse cx="40.0" cy="42.6" rx="2.4" ry="1.1" transform="rotate(304 40.0 42.6)"/>
-                  <ellipse cx="39.2" cy="37.8" rx="2.4" ry="1.1" transform="rotate(374 39.2 37.8)"/>
-                  <ellipse cx="45.4" cy="37.9" rx="2.3" ry="1.0" transform="rotate(320 45.4 37.9)"/>
-                  <ellipse cx="45.9" cy="33.0" rx="2.3" ry="1.0" transform="rotate(390 45.9 33.0)"/>
-                  <ellipse cx="65.9" cy="85.9" rx="3.4" ry="1.5" transform="rotate(110 65.9 85.9)"/>
-                  <ellipse cx="63.8" cy="90.2" rx="3.4" ry="1.5" transform="rotate(180 63.8 90.2)"/>
-                  <ellipse cx="72.6" cy="83.3" rx="3.3" ry="1.4" transform="rotate(94 72.6 83.3)"/>
-                  <ellipse cx="71.7" cy="88.1" rx="3.3" ry="1.4" transform="rotate(164 71.7 88.1)"/>
-                  <ellipse cx="78.4" cy="79.1" rx="3.2" ry="1.4" transform="rotate(79 78.4 79.1)"/>
-                  <ellipse cx="78.8" cy="84.0" rx="3.2" ry="1.4" transform="rotate(149 78.8 84.0)"/>
-                  <ellipse cx="82.8" cy="73.5" rx="3.0" ry="1.3" transform="rotate(64 82.8 73.5)"/>
-                  <ellipse cx="84.5" cy="78.1" rx="3.0" ry="1.3" transform="rotate(134 84.5 78.1)"/>
-                  <ellipse cx="85.6" cy="66.9" rx="2.9" ry="1.3" transform="rotate(48 85.6 66.9)"/>
-                  <ellipse cx="88.5" cy="70.9" rx="2.9" ry="1.3" transform="rotate(118 88.5 70.9)"/>
-                  <ellipse cx="86.5" cy="59.8" rx="2.8" ry="1.2" transform="rotate(32 86.5 59.8)"/>
-                  <ellipse cx="90.3" cy="62.8" rx="2.8" ry="1.2" transform="rotate(102 90.3 62.8)"/>
-                  <ellipse cx="85.5" cy="52.8" rx="2.7" ry="1.2" transform="rotate(17 85.5 52.8)"/>
-                  <ellipse cx="90.0" cy="54.6" rx="2.7" ry="1.2" transform="rotate(87 90.0 54.6)"/>
-                  <ellipse cx="82.6" cy="46.2" rx="2.6" ry="1.1" transform="rotate(1 82.6 46.2)"/>
-                  <ellipse cx="87.5" cy="46.8" rx="2.6" ry="1.1" transform="rotate(72 87.5 46.8)"/>
-                  <ellipse cx="78.1" cy="40.6" rx="2.4" ry="1.1" transform="rotate(-14 78.1 40.6)"/>
-                  <ellipse cx="83.0" cy="39.9" rx="2.4" ry="1.1" transform="rotate(56 83.0 39.9)"/>
-                  <ellipse cx="72.3" cy="36.5" rx="2.3" ry="1.0" transform="rotate(-30 72.3 36.5)"/>
-                  <ellipse cx="76.8" cy="34.5" rx="2.3" ry="1.0" transform="rotate(40 76.8 34.5)"/>
-                </g>
-                <text x="60" y="67.5" text-anchor="middle" class="seal-mono" fill="#f0f0f0">R<tspan class="seal-amp" dx=".5" dy="-1">&amp;</tspan><tspan dx=".5" dy="1">R</tspan></text>
-                <circle cx="60" cy="84.5" r="1.4" fill="#d8d8d8"/>
-              </g>
-
-              <!-- a slow shine that only ever touches the wax -->
-              <g mask="url(#waxMask)">
-                <rect class="seal-shine" x="-60" y="-10" width="46" height="140" fill="url(#shine)" transform="rotate(20 60 60)"/>
-              </g>
-            </svg>
-          </div>
-        </div>
-        <div class="face back"></div>
-      </div>
-      <p class="hint" id="hint"><span>Scroll to open</span><i></i></p>
-    </div>
-
+    <div class="ribbon ribbon-top" id="ribbonTop"></div>
+    <div class="ribbon ribbon-bottom" id="ribbonBottom"></div>
+    <button class="bow" id="bow" type="button" aria-label="Open the invitation">
+      <svg viewBox="0 0 300 230" aria-hidden="true">
+        <g filter="url(#fray)">
+          <g class="bow-loop bow-loop-l">
+            <path d="M150 112 C118 70 52 46 26 74 C4 98 26 140 70 140 C102 140 130 126 150 112Z" fill="url(#linen)"/>
+            <path d="M150 112 C118 70 52 46 26 74 C4 98 26 140 70 140 C102 140 130 126 150 112Z" fill="url(#ribbonShade)"/>
+            <path d="M146 110 C116 88 70 78 48 92" stroke="#3f4a2f" stroke-opacity=".28" stroke-width="2" fill="none"/>
+          </g>
+          <g class="bow-loop bow-loop-r">
+            <path d="M150 112 C182 70 248 46 274 74 C296 98 274 140 230 140 C198 140 170 126 150 112Z" fill="url(#linen)"/>
+            <path d="M150 112 C182 70 248 46 274 74 C296 98 274 140 230 140 C198 140 170 126 150 112Z" fill="url(#ribbonShade)"/>
+            <path d="M154 110 C184 88 230 78 252 92" stroke="#3f4a2f" stroke-opacity=".28" stroke-width="2" fill="none"/>
+          </g>
+          <g class="bow-tail bow-tail-l">
+            <path d="M146 118 C134 150 112 188 92 226 L118 230 C132 196 148 160 156 120Z" fill="url(#linen)"/>
+            <path d="M146 118 C134 150 112 188 92 226 L118 230 C132 196 148 160 156 120Z" fill="url(#ribbonShade)"/>
+          </g>
+          <g class="bow-tail bow-tail-r">
+            <path d="M154 118 C166 150 188 188 208 226 L182 230 C168 196 152 160 144 120Z" fill="url(#linen)"/>
+            <path d="M154 118 C166 150 188 188 208 226 L182 230 C168 196 152 160 144 120Z" fill="url(#ribbonShade)" transform="scale(-1 1) translate(-300 0)"/>
+          </g>
+          <rect class="bow-knot" x="134" y="96" width="32" height="34" rx="12" fill="url(#linen)"/>
+          <rect class="bow-knot" x="134" y="96" width="32" height="34" rx="12" fill="url(#ribbonShade)"/>
+        </g>
+        <g class="bow-seal">
+          <g filter="url(#wax)"><circle cx="150" cy="113" r="22" fill="#9b4d5c"/></g>
+          <circle cx="150" cy="113" r="15" fill="none" stroke="#7a3443" stroke-width="1.4" opacity=".75"/>
+          <text x="150.6" y="119.6" text-anchor="middle" class="bow-mono" fill="#f3d6da" opacity=".55">R&amp;R</text>
+          <text x="150" y="119" text-anchor="middle" class="bow-mono" fill="#6e2b39">R&amp;R</text>
+        </g>
+      </svg>
+    </button>
+    <p class="intro-hint" id="introHint">Tap or scroll to open</p>
   </div>
+</div>
+
+<main class="site" id="site">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="hero-bg"><img src="assets/hero-garden.jpg" alt="" decoding="async"></div>
+    <img class="hero-flora hero-flora-a sway" src="assets/olive.webp" alt="">
+    <img class="hero-flora hero-flora-b sway" src="assets/jasmine.webp" alt="">
+    <img class="hero-flora hero-flora-c sway" src="assets/rose-white.webp" alt="">
+    <div class="hero-card" id="heroCard">
+      <p class="hero-dear" id="dear" hidden></p>
+      <h1 class="hero-names split"><span>Rashed</span><em>&amp;</em><span>Rahaf</span></h1>
+      <p class="caps hero-invite">We invite you to<br>celebrate our wedding</p>
+      <div class="hero-date">
+        <p class="caps">December</p>
+        <div class="hero-day">
+          <img src="assets/rose-blush.webp" alt="">
+          <span>20</span>
+          <img class="flip" src="assets/rose-blush.webp" alt="">
+        </div>
+        <p class="caps">Sunday</p>
+        <p class="caps hero-year">2026</p>
+      </div>
+      <p class="caps hero-at">To be held at</p>
+      <p class="hero-venue" data-venue-short>Four Seasons Hotel, Abu Dhabi</p>
+    </div>
+    <a class="scroll-cue" href="#countdown" aria-label="Scroll down">
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </a>
+  </section>
+
+  <!-- ============ COUNTDOWN ============ -->
+  <section class="sec countdown" id="countdown">
+    <h2 class="title split">Countdown</h2>
+    <p class="sub rv">Until 20 December 2026</p>
+    <div class="cd-frame rv">
+      <div class="cd-inner">
+        <div class="cd-unit"><b data-u="d">0</b><span>Days</span></div>
+        <div class="cd-unit"><b data-u="h">0</b><span>Hours</span></div>
+        <div class="cd-unit"><b data-u="m">0</b><span>Minutes</span></div>
+        <div class="cd-unit"><b data-u="s">0</b><span>Seconds</span></div>
+      </div>
+      <img class="bloom cd-f cd-f1" src="assets/rose-white.webp" alt="">
+      <img class="bloom cd-f cd-f2" src="assets/jasmine.webp" alt="">
+      <img class="bloom cd-f cd-f3" src="assets/olive.webp" alt="">
+      <img class="bloom cd-f cd-f4" src="assets/rose-blush.webp" alt="">
+      <img class="bloom cd-f cd-f5" src="assets/bouquet.webp" alt="">
+      <img class="bloom cd-f cd-f6" src="assets/jasmine.webp" alt="">
+    </div>
+  </section>
+
+  <!-- ============ A NOTE FROM US ============ -->
+  <section class="sec note" id="note">
+    <h2 class="title split">A Note from Us</h2>
+    <div class="note-body">
+      <p class="rv">Some of the most beautiful stories begin quietly, and ours is one of them.</p>
+      <p class="rv">With grateful hearts and the blessing of our families, we are beginning our greatest chapter yet.</p>
+      <p class="rv">It would mean the world to us to have you there, sharing the joy of the day we become one.</p>
+    </div>
+    <p class="signature rv">Rashed &amp; Rahaf</p>
+  </section>
+
+  <div class="band" aria-hidden="true">
+    <img class="band-img" src="assets/band-garden.jpg" alt="">
+    <img class="edge edge-top" src="assets/edge-ivory.webp" alt="">
+    <img class="edge edge-bottom" src="assets/edge-olive.webp" alt="">
+  </div>
+
+  <!-- ============ THE CELEBRATION ============ -->
+  <section class="sec celebration" id="celebration">
+    <h2 class="title split">The Celebration</h2>
+    <p class="sub rv">Wedding reception &amp; dinner</p>
+    <div class="ornate rv-frame">
+      <svg class="ornate-svg" aria-hidden="true"></svg>
+      <div class="ornate-body">
+        <p class="o-venue rv">Four Seasons Hotel</p>
+        <p class="caps o-place rv" data-venue-place>Al Maryah Island · Abu Dhabi</p>
+        <p class="o-text rv">An evening of love, dinner and dancing as we begin our forever together.</p>
+        <p class="o-date rv">Sunday, 20 December 2026</p>
+        <p class="o-time rv">7:00 PM</p>
+        <a class="btn btn-light rv" id="mapLink" href="#" target="_blank" rel="noopener">View on map</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE EVENING ============ -->
+  <section class="sec evening" id="evening">
+    <img class="edge edge-flip-top" src="assets/edge-olive.webp" alt="" aria-hidden="true">
+    <h2 class="title split">The Evening</h2>
+    <p class="sub rv">Program · Sunday 20 December</p>
+    <p class="lead rv">Our wedding night, from the first welcome to the last dance.</p>
+    <div class="days rv" aria-hidden="true"><span>18</span><span>19</span><span class="today">20</span><span>21</span><span>22</span></div>
+    <ol class="timeline">
+      <li class="tl-item"><div class="tl-text"><time>7:00 PM</time><b>Guest Arrival</b></div><img class="tl-icon" src="assets/jasmine.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>8:00 PM</time><b>The Zaffa &amp; Grand Entrance</b></div><img class="tl-icon" src="assets/bouquet.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>8:45 PM</time><b>Dinner</b></div><img class="tl-icon" src="assets/olive.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>10:00 PM</time><b>Cake &amp; First Dance</b></div><img class="tl-icon" src="assets/rose-blush.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>11:30 PM</time><b>Farewell</b></div><img class="tl-icon" src="assets/rose-white.webp" alt=""></li>
+    </ol>
+  </section>
+
+  <!-- ============ DRESS CODE ============ -->
+  <section class="sec dress" id="dress">
+    <h2 class="title split">Dress Code</h2>
+    <p class="sub rv">Formal</p>
+    <div class="dress-art rv">
+      <img class="arch arch-l bloom" src="assets/wisteria-white.webp" alt="">
+      <img class="arch arch-r bloom" src="assets/wisteria-white.webp" alt="">
+      <img class="arch arch-c bloom" src="assets/jasmine.webp" alt="">
+      <div class="couple-slot" id="couple"></div>
+      <img class="arch-foot arch-foot-l bloom" src="assets/rose-white.webp" alt="">
+      <img class="arch-foot arch-foot-r bloom" src="assets/bouquet.webp" alt="">
+    </div>
+    <p class="lead rv">Our colours are sage, ivory and a whisper of burgundy. We would love to see you in them.</p>
+    <div class="swatches rv">
+      <div><i style="--c:#8e9a74"></i><span>Sage</span></div>
+      <div><i style="--c:#f3ede1"></i><span>Ivory</span></div>
+      <div><i style="--c:#a85d6c"></i><span>Burgundy</span></div>
+    </div>
+  </section>
+
+  <!-- ============ GIFT ============ -->
+  <section class="sec gift" id="gift">
+    <h2 class="title split">Wedding Gift</h2>
+    <p class="lead lead-italic rv">Your presence is our greatest gift.</p>
+    <div class="wreath rv-frame" id="wreath">
+      <p class="wreath-text rv">If you wish to honour us with a gift, a contribution towards our new home would be warmly appreciated.</p>
+    </div>
+    <div class="btn-row">
+      <button class="btn rv" id="openBank" type="button">View bank details</button>
+      <a class="btn btn-fill rv" id="giftLink" href="#" target="_blank" rel="noopener" hidden>Send a gift online</a>
+    </div>
+  </section>
+
+  <!-- ============ INVITE SOMEONE ============ -->
+  <section class="sec invite" id="invite">
+    <h2 class="title split">Invite a Guest</h2>
+    <p class="lead rv">Add a name to create a personal invitation, then share it on WhatsApp or anywhere you like.</p>
+    <form class="invite-form rv" id="inviteForm" novalidate>
+      <label class="q-label" for="inviteName">Guest's name</label>
+      <input class="field" id="inviteName" name="name" maxlength="60" autocomplete="off" placeholder="e.g. Aunt Mariam">
+      <button class="btn btn-fill" type="submit">Send invitation</button>
+      <p class="form-note" id="inviteNote" role="status"></p>
+    </form>
+  </section>
+
+  <!-- ============ RSVP ============ -->
+  <section class="sec rsvp" id="rsvp">
+    <h2 class="title split">RSVP</h2>
+    <div class="ornament rv" aria-hidden="true"><i></i><b>◇</b><i></i></div>
+    <p class="caps rsvp-by rv">The favour of a reply is kindly requested<br>by the twentieth of November, 2026</p>
+    <form class="rsvp-form" id="rsvpForm" novalidate>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="q rv">
+        <label class="q-label" for="rName"><span>01</span>Your name *</label>
+        <input class="field" id="rName" name="name" required maxlength="100" autocomplete="name">
+      </div>
+      <fieldset class="q rv">
+        <legend class="q-label"><span>02</span>Will you be joining us? *</legend>
+        <label class="opt"><input type="radio" name="attending" value="yes" checked><i></i>Delighted to accept</label>
+        <label class="opt"><input type="radio" name="attending" value="no"><i></i>Regretfully unable to attend</label>
+      </fieldset>
+      <div class="q rv" id="guestsQ">
+        <p class="q-label"><span>03</span>Number of guests in your party</p>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="Fewer guests">−</button>
+          <output id="guests">1</output>
+          <button type="button" data-step="1" aria-label="More guests">+</button>
+        </div>
+      </div>
+      <div class="q rv">
+        <label class="q-label" for="rMsg"><span>04</span>A message for the couple</label>
+        <textarea class="field" id="rMsg" name="message" rows="4" maxlength="500"></textarea>
+      </div>
+      <button class="btn btn-fill btn-wide rv" type="submit">Submit response</button>
+      <p class="form-note" id="rsvpNote" role="status"></p>
+    </form>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="closing" id="closing">
+    <div class="closing-arch rv-frame">
+      <img class="closing-img" src="assets/closing-balustrade.jpg" alt="" loading="lazy">
+      <img class="bloom ca-f ca-f1 sway" src="assets/jasmine.webp" alt="">
+      <img class="bloom ca-f ca-f2 sway" src="assets/rose-white.webp" alt="">
+      <img class="bloom ca-f ca-f3 sway" src="assets/olive.webp" alt="">
+      <img class="bloom ca-f ca-f4 sway" src="assets/bouquet.webp" alt="">
+    </div>
+    <p class="closing-names split"><span>Rashed</span><em>&amp;</em><span>Rahaf</span></p>
+    <p class="closing-date rv">20 December 2026</p>
+    <a class="btn btn-fill rv" href="assets/Rashed-Rahaf-Invitation.pdf" download="Rashed-Rahaf-Invitation.pdf">Download the invitation</a>
+    <p class="made rv">Made with love for Rashed &amp; Rahaf</p>
+  </section>
 </main>
 
-<!-- RSVP sheet -->
-<dialog id="rsvpDialog" class="sheet" aria-labelledby="rsvpTitle">
-  <form id="rsvpForm" novalidate>
-    <button type="button" class="sheet-close" id="closeRsvp" aria-label="Close">&times;</button>
-    <h3 id="rsvpTitle">RSVP</h3>
-    <p class="sheet-sub">Rashed &amp; Rahaf · 20.12.2026</p>
-    <label class="field">Your name
-      <input name="name" required maxlength="100" autocomplete="name">
-    </label>
-    <fieldset class="choice">
-      <legend>Will you attend?</legend>
-      <label><input type="radio" name="attending" value="yes" checked><span>Joyfully accept</span></label>
-      <label><input type="radio" name="attending" value="no"><span>Regretfully decline</span></label>
-    </fieldset>
-    <label class="field" id="guestsField">Number of guests
-      <select name="guests">
-        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-      </select>
-    </label>
-    <label class="field">A note for the couple <small>(optional)</small>
-      <textarea name="message" rows="3" maxlength="500"></textarea>
-    </label>
-    <button type="submit" class="btn-full">Send reply</button>
-    <p class="form-status" id="formStatus" role="status"></p>
-  </form>
-  <div class="thanks" id="thanks" hidden>
-    <h3>Thank you</h3>
-    <p id="thanksMsg">Your reply has been received.</p>
-    <button type="button" class="btn-card" id="doneRsvp"><span>Close</span></button>
-  </div>
+<!-- bank details -->
+<dialog class="sheet" id="bankSheet" aria-labelledby="bankTitle">
+  <button class="sheet-close" type="button" data-close aria-label="Close">&times;</button>
+  <h3 id="bankTitle">Bank Details</h3>
+  <p class="sheet-sub">Thank you for your love and generosity</p>
+  <dl class="bank" id="bankList"></dl>
+  <p class="form-note" id="copyNote" role="status"></p>
 </dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
