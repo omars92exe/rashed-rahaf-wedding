@@ -15,7 +15,14 @@ API = "https://commons.wikimedia.org/w/api.php?"
 
 def api(params):
     req = urllib.request.Request(API + urllib.parse.urlencode(params), headers=UA)
-    return json.load(urllib.request.urlopen(req))
+    for wait in (0, 10, 30, 60, 90):
+        time.sleep(wait)
+        try:
+            return json.load(urllib.request.urlopen(req))
+        except urllib.error.HTTPError as e:
+            if e.code != 429:
+                raise
+    raise SystemExit("rate-limited")
 
 
 def search(q):

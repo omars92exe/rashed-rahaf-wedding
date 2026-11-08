@@ -1,15 +1,18 @@
 /* ---------- Edit the wedding details here ---------- */
 const CONFIG = {
   // Celebration start, UAE time (+04:00)
-  date: '2026-12-20T19:00:00+04:00',
-  venueShort: 'Four Seasons Hotel, Abu Dhabi',
-  venuePlace: 'Al Maryah Island · Abu Dhabi',
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Four+Seasons+Hotel+Abu+Dhabi+at+Al+Maryah+Island',
-  // Shown under "View bank details". Replace with the couple's real details before sharing.
+  date: '2026-12-20T18:00:00+04:00',
+  venueShort: 'W Dubai – The Palm, Dubai',
+  venuePlace: 'West Crescent · Palm Jumeirah · Dubai',
+  mapsUrl: 'https://maps.app.goo.gl/5YmUtDvq4DDznqqF9',
+  // Shown under "View bank details", each with a copy button.
   bank: [
-    ['Account name', 'Rashed —'],
-    ['Bank', 'Bank name'],
-    ['IBAN', 'AE00 0000 0000 0000 0000 000'],
+    ['Account name', 'RASHED ALFAGOUSH'],
+    ['Bank', 'ADIB · Abu Dhabi Islamic Bank'],
+    ['Account number', '19083958'],
+    ['IBAN', 'AE21 0500 0000 0000 1908 3958'],
+    ['SWIFT', 'ABDIAEADXXX'],
+    ['Currency', 'AED'],
   ],
   // Optional online gift / payment page (a link from the couple's bank or a gift registry). '' hides the button.
   giftLink: '',
@@ -141,13 +144,19 @@ function parts() {
   const m = Math.floor(diff / 6e4); diff -= m * 6e4;
   return { d, h, m, s: Math.floor(diff / 1e3) };
 }
+function setUnit(el, v) {
+  if (el.textContent === v) return;
+  el.textContent = v;
+  // each number rolls in as it changes
+  if (hasGsap && !reduceMotion) gsap.fromTo(el, { yPercent: -45, opacity: 0, filter: 'blur(3px)' }, { yPercent: 0, opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: 'power2.out' });
+}
 function tick() {
   if (!countdownLive) return;
   const p = parts();
-  cd.d.textContent = p.d;
-  cd.h.textContent = String(p.h).padStart(2, '0');
-  cd.m.textContent = String(p.m).padStart(2, '0');
-  cd.s.textContent = String(p.s).padStart(2, '0');
+  setUnit(cd.d, String(p.d));
+  setUnit(cd.h, String(p.h).padStart(2, '0'));
+  setUnit(cd.m, String(p.m).padStart(2, '0'));
+  setUnit(cd.s, String(p.s).padStart(2, '0'));
 }
 tick();
 setInterval(tick, 1000);
@@ -206,7 +215,8 @@ setInterval(tick, 1000);
   requestAnimationFrame(frame);
 })();
 
-/* ---------- Opening the envelope: tap the bow, or scroll/swipe ---------- */
+/* ---------- Opening the envelope: tap the seal, or scroll/swipe ----------
+   The seal lifts, the satin ribbon parts, the flap opens onto the site itself and the envelope slides away. */
 const intro = $('#intro');
 let opened = false;
 function openEnvelope() {
@@ -219,22 +229,21 @@ function openEnvelope() {
     if (hasGsap) ScrollTrigger.refresh();
   };
   if (!hasGsap || reduceMotion) { done(); heroIn(); return; }
-  gsap.timeline({ onComplete: done })
+  $('#seal').style.animation = 'none';
+  gsap.timeline({ onComplete: done, defaults: { force3D: true } })
     .to('#introHint', { opacity: 0, duration: 0.3 }, 0)
-    .to('.bow-seal', { scale: 0.6, opacity: 0, transformOrigin: '150px 113px', duration: 0.5, ease: 'power2.in' }, 0)
-    .to('.bow-loop-l', { rotation: -40, scale: 0.4, x: -30, opacity: 0, duration: 0.8, ease: 'power2.in' }, 0.15)
-    .to('.bow-loop-r', { rotation: 40, scale: 0.4, x: 30, opacity: 0, duration: 0.8, ease: 'power2.in' }, 0.15)
-    .to('.bow-tail-l, .bow-tail-r, .bow-knot', { opacity: 0, y: 18, duration: 0.6, ease: 'power1.in' }, 0.25)
-    .to('#ribbonTop', { yPercent: -105, duration: 0.9, ease: 'power3.in' }, 0.45)
-    .to('#ribbonBottom', { yPercent: 105, duration: 0.9, ease: 'power3.in' }, 0.45)
-    .to('#envFlap', { rotationX: 178, duration: 1.1, ease: 'power2.inOut' }, 1.05)
-    .set('#envFlap', { zIndex: 1 }, 1.6)
-    .to('#envCard', { yPercent: -16, duration: 1, ease: 'power2.out' }, 1.75)
-    .to('.env-pocket', { yPercent: 70, duration: 1.1, ease: 'power2.in' }, 2.25)
-    .to('#envFlap, .env-back', { opacity: 0, duration: 0.8 }, 2.4)
-    .to('#envCard', { scale: 1.08, opacity: 0, duration: 0.9, ease: 'power1.in' }, 2.6)
-    .to(intro, { backgroundColor: 'rgba(227,223,210,0)', duration: 0.6 }, 2.8)
-    .call(heroIn, null, 2.85);
+    // the seal presses, then lifts away
+    .to('#seal', { scale: 0.92, duration: 0.14, ease: 'power2.out' }, 0)
+    .to('#seal', { scale: 1.18, y: -36, opacity: 0, duration: 0.7, ease: 'power2.in' }, 0.14)
+    // the satin parts to either side
+    .to('#satinL', { xPercent: -104, duration: 1.05, ease: 'power3.inOut' }, 0.3)
+    .to('#satinR', { xPercent: 104, duration: 1.05, ease: 'power3.inOut' }, 0.3)
+    // the flap opens; the site is already there inside
+    .to('#envFlapShadow', { opacity: 0, duration: 0.5 }, 0.95)
+    .to('#envFlap', { rotationX: 180, duration: 1.15, ease: 'power2.inOut' }, 0.95)
+    .call(heroIn, null, 1.35)
+    // the envelope slides down and away
+    .to('#envPocket', { yPercent: 102, duration: 1.25, ease: 'power3.inOut' }, 1.85);
 }
 const onWheel = e => { if (e.deltaY > 4) openEnvelope(); };
 let touchY = null;
@@ -251,21 +260,20 @@ addEventListener('wheel', onWheel, { passive: true });
 addEventListener('touchstart', onTouchStart, { passive: true });
 addEventListener('touchmove', onTouchMove, { passive: true });
 addEventListener('keydown', onKey);
-$('#bow').addEventListener('click', openEnvelope);
-$('.bow svg > g').classList.add('bow-idle');
+$('#seal').addEventListener('click', openEnvelope);
+$('#envPocket').addEventListener('click', openEnvelope);
 
 function heroIn() {
   if (!hasGsap || reduceMotion) return;
   gsap.timeline()
-    .from('.hero-bg img', { scale: 1.14, duration: 2.4, ease: 'power2.out' }, 0)
-    .from('#heroCard', { y: 40, opacity: 0, scale: 0.94, duration: 1.4, ease: 'power3.out' }, 0.1)
-    .from('.hero-flora-a', { x: -80, y: -60, rotation: -40, opacity: 0, duration: 1.8, ease: 'power3.out' }, 0.2)
-    .from('.hero-flora-b', { x: -70, y: 70, opacity: 0, duration: 1.6, ease: 'power3.out' }, 0.35)
-    .from('.hero-flora-c', { x: 70, y: 70, opacity: 0, duration: 1.6, ease: 'power3.out' }, 0.45)
-    .from('.hero-names .ch', { opacity: 0, yPercent: 60, filter: 'blur(8px)', stagger: 0.06, duration: 1.1, ease: 'power2.out' }, 0.6)
-    .from('.hero-card > *:not(.hero-names)', { opacity: 0, y: 14, stagger: 0.12, duration: 0.9, ease: 'power2.out' }, 1)
-    .from('.hero-day img', { scale: 0, rotation: 0, stagger: 0.12, duration: 1, ease: 'back.out(2)' }, 1.4)
-    .from('.scroll-cue', { opacity: 0, y: 12, duration: 0.8 }, 2);
+    .from('.hero-bg img', { scale: 1.16, duration: 2.6, ease: 'power2.out' }, 0)
+    .from('#heroCard', { y: 30, opacity: 0, scale: 0.96, duration: 1.4, ease: 'power3.out' }, 0.15)
+    .from('.hero-flora-a', { x: -80, y: -60, rotation: -40, opacity: 0, duration: 1.8, ease: 'power3.out' }, 0.3)
+    // the names are written in, right to left, then the و sweeps in
+    .fromTo('.hero-calli .calli-names', { clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0%)', duration: 1.6, ease: 'power2.inOut' }, 0.7)
+    .fromTo('.hero-calli .calli-waw', { opacity: 0, scale: 0.85, rotation: -8 }, { opacity: 1, scale: 1, rotation: 0, duration: 1, ease: 'power3.out' }, 1.7)
+    .from('.hero-card > *:not(.hero-calli)', { opacity: 0, y: 14, stagger: 0.1, duration: 0.9, ease: 'power2.out' }, 1.3)
+    .from('.scroll-cue', { opacity: 0, y: 12, duration: 0.8 }, 2.4);
 }
 
 /* ---------- Scroll reveals ---------- */
@@ -337,6 +345,11 @@ if (!hasGsap || reduceMotion) {
     gsap.from($('.tl-icon', li), { opacity: 0, scale: 0.4, rotation: -30, duration: 1.1, ease: 'back.out(1.8)', scrollTrigger: { trigger: li, start: 'top 85%', once: true } });
   });
 
+  // the closing names are written in, right to left
+  gsap.timeline({ scrollTrigger: { trigger: '.closing-calli', start: 'top 85%', once: true } })
+    .fromTo('.closing-calli .calli-names', { clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0%)', duration: 1.6, ease: 'power2.inOut' })
+    .fromTo('.closing-calli .calli-waw', { opacity: 0, scale: 0.85, rotation: -8 }, { opacity: 1, scale: 1, rotation: 0, duration: 1, ease: 'power3.out' }, 1);
+
   // the day marker gently beats
   gsap.to('.days .today', { scale: 1.08, duration: 0.8, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 }
@@ -346,7 +359,7 @@ addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidt
 /* ---------- Bank details ---------- */
 const bankSheet = $('#bankSheet');
 $('#bankList').innerHTML = CONFIG.bank.map(([k, v]) =>
-  `<div><span><dt>${k}</dt><dd>${v}</dd></span><button type="button" data-copy="${v}">Copy</button></div>`).join('');
+  `<div><span><dt>${k}</dt><dd>${v}</dd></span><button type="button" data-copy="${k === 'IBAN' ? v.replace(/\s/g, '') : v}">Copy</button></div>`).join('');
 $('#openBank').addEventListener('click', () => { $('#copyNote').textContent = ''; bankSheet.showModal(); });
 bankSheet.addEventListener('click', async e => {
   if (e.target === bankSheet || e.target.closest('[data-close]')) return bankSheet.close();

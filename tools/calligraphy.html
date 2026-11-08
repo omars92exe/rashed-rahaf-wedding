@@ -1,0 +1,21 @@
+<!doctype html>
+<!-- راشد ورهف, composed in Diwan Thuluth (macOS). Rendered to transparent PNG layers by make-calligraphy.sh:
+     ?layer=names -> assets/calli-names.png, ?layer=waw -> assets/calli-waw.png -->
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; background: transparent; }
+  .c { position: relative; width: 340px; height: 260px; font-family: 'Diwan Thuluth'; color: #000; }
+  .c span { position: absolute; white-space: nowrap; line-height: 1; -webkit-text-stroke: .6px #000; }
+</style>
+<div class="c">
+  <span class="n" style="font-size:126px;right:22px;top:14px">راشد</span>
+  <span class="w" style="font-size:190px;left:120px;top:20px">و</span>
+  <span class="n" style="font-size:126px;left:20px;top:82px">رهف</span>
+</div>
+<script>
+  const layer = new URLSearchParams(location.search).get('layer');
+  document.querySelectorAll('.c span').forEach(s => {
+    if (layer === 'names' && s.classList.contains('w')) s.style.visibility = 'hidden';
+    if (layer === 'waw' && s.classList.contains('n')) s.style.visibility = 'hidden';
+  });
+</script>
