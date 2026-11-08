@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rashed & Rahaf · 20.12.2026</title>
-<meta name="description" content="You are invited to the wedding of Rashed & Rahaf — Sunday, 20 December 2026 at Four Seasons Hotel, Abu Dhabi.">
+<meta name="description" content="You are invited to the wedding of Rashed & Rahaf — Sunday, 20 December 2026 at W Dubai – The Palm.">
 <meta property="og:title" content="The Wedding of Rashed & Rahaf">
-<meta property="og:description" content="Sunday, 20 December 2026 · Four Seasons Hotel, Abu Dhabi">
+<meta property="og:description" content="Sunday, 20 December 2026 · W Dubai – The Palm">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#f6f1e6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%235c6b45'/%3E%3Ctext x='32' y='41' font-size='22' text-anchor='middle' fill='%23f6f1e6' font-family='serif'%3ER%26R%3C/text%3E%3C/svg%3E">
 <link rel="preload" as="image" href="assets/env-ivory.jpg">
-<link rel="preload" as="image" href="assets/hero-garden.jpg">
+<link rel="preload" as="image" href="assets/hero-palm.jpg">
+<link rel="preload" as="image" href="assets/calli-names.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Pinyon+Script&display=swap" rel="stylesheet">
@@ -21,11 +22,6 @@
 
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
-    <!-- frayed fabric edge for the ribbon -->
-    <filter id="fray" x="-10%" y="-2%" width="120%" height="104%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9 0.06" numOctaves="2" seed="3" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
     <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
     <!-- soft-burgundy wax: poured edge + glossy relief -->
     <filter id="wax" x="-20%" y="-20%" width="140%" height="140%">
@@ -38,13 +34,6 @@
       <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
       <feComposite in="shape" in2="specIn" operator="arithmetic" k1="0" k2="1" k3=".55" k4="0"/>
     </filter>
-    <linearGradient id="ribbonShade" x1="0" x2="1">
-      <stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".25" stop-color="#fff" stop-opacity=".12"/>
-      <stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/>
-    </linearGradient>
-    <pattern id="linen" width="160" height="160" patternUnits="userSpaceOnUse">
-      <image href="assets/linen-sage.jpg" width="160" height="160"/>
-    </pattern>
   </defs>
 </svg>
 
@@ -159,56 +148,38 @@
 <canvas class="petals" id="petals" aria-hidden="true"></canvas>
 
 <!-- ============ THE ENVELOPE ============ -->
+<!-- Tap the seal or scroll: the seal lifts, the satin ribbon parts, the flap opens onto the site and the envelope slides away -->
 <div class="intro" id="intro">
   <div class="env" id="env">
-    <div class="env-back"></div>
-    <div class="env-card" id="envCard">
-      <p class="env-card-k">The wedding of</p>
-      <p class="env-card-names">Rashed &amp; Rahaf</p>
+    <div class="env-pocket" id="envPocket">
+      <div class="env-calli calli" role="img" aria-label="Rashed and Rahaf in Arabic calligraphy">
+        <i class="calli-names"></i><i class="calli-waw"></i>
+      </div>
+      <p class="env-date">20 · XII · 2026</p>
     </div>
-    <div class="env-pocket">
-      <img class="env-art env-art-a" src="assets/jasmine.webp" alt="">
-      <img class="env-art env-art-b" src="assets/rose-white.webp" alt="">
-    </div>
+    <div class="env-flap-shadow" id="envFlapShadow"></div>
     <div class="env-flap" id="envFlap">
-      <div class="env-flap-face front"><img class="env-art env-art-c" src="assets/olive.webp" alt=""></div>
+      <div class="env-flap-face front">
+        <svg class="env-flap-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M5 3 L50 92 L95 3" vector-effect="non-scaling-stroke"/></svg>
+      </div>
       <div class="env-flap-face back"></div>
     </div>
-    <div class="ribbon ribbon-top" id="ribbonTop"></div>
-    <div class="ribbon ribbon-bottom" id="ribbonBottom"></div>
-    <button class="bow" id="bow" type="button" aria-label="Open the invitation">
-      <svg viewBox="0 0 300 230" aria-hidden="true">
-        <g filter="url(#fray)">
-          <g class="bow-loop bow-loop-l">
-            <path d="M150 112 C118 70 52 46 26 74 C4 98 26 140 70 140 C102 140 130 126 150 112Z" fill="url(#linen)"/>
-            <path d="M150 112 C118 70 52 46 26 74 C4 98 26 140 70 140 C102 140 130 126 150 112Z" fill="url(#ribbonShade)"/>
-            <path d="M146 110 C116 88 70 78 48 92" stroke="#3f4a2f" stroke-opacity=".28" stroke-width="2" fill="none"/>
-          </g>
-          <g class="bow-loop bow-loop-r">
-            <path d="M150 112 C182 70 248 46 274 74 C296 98 274 140 230 140 C198 140 170 126 150 112Z" fill="url(#linen)"/>
-            <path d="M150 112 C182 70 248 46 274 74 C296 98 274 140 230 140 C198 140 170 126 150 112Z" fill="url(#ribbonShade)"/>
-            <path d="M154 110 C184 88 230 78 252 92" stroke="#3f4a2f" stroke-opacity=".28" stroke-width="2" fill="none"/>
-          </g>
-          <g class="bow-tail bow-tail-l">
-            <path d="M146 118 C134 150 112 188 92 226 L118 230 C132 196 148 160 156 120Z" fill="url(#linen)"/>
-            <path d="M146 118 C134 150 112 188 92 226 L118 230 C132 196 148 160 156 120Z" fill="url(#ribbonShade)"/>
-          </g>
-          <g class="bow-tail bow-tail-r">
-            <path d="M154 118 C166 150 188 188 208 226 L182 230 C168 196 152 160 144 120Z" fill="url(#linen)"/>
-            <path d="M154 118 C166 150 188 188 208 226 L182 230 C168 196 152 160 144 120Z" fill="url(#ribbonShade)" transform="scale(-1 1) translate(-300 0)"/>
-          </g>
-          <rect class="bow-knot" x="134" y="96" width="32" height="34" rx="12" fill="url(#linen)"/>
-          <rect class="bow-knot" x="134" y="96" width="32" height="34" rx="12" fill="url(#ribbonShade)"/>
-        </g>
-        <g class="bow-seal">
-          <g filter="url(#wax)"><circle cx="150" cy="113" r="22" fill="#9b4d5c"/></g>
-          <circle cx="150" cy="113" r="15" fill="none" stroke="#7a3443" stroke-width="1.4" opacity=".75"/>
-          <text x="150.6" y="119.6" text-anchor="middle" class="bow-mono" fill="#f3d6da" opacity=".55">R&amp;R</text>
-          <text x="150" y="119" text-anchor="middle" class="bow-mono" fill="#6e2b39">R&amp;R</text>
+    <div class="satin satin-l" id="satinL"></div>
+    <div class="satin satin-r" id="satinR"></div>
+    <button class="seal" id="seal" type="button" aria-label="Open the invitation">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <g filter="url(#wax)"><circle cx="60" cy="60" r="44" fill="#934656"/></g>
+        <circle cx="60" cy="60" r="33" fill="none" stroke="#6e2b39" stroke-width="1.2" opacity=".55"/>
+        <circle cx="60" cy="60" r="35.2" fill="none" stroke="#f3d2d8" stroke-width=".6" opacity=".22"/>
+        <!-- interlocking RR monogram, pressed into the wax -->
+        <g class="seal-mono">
+          <text x="54.4" y="70.6" fill="#f6dbe0" opacity=".28">R</text><text x="67.4" y="77.6" fill="#f6dbe0" opacity=".28">R</text>
+          <text x="52.6" y="68.8" fill="#5e2231" opacity=".6">R</text><text x="65.6" y="75.8" fill="#5e2231" opacity=".6">R</text>
+          <text x="53.5" y="69.7" fill="#7f3445">R</text><text x="66.5" y="76.7" fill="#7f3445">R</text>
         </g>
       </svg>
     </button>
-    <p class="intro-hint" id="introHint">Tap or scroll to open</p>
+    <p class="intro-hint" id="introHint">Tap the seal to open</p>
   </div>
 </div>
 
@@ -216,26 +187,18 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero" id="top">
-    <div class="hero-bg"><img src="assets/hero-garden.jpg" alt="" decoding="async"></div>
+    <div class="hero-bg"><img src="assets/hero-palm.jpg" alt="" decoding="async"></div>
     <img class="hero-flora hero-flora-a sway" src="assets/olive.webp" alt="">
-    <img class="hero-flora hero-flora-b sway" src="assets/jasmine.webp" alt="">
-    <img class="hero-flora hero-flora-c sway" src="assets/rose-white.webp" alt="">
     <div class="hero-card" id="heroCard">
       <p class="hero-dear" id="dear" hidden></p>
-      <h1 class="hero-names split"><span>Rashed</span><em>&amp;</em><span>Rahaf</span></h1>
-      <p class="caps hero-invite">We invite you to<br>celebrate our wedding</p>
+      <div class="hero-calli calli" role="img" aria-label="راشد ورهف"><i class="calli-names"></i><i class="calli-waw"></i></div>
+      <h1 class="hero-names">Rashed <em>&amp;</em> Rahaf</h1>
+      <p class="caps hero-invite">Invite you to celebrate their wedding</p>
       <div class="hero-date">
-        <p class="caps">December</p>
-        <div class="hero-day">
-          <img src="assets/rose-blush.webp" alt="">
-          <span>20</span>
-          <img class="flip" src="assets/rose-blush.webp" alt="">
-        </div>
-        <p class="caps">Sunday</p>
-        <p class="caps hero-year">2026</p>
+        <p class="caps">December 2026</p>
+        <div class="hero-day"><span class="caps">Sunday</span><b>20</b><span class="caps">6 PM</span></div>
       </div>
-      <p class="caps hero-at">To be held at</p>
-      <p class="hero-venue" data-venue-short>Four Seasons Hotel, Abu Dhabi</p>
+      <p class="hero-venue" data-venue-short>W Dubai – The Palm, Dubai</p>
     </div>
     <a class="scroll-cue" href="#countdown" aria-label="Scroll down">
       <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -274,7 +237,7 @@
   </section>
 
   <div class="band" aria-hidden="true">
-    <img class="band-img" src="assets/band-garden.jpg" alt="">
+    <img class="band-img" src="assets/band-sea.jpg" alt="">
     <img class="edge edge-top" src="assets/edge-ivory.webp" alt="">
     <img class="edge edge-bottom" src="assets/edge-olive.webp" alt="">
   </div>
@@ -286,11 +249,11 @@
     <div class="ornate rv-frame">
       <svg class="ornate-svg" aria-hidden="true"></svg>
       <div class="ornate-body">
-        <p class="o-venue rv">Four Seasons Hotel</p>
-        <p class="caps o-place rv" data-venue-place>Al Maryah Island · Abu Dhabi</p>
-        <p class="o-text rv">An evening of love, dinner and dancing as we begin our forever together.</p>
+        <p class="o-venue rv">W Dubai – The Palm</p>
+        <p class="caps o-place rv" data-venue-place>West Crescent · Palm Jumeirah · Dubai</p>
+        <p class="o-text rv">An evening by the sea on the Palm, with love, dinner and dancing as we begin our forever together.</p>
         <p class="o-date rv">Sunday, 20 December 2026</p>
-        <p class="o-time rv">7:00 PM</p>
+        <p class="o-time rv">6:00 PM</p>
         <a class="btn btn-light rv" id="mapLink" href="#" target="_blank" rel="noopener">View on map</a>
       </div>
     </div>
@@ -304,11 +267,11 @@
     <p class="lead rv">Our wedding night, from the first welcome to the last dance.</p>
     <div class="days rv" aria-hidden="true"><span>18</span><span>19</span><span class="today">20</span><span>21</span><span>22</span></div>
     <ol class="timeline">
-      <li class="tl-item"><div class="tl-text"><time>7:00 PM</time><b>Guest Arrival</b></div><img class="tl-icon" src="assets/jasmine.webp" alt=""></li>
-      <li class="tl-item"><div class="tl-text"><time>8:00 PM</time><b>The Zaffa &amp; Grand Entrance</b></div><img class="tl-icon" src="assets/bouquet.webp" alt=""></li>
-      <li class="tl-item"><div class="tl-text"><time>8:45 PM</time><b>Dinner</b></div><img class="tl-icon" src="assets/olive.webp" alt=""></li>
-      <li class="tl-item"><div class="tl-text"><time>10:00 PM</time><b>Cake &amp; First Dance</b></div><img class="tl-icon" src="assets/rose-blush.webp" alt=""></li>
-      <li class="tl-item"><div class="tl-text"><time>11:30 PM</time><b>Farewell</b></div><img class="tl-icon" src="assets/rose-white.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>6:00 PM</time><b>Guest Arrival</b></div><img class="tl-icon" src="assets/jasmine.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>7:00 PM</time><b>The Zaffa &amp; Grand Entrance</b></div><img class="tl-icon" src="assets/bouquet.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>8:00 PM</time><b>Dinner</b></div><img class="tl-icon" src="assets/olive.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>9:30 PM</time><b>Cake &amp; First Dance</b></div><img class="tl-icon" src="assets/rose-blush.webp" alt=""></li>
+      <li class="tl-item"><div class="tl-text"><time>11:00 PM</time><b>Farewell</b></div><img class="tl-icon" src="assets/rose-white.webp" alt=""></li>
     </ol>
   </section>
 
@@ -324,11 +287,40 @@
       <img class="arch-foot arch-foot-l bloom" src="assets/rose-white.webp" alt="">
       <img class="arch-foot arch-foot-r bloom" src="assets/bouquet.webp" alt="">
     </div>
-    <p class="lead rv">Our colours are sage, ivory and a whisper of burgundy. We would love to see you in them.</p>
-    <div class="swatches rv">
-      <div><i style="--c:#8e9a74"></i><span>Sage</span></div>
-      <div><i style="--c:#f3ede1"></i><span>Ivory</span></div>
-      <div><i style="--c:#a85d6c"></i><span>Burgundy</span></div>
+    <div class="attire">
+      <div class="attire-card rv">
+        <svg class="attire-art" viewBox="0 0 120 120" aria-hidden="true">
+          <defs>
+            <linearGradient id="goldCloth" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#e4c98d"/><stop offset=".45" stop-color="#c9a45e"/><stop offset=".7" stop-color="#b08a45"/><stop offset="1" stop-color="#d9bb7a"/>
+            </linearGradient>
+          </defs>
+          <!-- gold suit jacket, white shirt, black bow tie -->
+          <path d="M22 116 L28 40 Q40 30 50 28 L60 64 L70 28 Q80 30 92 40 L98 116Z" fill="url(#goldCloth)"/>
+          <path d="M50 28 L60 64 L70 28 Q60 32 50 28Z" fill="#fbf8f1"/>
+          <path d="M50 28 L44 46 L52 50 L46 60 L60 92 Z" fill="#b8934e"/>
+          <path d="M70 28 L76 46 L68 50 L74 60 L60 92 Z" fill="#a9843f"/>
+          <path d="M50 28 L44 46 L52 50 L46 60 L60 92 M70 28 L76 46 L68 50 L74 60 L60 92 M60 92 L60 116 M28 40 Q40 30 50 28 M70 28 Q80 30 92 40" fill="none" stroke="#7d6130" stroke-width=".8" opacity=".7"/>
+          <path d="M48 72 L55 70" stroke="#7d6130" stroke-width=".8"/><path d="M80 76 h8" stroke="#7d6130" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="60" cy="100" r="1.6" fill="#7d6130"/><circle cx="60" cy="108" r="1.6" fill="#7d6130"/>
+          <g class="attire-bow">
+            <path d="M60 37 L46 30 Q43 37 46 44 Z" fill="#1f1d1b"/><path d="M60 37 L74 30 Q77 37 74 44 Z" fill="#1f1d1b"/>
+            <path d="M48 32.5 Q50 37 48 41.5 M72 32.5 Q70 37 72 41.5" stroke="#4a4642" stroke-width=".7" fill="none"/>
+            <rect x="56.6" y="33.6" width="6.8" height="6.8" rx="1.6" fill="#2c2926"/>
+          </g>
+        </svg>
+        <p class="caps attire-k">Gentlemen</p>
+        <p class="attire-t">Gold suit &amp; bow tie</p>
+      </div>
+      <div class="attire-card rv">
+        <div class="swatches">
+          <div><i style="--c:#8e9a74"></i><span>Sage</span></div>
+          <div><i style="--c:#f3ede1"></i><span>Ivory</span></div>
+          <div><i style="--c:#a85d6c"></i><span>Burgundy</span></div>
+        </div>
+        <p class="caps attire-k">Our colours</p>
+        <p class="attire-t">Sage, ivory &amp; a whisper of burgundy</p>
+      </div>
     </div>
   </section>
 
@@ -393,13 +385,14 @@
   <!-- ============ CLOSING ============ -->
   <section class="closing" id="closing">
     <div class="closing-arch rv-frame">
-      <img class="closing-img" src="assets/closing-balustrade.jpg" alt="" loading="lazy">
+      <img class="closing-img" src="assets/closing-palms.jpg" alt="" loading="lazy">
       <img class="bloom ca-f ca-f1 sway" src="assets/jasmine.webp" alt="">
       <img class="bloom ca-f ca-f2 sway" src="assets/rose-white.webp" alt="">
       <img class="bloom ca-f ca-f3 sway" src="assets/olive.webp" alt="">
       <img class="bloom ca-f ca-f4 sway" src="assets/bouquet.webp" alt="">
     </div>
-    <p class="closing-names split"><span>Rashed</span><em>&amp;</em><span>Rahaf</span></p>
+    <div class="closing-calli calli" role="img" aria-label="راشد ورهف"><i class="calli-names"></i><i class="calli-waw"></i></div>
+    <p class="closing-names rv">Rashed <em>&amp;</em> Rahaf</p>
     <p class="closing-date rv">20 December 2026</p>
     <a class="btn btn-fill rv" href="assets/Rashed-Rahaf-Invitation.pdf" download="Rashed-Rahaf-Invitation.pdf">Download the invitation</a>
     <p class="made rv">Made with love for Rashed &amp; Rahaf</p>
