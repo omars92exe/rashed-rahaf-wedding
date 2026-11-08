@@ -336,7 +336,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 /* ---------- dress code: attire cards ---------- */
 .attire { display: grid; gap: 16px; margin-top: 34px; }
 .attire-card { padding: 26px 18px 24px; background: rgba(255, 253, 248, .55); border: 1px solid rgba(92, 107, 69, .22); box-shadow: 0 10px 26px rgba(60, 60, 40, .08); }
-.attire-art { display: block; width: 116px; height: 116px; margin: 0 auto 6px; filter: drop-shadow(0 6px 8px rgba(120, 90, 30, .25)); }
+.attire-art { display: block; width: 116px; height: 116px; margin: 0 auto 6px; filter: drop-shadow(0 6px 8px rgba(30, 30, 30, .25)); }
 .attire-bow { transform-origin: 60px 37px; animation: bowtie 3.6s ease-in-out infinite; }
 @keyframes bowtie { 50% { transform: rotate(-4deg) scale(1.04); } }
 .attire-k { margin: 6px 0 0; color: var(--sage); }
