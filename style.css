@@ -253,6 +253,13 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .ca-f3 { width: 46%; left: -20%; top: 4%; rotate: -30deg; transform-origin: 0 0; }
 .ca-f4 { width: 40%; right: -16%; top: 16%; rotate: 20deg; transform-origin: 100% 0; }
 .closing-date { margin: .8rem 0 0; letter-spacing: .14em; }
+/* the last word: a warm welcome under the download button */
+.welcome { margin: 2.6rem 0 0; }
+.welcome-rule { display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--sage); }
+.welcome-rule i { width: 44px; height: 1px; background: currentColor; opacity: .7; }
+.welcome-rule b { font-weight: 400; font-size: .7rem; }
+.welcome-script { margin: .9rem 0 0; font-family: var(--script); font-size: 2rem; line-height: 1.2; color: var(--burgundy); }
+.welcome-sub { margin: .5rem 0 0; font-size: .66rem !important; color: var(--sage); }
 
 /* ---------- bank sheet ---------- */
 .sheet {
