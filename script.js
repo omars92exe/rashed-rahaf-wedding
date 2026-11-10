@@ -394,14 +394,39 @@ const bankSheet = $('#bankSheet');
 $('#bankList').innerHTML = CONFIG.bank.map(([k, v]) =>
   `<div><span><dt>${k}</dt><dd>${v}</dd></span><button type="button" data-copy="${k === 'IBAN' ? v.replace(/\s/g, '') : v}">Copy</button></div>`).join('');
 $('#openBank').addEventListener('click', () => { $('#copyNote').textContent = ''; bankSheet.showModal(); });
-bankSheet.addEventListener('click', async e => {
+// Copy that works on iPhone Safari and in in-app browsers (WhatsApp, Instagram), where the Clipboard API can
+// report success without copying. The selection trick runs first, inside the open dialog (a modal dialog makes
+// the rest of the page inert, so the helper field has to live in it), then the Clipboard API as a backup.
+function copyText(text) {
+  let ok = false;
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px;';
+  bankSheet.appendChild(ta);
+  ta.focus({ preventScroll: true });
+  ta.select();
+  ta.setSelectionRange(0, text.length);
+  try { ok = document.execCommand('copy'); } catch { ok = false; }
+  ta.remove();
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).catch(() => {});
+  return ok || !!(navigator.clipboard && window.isSecureContext);
+}
+bankSheet.addEventListener('click', e => {
   if (e.target === bankSheet || e.target.closest('[data-close]')) return bankSheet.close();
   const btn = e.target.closest('[data-copy]');
   if (!btn) return;
-  try {
-    await navigator.clipboard.writeText(btn.dataset.copy);
-    $('#copyNote').textContent = 'Copied';
-  } catch {
+  const ok = copyText(btn.dataset.copy);
+  $$('[data-copy]', bankSheet).forEach(b => { b.textContent = 'Copy'; b.classList.remove('copied'); });
+  if (ok) {
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    $('#copyNote').textContent = `${btn.closest('div').querySelector('dt').textContent} copied`;
+    clearTimeout(btn._t);
+    btn._t = setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2200);
+  } else {
+    // last resort: show the value selected so it can be copied by hand
     $('#copyNote').textContent = btn.dataset.copy;
+    getSelection().selectAllChildren($('#copyNote'));
   }
 });

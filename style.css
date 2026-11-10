@@ -271,7 +271,8 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .bank div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: .9rem 0; border-top: 1px solid rgba(92, 107, 69, .2); }
 .bank dt { font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: var(--sage); }
 .bank dd { margin: .15rem 0 0; font-size: 1.05rem; word-break: break-all; }
-.bank button { flex: none; padding: .5rem .8rem; border: 1px solid var(--olive); background: none; color: var(--olive); font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; }
+.bank button { flex: none; padding: .5rem .8rem; border: 1px solid var(--olive); background: none; color: var(--olive); font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; min-width: 7.4em; transition: background .25s, color .25s; -webkit-tap-highlight-color: transparent; }
+.bank button.copied { background: var(--olive); color: var(--ivory); }
 
 /* no animation library / reduced motion: show everything */
 .static .rv, .static .bloom, .static .ch, .static .tl-item { opacity: 1 !important; transform: none !important; filter: none !important; }
