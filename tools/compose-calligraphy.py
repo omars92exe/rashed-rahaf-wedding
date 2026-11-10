@@ -1,7 +1,6 @@
 """Lay out راشد ورهف as a stacked monogram from the single-word renders in tools/out/:
-- راشد above, رهف directly beneath it on the same centre line;
-- the و (burgundy layer) on that centre line between them, a little larger, its tail running
-  parallel to the ر of راشد and coming to rest on the head of the ه;
+- راشد above and a little to the right, رهف tucked closely beneath it a little to the left;
+- the و (burgundy layer) between them; the names are drawn over it, so its tail slips under رهف;
 - the dot of the ف lifted up and to the left so it clears the tail.
 Writes assets/calli-names.png and assets/calli-waw.png (white on transparent, used as CSS masks)."""
 import sys
@@ -13,9 +12,9 @@ D = sys.argv[1] if len(sys.argv) > 1 else "tools/out"
 L = {k: Image.open(f"{D}/{k}.png").getchannel("A") for k in ("rashed", "waw", "rahaf")}
 
 # layout, in px of the 4x renders (all words share one text origin)
-RAHAF = (9, 390)          # رهف offset under راشد: centres line up, one row lower
-WAW = (630, 745, 1.45)    # و centre and scale
-DOT = (-110, 30)          # move of the ف dot
+RAHAF = (-60, 300)        # رهف just under راشد, a little to the left
+WAW = (580, 690, 1.2)     # و centre and scale; drawn beneath the names
+DOT = (-105, 25)          # move of the ف dot
 
 def components(alpha):
     a = np.asarray(alpha) > 40

@@ -64,9 +64,9 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 
 /* ================= ARABIC CALLIGRAPHY (راشد ورهف) =================
    Two transparent layers used as masks, so they take any colour and the و can animate on its own. */
-.calli { position: relative; aspect-ratio: 528 / 792; }
+.calli { position: relative; aspect-ratio: 587 / 702; }
 .calli i { position: absolute; inset: 0; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
-.calli-names { background: var(--olive-deep); -webkit-mask-image: url("assets/calli-names.png") !important; mask-image: url("assets/calli-names.png") !important; }
+.calli-names { z-index: 1; background: var(--olive-deep); -webkit-mask-image: url("assets/calli-names.png") !important; mask-image: url("assets/calli-names.png") !important; }
 .calli-waw { background: var(--burgundy); -webkit-mask-image: url("assets/calli-waw.png") !important; mask-image: url("assets/calli-waw.png") !important; }
 
 /* ================= THE ENVELOPE ================= */
@@ -129,7 +129,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   filter: drop-shadow(0 12px 24px rgba(30, 50, 55, .3));
 }
 .hero-dear { margin: 0; font-family: var(--script); font-size: 1.5rem; line-height: 1.2; color: var(--burgundy); }
-.hero-calli { width: 42%; margin: 0 auto; }
+.hero-calli { width: 47%; margin: 0 auto; }
 .hero-names { margin: .1rem 0 0; font-weight: 500; font-size: .9rem; letter-spacing: .32em; text-transform: uppercase; color: var(--olive); }
 .hero-names em { font-family: var(--script); font-style: normal; text-transform: none; letter-spacing: 0; font-size: 1.5em; color: var(--burgundy); margin: 0 .1em; }
 .hero-invite { margin: .7rem 0 0; font-size: .62rem !important; color: var(--ink); }
@@ -310,6 +310,6 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 @keyframes bowtie { 50% { transform: rotate(-4deg) scale(1.04); } }
 .attire-k { margin: 6px 0 0; color: var(--sage); }
 .attire-t { margin: .3rem 0 0; font-size: 1.45rem; line-height: 1.25; color: var(--olive); }
-.closing-calli { width: 40%; margin: 26px auto 0; }
+.closing-calli { width: 44.5%; margin: 26px auto 0; }
 .closing .closing-names { margin: .2rem 0 0; font-size: .95rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--olive); }
 .closing .closing-names em { font-family: var(--script); font-style: normal; text-transform: none; letter-spacing: 0; font-size: 1.5em; color: var(--burgundy); }
