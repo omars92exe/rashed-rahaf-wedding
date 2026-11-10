@@ -79,10 +79,6 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   background: #76806a url("assets/env-pocket.jpg") 0 0 / 100% 100%;
   will-change: transform;
 }
-.env-date {
-  position: absolute; left: 0; right: 0; top: 62%; margin: 0; text-align: center;
-  font-size: .86rem; font-weight: 600; letter-spacing: .42em; color: #efe2c4; text-shadow: 0 1px 1px rgba(40, 48, 30, .5);
-}
 .env-flap-shadow { /* the flap's shadow on the pocket: a static, blurred triangle (cheaper and steadier than drop-shadow) */
   position: absolute; left: -1%; right: -1%; top: 0; height: 52.6%; z-index: 2;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
