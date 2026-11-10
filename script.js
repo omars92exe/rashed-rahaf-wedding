@@ -16,8 +16,6 @@ const CONFIG = {
   ],
   // Optional online gift / payment page (a link from the couple's bank or a gift registry). '' hides the button.
   giftLink: '',
-  // Fallback if RSVP storage isn't set up: replies open WhatsApp to this number (digits only). '' disables it.
-  whatsapp: '',
 };
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -40,7 +38,6 @@ const guestName = (new URLSearchParams(location.search).get('to') || '').trim().
 if (guestName) {
   $('#dear').textContent = `Dear ${guestName},`;
   $('#dear').hidden = false;
-  $('#rName').value = guestName;
 }
 
 $('#couple').appendChild($('#coupleTpl').content.cloneNode(true));
@@ -369,60 +366,3 @@ bankSheet.addEventListener('click', async e => {
     $('#copyNote').textContent = btn.dataset.copy;
   }
 });
-
-/* ---------- Invite a guest: a personal link to share ---------- */
-$('#inviteForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const name = $('#inviteName').value.trim();
-  const note = $('#inviteNote');
-  const url = new URL(location.pathname, location.origin);
-  if (name) url.searchParams.set('to', name);
-  const text = `${name ? `Dear ${name}, ` : ''}you are warmly invited to the wedding of Rashed & Rahaf on Sunday, 20 December 2026.`;
-  if (navigator.share) {
-    try { await navigator.share({ title: 'The Wedding of Rashed & Rahaf', text, url: url.href }); note.textContent = 'Invitation shared'; }
-    catch { /* the guest closed the share sheet */ }
-  } else {
-    window.open(`https://wa.me/?text=${encodeURIComponent(`${text}\n${url.href}`)}`, '_blank', 'noopener');
-    note.textContent = 'Opening WhatsApp…';
-  }
-});
-
-/* ---------- RSVP ---------- */
-const form = $('#rsvpForm');
-const note = $('#rsvpNote');
-let guests = 1;
-$$('[data-step]', form).forEach(b => b.addEventListener('click', () => {
-  guests = Math.min(10, Math.max(1, guests + Number(b.dataset.step)));
-  $('#guests').textContent = guests;
-}));
-form.addEventListener('change', () => { $('#guestsQ').hidden = form.elements.attending.value === 'no'; });
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(form));
-  data.name = (data.name || '').trim();
-  data.guests = data.attending === 'no' ? 0 : guests;
-  if (!data.name) { note.textContent = 'Please write your name.'; $('#rName').focus(); return; }
-  const btn = $('[type=submit]', form);
-  btn.disabled = true;
-  note.textContent = 'Sending…';
-  try {
-    const res = await fetch('/api/rsvp', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
-    if (!res.ok) throw new Error(res.status);
-    thanks(data);
-  } catch {
-    if (CONFIG.whatsapp) {
-      const text = `RSVP — Rashed & Rahaf\nName: ${data.name}\nAttending: ${data.attending === 'yes' ? 'Yes' : 'No'}\nGuests: ${data.guests}` + (data.message ? `\nNote: ${data.message}` : '');
-      window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
-      thanks(data);
-    } else {
-      note.textContent = 'Sorry, your reply could not be sent right now. Please try again later.';
-    }
-  } finally {
-    btn.disabled = false;
-  }
-});
-function thanks(data) {
-  form.innerHTML = `<p class="lead lead-italic" style="text-align:center">${data.attending === 'yes'
-    ? 'Thank you, we cannot wait to celebrate with you.'
-    : 'Thank you for letting us know. You will be missed.'}</p>`;
-}
