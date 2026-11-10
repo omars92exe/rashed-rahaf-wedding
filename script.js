@@ -1,7 +1,7 @@
 /* ---------- Edit the wedding details here ---------- */
 const CONFIG = {
   // Celebration start, UAE time (+04:00)
-  date: '2026-12-20T18:00:00+04:00',
+  date: '2026-12-20T17:00:00+04:00',
   venueShort: 'W Dubai – The Palm, Dubai',
   venuePlace: 'West Crescent · Palm Jumeirah · Dubai',
   mapsUrl: 'https://maps.app.goo.gl/5YmUtDvq4DDznqqF9',
