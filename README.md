@@ -26,6 +26,13 @@ The PDF is made from `tools/invitation-card.html`; after editing it run `tools/m
 
 The Arabic names are set in Diwan Thuluth (a macOS font): `tools/make-calligraphy.sh` renders راشد, و and رهف one by one (`tools/calligraphy.html`), and `tools/compose-calligraphy.py` stacks them into a monogram (راشد above and a little right, رهف close beneath and a little left, the و between them passing under رهف, the ف dot moved clear), written to the transparent layers `assets/calli-names.png` and `assets/calli-waw.png`. The site uses them as masks, so their colour is set in CSS.
 
+## Link preview (WhatsApp)
+
+`assets/og-image.jpg` is the picture shown when the link is shared. Built by `tools/og/make-og.sh` from the couple's photo
+(put it at `tools/og/couple.png`; it is lifted out with macOS subject lifting and kept out of git), `make-backdrop.py` and `og.html`.
+After the domain is set up, change the two `og:image` / `twitter:image` URLs in `index.html` to the full
+`https://<your-domain>/assets/og-image.jpg`, because WhatsApp ignores relative addresses.
+
 ## Files
 
 - `index.html`, `style.css`, `script.js`: the site (no build step)
