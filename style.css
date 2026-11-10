@@ -97,11 +97,6 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .env-flap-face.front { background: #7a846d url("assets/env-flap.jpg") 0 0 / 100% 100%; }
 .env-flap-face.back { transform: rotateX(180deg); background: #efe6d2 url("assets/env-ivory.jpg") center / 520px; }
 
-/* satin ribbon: drawn and gently rippled on a canvas (script.js, satinRibbon) */
-.satin { position: absolute; top: calc(50% - 30px); height: 60px; width: 50%; z-index: 4; will-change: transform; pointer-events: none; }
-.satin canvas { display: block; width: 100%; height: 100%; }
-.satin-l { left: 0; } .satin-r { right: 0; }
-
 /* wax seal with the RR monogram */
 .seal {
   position: absolute; z-index: 5; left: 50%; top: 50%; width: 128px; height: 128px; translate: -50% -50%;
@@ -308,7 +303,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 /* no animation library / reduced motion: show everything */
 .static .rv, .static .bloom, .static .ch, .static .tl-item { opacity: 1 !important; transform: none !important; filter: none !important; }
 @media (prefers-reduced-motion: reduce) {
-  .sway, .band-img, .attire-bow, .hero-bg img, .scroll-cue, .intro-hint, .dance, .veil, .hem, .seal, .satin { animation: none !important; }
+  .sway, .band-img, .attire-bow, .hero-bg img, .scroll-cue, .intro-hint, .dance, .veil, .hem, .seal { animation: none !important; }
 }
 
 /* ---------- dress code: attire cards ---------- */
