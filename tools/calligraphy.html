@@ -4,13 +4,15 @@
 <meta charset="utf-8">
 <style>
   html, body { margin: 0; background: transparent; }
-  .c { position: relative; width: 340px; height: 260px; font-family: 'Diwan Thuluth'; color: #000; }
+  .c { position: relative; width: 360px; height: 280px; font-family: 'Diwan Thuluth'; color: #000; }
   .c span { position: absolute; white-space: nowrap; line-height: 1; -webkit-text-stroke: .6px #000; }
 </style>
 <div class="c">
-  <span class="n" style="font-size:126px;right:22px;top:14px">راشد</span>
-  <span class="w" style="font-size:190px;left:120px;top:20px">و</span>
-  <span class="n" style="font-size:126px;left:20px;top:82px">رهف</span>
+  <!-- راشد above on the right, رهف directly under it a little to the left,
+       the و tucked under the د with its tail sweeping through the ر of رهف -->
+  <span class="n" style="font-size:124px;right:40px;top:8px">راشد</span>
+  <span class="w" style="font-size:170px;left:168px;top:44px">و</span>
+  <span class="n" style="font-size:124px;left:80px;top:106px">رهف</span>
 </div>
 <script>
   const layer = new URLSearchParams(location.search).get('layer');
