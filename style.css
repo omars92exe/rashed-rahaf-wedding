@@ -129,7 +129,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   filter: drop-shadow(0 12px 24px rgba(30, 50, 55, .3));
 }
 .hero-dear { margin: 0; font-family: var(--script); font-size: 1.5rem; line-height: 1.2; color: var(--burgundy); }
-.hero-calli { width: 47%; margin: 0 auto; }
+.hero-calli { width: 38%; margin: .9rem auto 0; }   /* kept clear of the torn top edge */
 .hero-names { margin: .1rem 0 0; font-weight: 500; font-size: .9rem; letter-spacing: .32em; text-transform: uppercase; color: var(--olive); }
 .hero-names em { font-family: var(--script); font-style: normal; text-transform: none; letter-spacing: 0; font-size: 1.5em; color: var(--burgundy); margin: 0 .1em; }
 .hero-invite { margin: .7rem 0 0; font-size: .62rem !important; color: var(--ink); }
