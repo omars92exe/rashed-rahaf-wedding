@@ -26,7 +26,7 @@ In `index.html`: the "A Note from Us" text, the program times in "The Evening", 
 
 The PDF is made from `tools/invitation-card.html`; after editing it run `tools/make-pdf.sh` (uses Google Chrome on the Mac).
 
-The Arabic names are set in Diwan Thuluth (a macOS font): `tools/make-calligraphy.sh` renders راشد, و and رهف one by one (`tools/calligraphy.html`), and `tools/compose-calligraphy.py` stacks them into a monogram (راشد above, رهف beneath on the same centre line, the و between them, the ف dot moved clear of its tail), written to the transparent layers `assets/calli-names.png` and `assets/calli-waw.png`. The site uses them as masks, so their colour is set in CSS.
+The Arabic names are set in Diwan Thuluth (a macOS font): `tools/make-calligraphy.sh` renders راشد, و and رهف one by one (`tools/calligraphy.html`), and `tools/compose-calligraphy.py` stacks them into a monogram (راشد above and a little right, رهف close beneath and a little left, the و between them passing under رهف, the ف dot moved clear), written to the transparent layers `assets/calli-names.png` and `assets/calli-waw.png`. The site uses them as masks, so their colour is set in CSS.
 
 ## Files
 
