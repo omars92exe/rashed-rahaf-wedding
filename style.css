@@ -79,11 +79,8 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   background: #76806a url("assets/env-pocket.jpg") 0 0 / 100% 100%;
   will-change: transform;
 }
-.env-calli { position: absolute; left: 50%; top: 56%; width: 34%; translate: -50% 0; filter: drop-shadow(0 1px .5px rgba(40, 48, 30, .55)) drop-shadow(0 0 10px rgba(40, 48, 30, .18)); }
-.env-calli .calli-names { background: linear-gradient(160deg, #f1e4c6, #cfb88c 55%, #e8d8b4); }
-.env-calli .calli-waw { background: linear-gradient(160deg, #cf8e9a, #a4566a); }
 .env-date {
-  position: absolute; left: 0; right: 0; top: calc(56% + var(--col) * .34 * 792 / 528 + 12px); margin: 0; text-align: center;
+  position: absolute; left: 0; right: 0; top: 62%; margin: 0; text-align: center;
   font-size: .86rem; font-weight: 600; letter-spacing: .42em; color: #efe2c4; text-shadow: 0 1px 1px rgba(40, 48, 30, .5);
 }
 .env-flap-shadow { /* the flap's shadow on the pocket: a static, blurred triangle (cheaper and steadier than drop-shadow) */
