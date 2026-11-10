@@ -1,4 +1,4 @@
-"""A pressed burgundy wax seal with an interlocking RR in relief -> assets/seal.png (transparent).
+"""A pressed beige wax seal with an interlocking RR in relief -> assets/seal.png (transparent).
 Built as a height map (wax puddle, stamped rim and field, bevelled letters), then lit like wax:
 soft diffuse, a glossy highlight, darker hollows and a little colour bleeding through the thin edges."""
 import numpy as np
@@ -65,16 +65,16 @@ spec = np.clip(dot(Hh), 0, 1) ** 30
 sheen = np.clip(dot(Hh), 0, 1) ** 8
 ao = np.clip(1 - (nd.gaussian_filter(hs, 9) - hs) * 2.2, .55, 1)
 
-base = np.array([112, 30, 48.]) / 255
-deep = np.array([58, 12, 24.]) / 255
-lit = np.array([168, 62, 80.]) / 255
+base = np.array([214, 202, 178.]) / 255
+deep = np.array([138, 126, 104.]) / 255
+lit = np.array([240, 233, 216.]) / 255
 c = deep + (base - deep) * np.clip(diff * 1.25, 0, 1)[..., None]
 c = c + (lit - base) * np.clip(diff - .72, 0, 1)[..., None] * 2.2
-c = c * ao[..., None] * (1 + smooth_noise(S, 40, 9)[..., None] * .05)
+c = c * ao[..., None] * (1 + smooth_noise(S, 40, 9)[..., None] * .022)
 # thin outer edge glows a little (light through the wax)
 thin = np.exp(-np.clip(edge, 0, None) / 5)[..., None] * (edge > 0)[..., None]
-c = c + thin * np.array([.12, .02, .04])
-c = c + spec[..., None] * .4 + sheen[..., None] * .06
+c = c + thin * np.array([.04, .035, .02])
+c = c + spec[..., None] * .22 + sheen[..., None] * .04
 rgba = np.dstack([np.clip(c, 0, 1), mask])
 Image.fromarray((rgba * 255).astype(np.uint8)).resize((600, 600), Image.LANCZOS).save("assets/seal.png", optimize=True)
 print("wrote assets/seal.png")
