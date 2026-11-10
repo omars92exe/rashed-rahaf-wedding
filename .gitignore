@@ -7,3 +7,10 @@ tools/og/couple.png
 tools/og/couple-mask.png
 tools/og/backdrop.png
 tools/og/og@2x.png
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

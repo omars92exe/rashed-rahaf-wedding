@@ -38,12 +38,15 @@ The tags in `index.html` point at `https://rashedandrahaf.wedding/assets/og-imag
 - `assets/`: artwork, textures and the invitation PDF
 - `tools/`: scripts that fetched and cut out the artwork, made the textures and the PDF
 
-## Deploy (GitHub → Cloudflare Pages)
+## Live site and publishing
 
-1. Push this folder to a GitHub repository.
-2. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**, then pick the repo.
-3. Build settings: Framework preset **None**, build command empty, build output directory `/`.
-4. Add your custom domain under **Custom domains**.
+Live at **https://rashedandrahaf.wedding** (and www.), served by Cloudflare as the static-assets Worker
+`rashed-rahaf-wedding` (`wrangler.jsonc`). After any change, publish with:
+
+    sh tools/deploy.sh
+
+Only `index.html`, `style.css`, `script.js` and `assets/` go up; `.assetsignore` keeps `tools/`, this README and the
+config off the site. The first run on a new Mac asks you to sign in to Cloudflare in the browser.
 
 ## Image credits
 

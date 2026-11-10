@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // The wedding site, served as static assets on Cloudflare (Pages on Workers).
+  // Publish with: sh tools/deploy.sh   (.assetsignore keeps tools/ and the README off the site)
+  "name": "rashed-rahaf-wedding",
+  "compatibility_date": "2026-11-09",
+  "observability": { "enabled": true },
+  "assets": { "directory": "." },
+  "routes": [
+    { "pattern": "rashedandrahaf.wedding", "custom_domain": true },
+    { "pattern": "www.rashedandrahaf.wedding", "custom_domain": true }
+  ]
+}
