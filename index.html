@@ -327,51 +327,6 @@
     </div>
   </section>
 
-  <!-- ============ INVITE SOMEONE ============ -->
-  <section class="sec invite" id="invite">
-    <h2 class="title split">Invite a Guest</h2>
-    <p class="lead rv">Add a name to create a personal invitation, then share it on WhatsApp or anywhere you like.</p>
-    <form class="invite-form rv" id="inviteForm" novalidate>
-      <label class="q-label" for="inviteName">Guest's name</label>
-      <input class="field" id="inviteName" name="name" maxlength="60" autocomplete="off" placeholder="e.g. Aunt Mariam">
-      <button class="btn btn-fill" type="submit">Send invitation</button>
-      <p class="form-note" id="inviteNote" role="status"></p>
-    </form>
-  </section>
-
-  <!-- ============ RSVP ============ -->
-  <section class="sec rsvp" id="rsvp">
-    <h2 class="title split">RSVP</h2>
-    <div class="ornament rv" aria-hidden="true"><i></i><b>◇</b><i></i></div>
-    <p class="caps rsvp-by rv">The favour of a reply is kindly requested<br>by the twentieth of November, 2026</p>
-    <form class="rsvp-form" id="rsvpForm" novalidate>
-      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <div class="q rv">
-        <label class="q-label" for="rName"><span>01</span>Your name *</label>
-        <input class="field" id="rName" name="name" required maxlength="100" autocomplete="name">
-      </div>
-      <fieldset class="q rv">
-        <legend class="q-label"><span>02</span>Will you be joining us? *</legend>
-        <label class="opt"><input type="radio" name="attending" value="yes" checked><i></i>Delighted to accept</label>
-        <label class="opt"><input type="radio" name="attending" value="no"><i></i>Regretfully unable to attend</label>
-      </fieldset>
-      <div class="q rv" id="guestsQ">
-        <p class="q-label"><span>03</span>Number of guests in your party</p>
-        <div class="stepper">
-          <button type="button" data-step="-1" aria-label="Fewer guests">−</button>
-          <output id="guests">1</output>
-          <button type="button" data-step="1" aria-label="More guests">+</button>
-        </div>
-      </div>
-      <div class="q rv">
-        <label class="q-label" for="rMsg"><span>04</span>A message for the couple</label>
-        <textarea class="field" id="rMsg" name="message" rows="4" maxlength="500"></textarea>
-      </div>
-      <button class="btn btn-fill btn-wide rv" type="submit">Submit response</button>
-      <p class="form-note" id="rsvpNote" role="status"></p>
-    </form>
-  </section>
-
   <!-- ============ CLOSING ============ -->
   <section class="closing" id="closing">
     <div class="closing-arch rv-frame">

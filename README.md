@@ -10,9 +10,7 @@ A phone-first invitation in sage, ivory and soft burgundy, structured like The D
 6. **The Evening** — the night's program as a timeline.
 7. **Dress Code** — the couple under a floral arch, gentlemen in a black suit and black bow tie.
 8. **Wedding Gift** — a flower wreath, bank details sheet with copy buttons, optional online gift link.
-9. **Invite a Guest** — type a name to share a personal invitation link (share sheet or WhatsApp).
-10. **RSVP** — numbered questions, guests counter, message.
-11. **Closing** — arched palm painting, the calligraphy and a PDF download of the invitation.
+9. **Closing** — arched palm painting, the calligraphy and a PDF download of the invitation.
 
 ## Edit before sharing
 
@@ -20,7 +18,7 @@ In `CONFIG` at the top of `script.js`:
 
 - `bank`: the gift account details shown in the bank sheet
 - `giftLink`: optional online gift / payment page; leave `''` to hide the button
-- `venueShort`, `venuePlace`, `mapsUrl`, `date`, `whatsapp`
+- `venueShort`, `venuePlace`, `mapsUrl`, `date`
 
 In `index.html`: the "A Note from Us" text, the program times in "The Evening", and the dress code wording.
 
@@ -32,7 +30,6 @@ The Arabic names are set in Diwan Thuluth (a macOS font): `tools/make-calligraph
 
 - `index.html`, `style.css`, `script.js`: the site (no build step)
 - `assets/`: artwork, textures and the invitation PDF
-- `functions/api/rsvp.js`, `functions/api/rsvps.js`: RSVP storage on Cloudflare
 - `tools/`: scripts that fetched and cut out the artwork, made the textures and the PDF
 
 ## Deploy (GitHub → Cloudflare Pages)
@@ -40,11 +37,7 @@ The Arabic names are set in Diwan Thuluth (a macOS font): `tools/make-calligraph
 1. Push this folder to a GitHub repository.
 2. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**, then pick the repo.
 3. Build settings: Framework preset **None**, build command empty, build output directory `/`.
-4. **Storage & Databases → KV**: create a namespace `wedding-rsvps`. In the Pages project → **Settings → Bindings → Add → KV namespace**, set variable name `RSVPS` and namespace `wedding-rsvps`.
-5. **Settings → Variables and Secrets**: add a secret `ADMIN_KEY` set to a long random value.
-6. Redeploy so the binding takes effect, then add your custom domain.
-
-To see replies, open `https://<your-domain>/api/rsvps?key=<ADMIN_KEY>`.
+4. Add your custom domain under **Custom domains**.
 
 ## Image credits
 
