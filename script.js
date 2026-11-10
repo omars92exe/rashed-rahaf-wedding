@@ -392,7 +392,7 @@ if ('ResizeObserver' in window) {
 /* ---------- Bank details ---------- */
 const bankSheet = $('#bankSheet');
 $('#bankList').innerHTML = CONFIG.bank.map(([k, v]) =>
-  `<div><span><dt>${k}</dt><dd>${v}</dd></span><button type="button" data-copy="${k === 'IBAN' ? v.replace(/\s/g, '') : v}">Copy</button></div>`).join('');
+  `<div><span><dt>${k}</dt><dd>${v}</dd></span><button type="button" data-copy="${k === 'IBAN' ? v.replace(/\s/g, '') : v}" aria-label="Copy ${k}"><span class="cp-a">Copy</span><span class="cp-b" aria-hidden="true">Copied</span></button></div>`).join('');
 $('#openBank').addEventListener('click', () => { $('#copyNote').textContent = ''; bankSheet.showModal(); });
 // Copy that works on iPhone Safari and in in-app browsers (WhatsApp, Instagram), where the Clipboard API can
 // report success without copying. The selection trick runs first, inside the open dialog (a modal dialog makes
@@ -417,13 +417,13 @@ bankSheet.addEventListener('click', e => {
   const btn = e.target.closest('[data-copy]');
   if (!btn) return;
   const ok = copyText(btn.dataset.copy);
-  $$('[data-copy]', bankSheet).forEach(b => { b.textContent = 'Copy'; b.classList.remove('copied'); });
+  $$('[data-copy]', bankSheet).forEach(b => { if (b !== btn) b.classList.remove('copied'); });
+  $('#copyNote').textContent = '';
   if (ok) {
-    btn.textContent = 'Copied ✓';
+    // the button itself fills and says Copied (style.css), then eases back
     btn.classList.add('copied');
-    $('#copyNote').textContent = `${btn.closest('div').querySelector('dt').textContent} copied`;
     clearTimeout(btn._t);
-    btn._t = setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2200);
+    btn._t = setTimeout(() => btn.classList.remove('copied'), 2000);
   } else {
     // last resort: show the value selected so it can be copied by hand
     $('#copyNote').textContent = btn.dataset.copy;
