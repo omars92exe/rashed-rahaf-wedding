@@ -8,7 +8,7 @@ A phone-first invitation in sage, ivory and soft burgundy, structured like The D
 4. **A Note from Us**, then a painted sea band that drifts like the tide.
 5. **The Celebration** — olive section with an ornate frame that draws itself, venue, time and map.
 6. **The Evening** — the night's program as a timeline.
-7. **Dress Code** — the couple under a floral arch, gentlemen in a black suit and black bow tie, and the colour palette.
+7. **Dress Code** — the couple under a floral arch, gentlemen in a black suit and black bow tie.
 8. **Wedding Gift** — a flower wreath, bank details sheet with copy buttons, optional online gift link.
 9. **Invite a Guest** — type a name to share a personal invitation link (share sheet or WhatsApp).
 10. **RSVP** — numbered questions, guests counter, message.
@@ -26,7 +26,7 @@ In `index.html`: the "A Note from Us" text, the program times in "The Evening", 
 
 The PDF is made from `tools/invitation-card.html`; after editing it run `tools/make-pdf.sh` (uses Google Chrome on the Mac).
 
-The Arabic names are composed in `tools/calligraphy.html` (Diwan Thuluth, a macOS font) and rendered to the transparent layers `assets/calli-names.png` and `assets/calli-waw.png` by `tools/make-calligraphy.sh`. The site uses them as masks, so their colour is set in CSS.
+The Arabic names are set in Diwan Thuluth (a macOS font): `tools/make-calligraphy.sh` renders راشد, و and رهف one by one (`tools/calligraphy.html`), and `tools/compose-calligraphy.py` stacks them into a monogram (راشد above, رهف beneath on the same centre line, the و between them, the ف dot moved clear of its tail), written to the transparent layers `assets/calli-names.png` and `assets/calli-waw.png`. The site uses them as masks, so their colour is set in CSS.
 
 ## Files
 

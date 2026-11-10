@@ -64,7 +64,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 
 /* ================= ARABIC CALLIGRAPHY (راشد ورهف) =================
    Two transparent layers used as masks, so they take any colour and the و can animate on its own. */
-.calli { position: relative; aspect-ratio: 971 / 807; }
+.calli { position: relative; aspect-ratio: 528 / 792; }
 .calli i { position: absolute; inset: 0; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
 .calli-names { background: var(--olive-deep); -webkit-mask-image: url("assets/calli-names.png") !important; mask-image: url("assets/calli-names.png") !important; }
 .calli-waw { background: var(--burgundy); -webkit-mask-image: url("assets/calli-waw.png") !important; mask-image: url("assets/calli-waw.png") !important; }
@@ -86,11 +86,11 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
     linear-gradient(to top left, transparent calc(50% - 1.5px), rgba(255, 255, 255, .13) calc(50% - .5px), rgba(0, 0, 0, .28) calc(50% + .5px), transparent calc(50% + 2px)) left bottom / 50% 51% no-repeat,
     linear-gradient(to top right, transparent calc(50% - 1.5px), rgba(255, 255, 255, .13) calc(50% - .5px), rgba(0, 0, 0, .28) calc(50% + .5px), transparent calc(50% + 2px)) right bottom / 50% 51% no-repeat;
 }
-.env-calli { position: absolute; left: 50%; top: 57%; width: 50%; translate: -50% 0; }
+.env-calli { position: absolute; left: 50%; top: 56%; width: 34%; translate: -50% 0; }
 .env-calli .calli-names { background: linear-gradient(160deg, #f1e4c6, #cfb88c 55%, #e8d8b4); }
 .env-calli .calli-waw { background: linear-gradient(160deg, #cf8e9a, #a4566a); }
 .env-date {
-  position: absolute; left: 0; right: 0; top: calc(57% + var(--col) * .5 * 807 / 971 + 12px); margin: 0; text-align: center;
+  position: absolute; left: 0; right: 0; top: calc(56% + var(--col) * .34 * 792 / 528 + 12px); margin: 0; text-align: center;
   font-size: .86rem; font-weight: 500; letter-spacing: .42em; color: #dccaa3;
 }
 .env-flap-shadow { /* the flap's shadow on the pocket: a static, blurred triangle (cheaper and steadier than drop-shadow) */
@@ -160,7 +160,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   filter: drop-shadow(0 12px 24px rgba(30, 50, 55, .3));
 }
 .hero-dear { margin: 0; font-family: var(--script); font-size: 1.5rem; line-height: 1.2; color: var(--burgundy); }
-.hero-calli { width: 66%; margin: 0 auto; }
+.hero-calli { width: 42%; margin: 0 auto; }
 .hero-names { margin: .1rem 0 0; font-weight: 500; font-size: .9rem; letter-spacing: .32em; text-transform: uppercase; color: var(--olive); }
 .hero-names em { font-family: var(--script); font-style: normal; text-transform: none; letter-spacing: 0; font-size: 1.5em; color: var(--burgundy); margin: 0 .1em; }
 .hero-invite { margin: .7rem 0 0; font-size: .62rem !important; color: var(--ink); }
@@ -264,9 +264,6 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 @keyframes veil { from { transform: rotate(-2deg) skewY(-1deg); } to { transform: rotate(4deg) skewY(2deg); } }
 .hem { transform-origin: 50px 100px; animation: hem 3.2s ease-in-out infinite alternate; }
 @keyframes hem { from { transform: skewX(-2deg); } to { transform: skewX(2.5deg); } }
-.swatches { display: flex; justify-content: center; gap: 26px; margin-top: 1.6rem; }
-.swatches div { display: flex; flex-direction: column; align-items: center; gap: .4rem; font-size: .78rem; letter-spacing: .2em; text-transform: uppercase; }
-.swatches i { width: 46px; height: 46px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(60, 60, 40, .15), 0 4px 10px rgba(60, 60, 40, .15); }
 
 /* ---------- gift ---------- */
 .wreath { position: relative; width: 320px; height: 320px; margin: 28px auto 0; display: grid; place-items: center; }
@@ -339,12 +336,11 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 /* ---------- dress code: attire cards ---------- */
 .attire { display: grid; gap: 16px; margin-top: 34px; }
 .attire-card { padding: 26px 18px 24px; background: rgba(255, 253, 248, .55); border: 1px solid rgba(92, 107, 69, .22); box-shadow: 0 10px 26px rgba(60, 60, 40, .08); }
-.attire-art { display: block; width: 116px; height: 116px; margin: 0 auto 6px; filter: drop-shadow(0 6px 8px rgba(30, 30, 30, .25)); }
-.attire-bow { transform-origin: 60px 37px; animation: bowtie 3.6s ease-in-out infinite; }
+.attire-art { display: block; width: min(64%, 210px); height: auto; margin: 0 auto 10px; filter: drop-shadow(0 8px 12px rgba(30, 30, 30, .28)); }
+.attire-bow { transform-origin: 100px 52px; animation: bowtie 3.6s ease-in-out infinite; }
 @keyframes bowtie { 50% { transform: rotate(-4deg) scale(1.04); } }
 .attire-k { margin: 6px 0 0; color: var(--sage); }
 .attire-t { margin: .3rem 0 0; font-size: 1.45rem; line-height: 1.25; color: var(--olive); }
-.attire-card .swatches { margin: 4px 0 14px; }
-.closing-calli { width: 56%; margin: 26px auto 0; }
+.closing-calli { width: 40%; margin: 26px auto 0; }
 .closing .closing-names { margin: .2rem 0 0; font-size: .95rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--olive); }
 .closing .closing-names em { font-family: var(--script); font-style: normal; text-transform: none; letter-spacing: 0; font-size: 1.5em; color: var(--burgundy); }
