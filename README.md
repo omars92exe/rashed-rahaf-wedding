@@ -2,7 +2,7 @@
 
 A phone-first invitation in sage, ivory and soft burgundy, structured like The Digital Yes "Fresco" demo but with its own artwork.
 
-1. **Envelope** — sage card blind-embossed with florals (`tools/envelope.py`), راشد ورهف in champagne, a champagne satin ribbon that ripples softly (drawn on a canvas) and a burgundy wax seal with an interlocking RR in relief (`tools/seal.py`). Tap the seal or scroll: the seal lifts, the ribbon parts, the flap opens onto the site and the envelope slides away.
+1. **Envelope** — sage card blind-embossed with florals (`tools/envelope.py`), a champagne satin ribbon that ripples softly (drawn on a canvas) and a burgundy wax seal with an interlocking RR in relief (`tools/seal.py`). Tap the seal or scroll: the seal lifts, the ribbon parts, the flap opens onto the site and the envelope slides away.
 2. **Hero** — a torn ivory card over Winslow Homer's palm and sea: the calligraphy is written in, then names, date, 6 PM, Secret Garden at W Dubai – The Palm. A personal link (`?to=Name`) adds "Dear Name," at the top.
 3. **Countdown** in a sage linen frame with flowers that bloom in.
 4. **A Note from Us**, then a painted sea band that drifts like the tide.
