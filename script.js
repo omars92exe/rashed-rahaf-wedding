@@ -109,6 +109,30 @@ function buildOrnate() {
       <g transform="translate(${W / 2} ${H - i + 2}) scale(1 -1)" class="o-sprig">${sprig}</g>
     </g>`;
   $$('.draw', svg).forEach(p => { p.setAttribute('pathLength', '1'); p.setAttribute('fill', 'none'); });
+  paintOrnate();   // a rebuilt frame picks up exactly where the drawing is
+}
+
+/* The frame's draw-in is one progress value (0 = not drawn, 1 = done) painted onto whatever nodes exist,
+   so rebuilding the frame mid-animation or a repaint never makes it vanish or pop. */
+const ornate = { p: hasGsap && !reduceMotion ? 0 : 1 };
+function paintOrnate() {
+  const paths = $$('.ornate-svg .draw'), bits = $$('.ornate-svg use, .ornate-svg circle');
+  if (ornate.p >= 1) {   // finished: plain solid lines, no dash styling left for browsers to mis-repaint
+    paths.forEach(el => { el.style.strokeDasharray = ''; el.style.strokeDashoffset = ''; });
+    bits.forEach(el => { el.style.opacity = ''; });
+    return;
+  }
+  const n = paths.length || 1;
+  paths.forEach((el, k) => {
+    const t = Math.min(1, Math.max(0, (ornate.p * 1.35 - (k / n) * 0.35)));     // a light stagger around the frame
+    const e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;              // ease in-out
+    el.style.strokeDasharray = '1'; el.style.strokeDashoffset = String(1 - e);
+  });
+  const m = bits.length || 1;
+  bits.forEach((el, k) => {
+    const t = Math.min(1, Math.max(0, (ornate.p - 0.45 - (k / m) * 0.25) / 0.3));   // leaves and buds bloom in after the lines
+    el.style.opacity = String(t * t * (3 - 2 * t));
+  });
 }
 
 /* ---------- Flower wreath around the gift note ---------- */
@@ -320,14 +344,7 @@ if (!hasGsap || reduceMotion) {
   });
 
   // the ornate frame draws itself in
-  const drawFrame = () => {
-    const paths = $$('.ornate-svg .draw');
-    // once drawn, drop the dash trick: browsers can mis-repaint pathLength dashes while scrolling and blank the lines
-    gsap.fromTo(paths, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.2, stagger: 0.04, ease: 'power2.inOut',
-      onComplete: () => gsap.set($$('.ornate-svg .draw'), { clearProps: 'strokeDasharray,strokeDashoffset' }) });
-    gsap.fromTo('.ornate-svg use, .ornate-svg circle', { opacity: 0, scale: 0, transformOrigin: 'center', transformBox: 'fill-box' },
-      { opacity: 1, scale: 1, duration: 0.8, stagger: 0.03, delay: 1, ease: 'back.out(2)' });
-  };
+  const drawFrame = () => gsap.to(ornate, { p: 1, duration: 2.8, ease: 'none', onUpdate: paintOrnate, onComplete: paintOrnate });
   ScrollTrigger.create({ trigger: '.ornate', start: 'top 78%', once: true, onEnter: drawFrame });
 
   // the painted band glides as you pass
