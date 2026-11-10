@@ -1,23 +1,11 @@
 <!doctype html>
-<!-- راشد ورهف, composed in Diwan Thuluth (macOS). Rendered to transparent PNG layers by make-calligraphy.sh:
-     ?layer=names -> assets/calli-names.png, ?layer=waw -> assets/calli-waw.png -->
+<!-- Renders one word of راشد ورهف in Diwan Thuluth (macOS) at a fixed text origin, so all words share a baseline.
+     make-calligraphy.sh calls it as calligraphy.html#<word> and tools/compose-calligraphy.py lays the words out. -->
 <meta charset="utf-8">
 <style>
   html, body { margin: 0; background: transparent; }
-  .c { position: relative; width: 360px; height: 280px; font-family: 'Diwan Thuluth'; color: #000; }
-  .c span { position: absolute; white-space: nowrap; line-height: 1; -webkit-text-stroke: .6px #000; }
+  span { position: absolute; left: 100px; top: 60px; font-family: 'Diwan Thuluth'; font-size: 120px; line-height: 1;
+         color: #000; -webkit-text-stroke: .6px #000; white-space: nowrap; }
 </style>
-<div class="c">
-  <!-- راشد above on the right, رهف directly under it a little to the left,
-       the و tucked under the د with its tail sweeping through the ر of رهف -->
-  <span class="n" style="font-size:124px;right:40px;top:8px">راشد</span>
-  <span class="w" style="font-size:170px;left:168px;top:44px">و</span>
-  <span class="n" style="font-size:124px;left:80px;top:106px">رهف</span>
-</div>
-<script>
-  const layer = new URLSearchParams(location.search).get('layer');
-  document.querySelectorAll('.c span').forEach(s => {
-    if (layer === 'names' && s.classList.contains('w')) s.style.visibility = 'hidden';
-    if (layer === 'waw' && s.classList.contains('n')) s.style.visibility = 'hidden';
-  });
-</script>
+<span id="w"></span>
+<script>document.getElementById('w').textContent = decodeURIComponent(location.hash.slice(1));</script>

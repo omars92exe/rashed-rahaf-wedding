@@ -291,40 +291,53 @@
     </div>
     <div class="attire">
       <div class="attire-card rv">
-        <svg class="attire-art" viewBox="0 0 120 120" aria-hidden="true">
+        <svg class="attire-art" viewBox="0 0 200 214" aria-hidden="true">
           <defs>
             <linearGradient id="blackCloth" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#3a3836"/><stop offset=".5" stop-color="#1c1b1a"/><stop offset="1" stop-color="#2e2c2a"/>
+              <stop offset="0" stop-color="#3b3936"/><stop offset=".45" stop-color="#1b1a19"/><stop offset="1" stop-color="#2b2927"/>
+            </linearGradient>
+            <linearGradient id="lapelL" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#0c0c0b"/><stop offset=".55" stop-color="#4b4844"/><stop offset="1" stop-color="#141413"/>
+            </linearGradient>
+            <linearGradient id="lapelR" x1="1" y1="0" x2="0" y2="0">
+              <stop offset="0" stop-color="#0c0c0b"/><stop offset=".55" stop-color="#3f3c39"/><stop offset="1" stop-color="#141413"/>
             </linearGradient>
             <linearGradient id="blackSilk" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#3b3936"/><stop offset=".5" stop-color="#121211"/><stop offset="1" stop-color="#2a2826"/>
+              <stop offset="0" stop-color="#4a4743"/><stop offset=".5" stop-color="#121211"/><stop offset="1" stop-color="#2c2a28"/>
+            </linearGradient>
+            <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ece6da"/>
             </linearGradient>
           </defs>
-          <!-- black suit jacket, white shirt, black bow tie -->
-          <path d="M22 116 L28 40 Q40 30 50 28 L60 64 L70 28 Q80 30 92 40 L98 116Z" fill="url(#blackCloth)"/>
-          <path d="M50 28 L60 64 L70 28 Q60 32 50 28Z" fill="#fbf8f1"/>
-          <path d="M50 28 L44 46 L52 50 L46 60 L60 92 Z" fill="#0f0f0e"/>
-          <path d="M70 28 L76 46 L68 50 L74 60 L60 92 Z" fill="#141413"/>
-          <path d="M50 28 L44 46 L52 50 L46 60 L60 92 M70 28 L76 46 L68 50 L74 60 L60 92 M60 92 L60 116" fill="none" stroke="#5a5652" stroke-width=".8" opacity=".8"/>
-          <path d="M80 76 h8" stroke="#5a5652" stroke-width="1.2" stroke-linecap="round"/>
-          <circle cx="60" cy="100" r="1.6" fill="#6a6560"/><circle cx="60" cy="108" r="1.6" fill="#6a6560"/>
+          <!-- black dinner suit: peak satin lapels, white pleated shirt, black bow tie, white pocket square -->
+          <path d="M100 38 C86 38 72 43 62 47 L38 55 Q25 61 23 92 L19 212 L181 212 L177 92 Q175 61 162 55 L138 47 C128 43 114 38 100 38Z" fill="url(#blackCloth)"/>
+          <path d="M45 66 Q40 120 41 212 M155 66 Q160 120 159 212" fill="none" stroke="#000" stroke-opacity=".45" stroke-width="1.2"/>
+          <path d="M45 66 Q40 120 41 212 M155 66 Q160 120 159 212" fill="none" stroke="#6a6560" stroke-opacity=".25" stroke-width=".6" transform="translate(1.2 0)"/>
+          <!-- shirt -->
+          <path d="M80 41 L100 124 L120 41 Q100 50 80 41Z" fill="url(#shirt)"/>
+          <path d="M94 60 L100 120 M106 60 L100 120 M90 52 L99 112 M110 52 L101 112" stroke="#d9d1c2" stroke-width=".6" fill="none"/>
+          <circle cx="100" cy="72" r="1.5" fill="#1a1918"/><circle cx="100" cy="86" r="1.5" fill="#1a1918"/><circle cx="100" cy="100" r="1.5" fill="#1a1918"/>
+          <path d="M84 42 L92 50 L100 46 L108 50 L116 42 Q100 47 84 42Z" fill="#f4efe6" stroke="#d6cdbd" stroke-width=".5"/>
+          <!-- satin peak lapels -->
+          <path d="M80 41 L100 124 L100 154 L62 100 L46 74 L62 82 Z" fill="url(#lapelL)"/>
+          <path d="M120 41 L100 124 L100 154 L138 100 L154 74 L138 82 Z" fill="url(#lapelR)"/>
+          <path d="M80 41 L100 124 L100 154 L62 100 L46 74 L62 82 Z M120 41 L100 124 L100 154 L138 100 L154 74 L138 82 Z" fill="none" stroke="#77716a" stroke-width=".6" stroke-opacity=".7"/>
+          <!-- front opening, button, pockets -->
+          <path d="M100 154 L100 166 Q96 190 88 212 M100 166 Q104 190 112 212" fill="none" stroke="#000" stroke-opacity=".6" stroke-width="1"/>
+          <circle cx="100" cy="162" r="3.2" fill="url(#blackSilk)" stroke="#5a5652" stroke-width=".5"/>
+          <path d="M50 176 h28 M122 176 h28" stroke="#000" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>
+          <path d="M50 175 h28 M122 175 h28" stroke="#6a6560" stroke-opacity=".35" stroke-width=".6"/>
+          <path d="M126 104 h26" stroke="#000" stroke-opacity=".55" stroke-width="1.6"/>
+          <path d="M129 104 L133 95 L137 102 L141 94 L145 102 L149 96 L150 104Z" fill="#fbf8f1"/>
+          <!-- bow tie -->
           <g class="attire-bow">
-            <path d="M60 37 L46 30 Q43 37 46 44 Z" fill="url(#blackSilk)"/><path d="M60 37 L74 30 Q77 37 74 44 Z" fill="url(#blackSilk)"/>
-            <path d="M48 32.5 Q50 37 48 41.5 M72 32.5 Q70 37 72 41.5" stroke="#5a5652" stroke-width=".7" fill="none"/>
-            <rect x="56.6" y="33.6" width="6.8" height="6.8" rx="1.6" fill="#232120"/>
+            <path d="M100 52 L78 41 Q73 52 78 63 Z" fill="url(#blackSilk)"/><path d="M100 52 L122 41 Q127 52 122 63 Z" fill="url(#blackSilk)"/>
+            <path d="M81 44 Q84 52 81 60 M119 44 Q116 52 119 60 M90 47 Q92 52 90 57 M110 47 Q108 52 110 57" stroke="#6a6560" stroke-width=".7" fill="none"/>
+            <rect x="94.5" y="46.5" width="11" height="11" rx="2.6" fill="#232120" stroke="#55514c" stroke-width=".5"/>
           </g>
         </svg>
         <p class="caps attire-k">Gentlemen</p>
         <p class="attire-t">Black suit &amp; black bow tie</p>
-      </div>
-      <div class="attire-card rv">
-        <div class="swatches">
-          <div><i style="--c:#8e9a74"></i><span>Sage</span></div>
-          <div><i style="--c:#f3ede1"></i><span>Ivory</span></div>
-          <div><i style="--c:#a85d6c"></i><span>Burgundy</span></div>
-        </div>
-        <p class="caps attire-k">Our colours</p>
-        <p class="attire-t">Sage, ivory &amp; a whisper of burgundy</p>
       </div>
     </div>
   </section>
