@@ -72,31 +72,24 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 /* ================= THE ENVELOPE ================= */
 .intro { position: fixed; inset: 0; z-index: 60; display: flex; justify-content: center; pointer-events: none; }
 .env { position: relative; width: var(--col); height: 100%; perspective: 1600px; pointer-events: auto; }
-/* deep green paper: the ivory paper texture multiplied over a forest green */
-.env-pocket, .env-flap-face { background: #3f5034 url("assets/env-ivory.jpg") center / 520px; background-blend-mode: multiply; }
+/* sage card with blind-embossed florals and real folds (tools/envelope.py), stretched to the envelope */
 .env-pocket {
   position: absolute; inset: 0; z-index: 2;
   clip-path: polygon(0 0, 50% 49%, 100% 0, 100% 100%, 0 100%);
-  box-shadow: inset 0 0 110px rgba(10, 22, 8, .38);
+  background: #76806a url("assets/env-pocket.jpg") 0 0 / 100% 100%;
   will-change: transform;
 }
-.env-pocket::before { /* the two side folds, pressed into the paper */
-  content: ""; position: absolute; inset: 0;
-  background:
-    linear-gradient(to top left, transparent calc(50% - 1.5px), rgba(255, 255, 255, .13) calc(50% - .5px), rgba(0, 0, 0, .28) calc(50% + .5px), transparent calc(50% + 2px)) left bottom / 50% 51% no-repeat,
-    linear-gradient(to top right, transparent calc(50% - 1.5px), rgba(255, 255, 255, .13) calc(50% - .5px), rgba(0, 0, 0, .28) calc(50% + .5px), transparent calc(50% + 2px)) right bottom / 50% 51% no-repeat;
-}
-.env-calli { position: absolute; left: 50%; top: 56%; width: 34%; translate: -50% 0; }
+.env-calli { position: absolute; left: 50%; top: 56%; width: 34%; translate: -50% 0; filter: drop-shadow(0 1px .5px rgba(40, 48, 30, .55)) drop-shadow(0 0 10px rgba(40, 48, 30, .18)); }
 .env-calli .calli-names { background: linear-gradient(160deg, #f1e4c6, #cfb88c 55%, #e8d8b4); }
 .env-calli .calli-waw { background: linear-gradient(160deg, #cf8e9a, #a4566a); }
 .env-date {
   position: absolute; left: 0; right: 0; top: calc(56% + var(--col) * .34 * 792 / 528 + 12px); margin: 0; text-align: center;
-  font-size: .86rem; font-weight: 500; letter-spacing: .42em; color: #dccaa3;
+  font-size: .86rem; font-weight: 600; letter-spacing: .42em; color: #efe2c4; text-shadow: 0 1px 1px rgba(40, 48, 30, .5);
 }
 .env-flap-shadow { /* the flap's shadow on the pocket: a static, blurred triangle (cheaper and steadier than drop-shadow) */
   position: absolute; left: -1%; right: -1%; top: 0; height: 52.6%; z-index: 2;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-  background: linear-gradient(rgba(5, 14, 4, 0) 40%, rgba(5, 14, 4, .5));
+  background: linear-gradient(rgba(30, 38, 22, 0) 40%, rgba(30, 38, 22, .42));
   filter: blur(9px);
 }
 .env-flap {
@@ -104,38 +97,26 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   transform-origin: 50% 0; transform-style: preserve-3d; will-change: transform;
 }
 .env-flap-face { position: absolute; inset: 0; clip-path: polygon(0 0, 100% 0, 50% 100%); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.env-flap-face.front { background-image: linear-gradient(rgba(255, 255, 255, .07), rgba(0, 0, 0, .1)), url("assets/env-ivory.jpg"); background-size: auto, 520px; }
-.env-flap-face.back { transform: rotateX(180deg); background: #efe6d2 url("assets/env-ivory.jpg") center / 520px; background-blend-mode: normal; }
-.env-flap-line { position: absolute; inset: 0; width: 100%; height: 100%; }
-.env-flap-line path { fill: none; stroke: #d8c49a; stroke-opacity: .45; stroke-width: 1; }
+.env-flap-face.front { background: #7a846d url("assets/env-flap.jpg") 0 0 / 100% 100%; }
+.env-flap-face.back { transform: rotateX(180deg); background: #efe6d2 url("assets/env-ivory.jpg") center / 520px; }
 
-/* satin ribbon: smooth bands of light across a champagne-beige silk */
-.satin {
-  position: absolute; top: calc(50% - 15px); height: 30px; width: 50%; z-index: 4; will-change: transform;
-  background:
-    linear-gradient(100deg, transparent 30%, rgba(255, 252, 240, .5) 46%, rgba(255, 255, 255, .08) 54%, transparent 66%) 0 0 / 260% 100% no-repeat,
-    linear-gradient(180deg, #a08a63 0%, #d2bf98 14%, #f0e4c8 30%, #d9c7a2 46%, #bba67e 62%, #e0d0ad 80%, #9a845d 100%);
-  box-shadow: 0 2px 3px rgba(5, 12, 4, .45), 0 8px 16px rgba(5, 12, 4, .3);
-  animation: sheen 5s ease-in-out infinite;
-}
-.satin::before, .satin::after { content: ""; position: absolute; left: 0; right: 0; height: 1px; background: rgba(255, 255, 255, .35); }
-.satin::before { top: 3px; background: rgba(255, 250, 235, .55); } .satin::after { bottom: 3px; background: rgba(90, 70, 40, .3); }
-.satin-l { left: 0; } .satin-r { right: 0; animation-delay: -2.5s; }
-@keyframes sheen { 0% { background-position: 110% 0, 0 0; } 100% { background-position: -110% 0, 0 0; } }
+/* satin ribbon: drawn and gently rippled on a canvas (script.js, satinRibbon) */
+.satin { position: absolute; top: calc(50% - 30px); height: 60px; width: 50%; z-index: 4; will-change: transform; pointer-events: none; }
+.satin canvas { display: block; width: 100%; height: 100%; }
+.satin-l { left: 0; } .satin-r { right: 0; }
 
 /* wax seal with the RR monogram */
 .seal {
-  position: absolute; z-index: 5; left: 50%; top: 50%; width: 118px; height: 118px; translate: -50% -50%;
+  position: absolute; z-index: 5; left: 50%; top: 50%; width: 128px; height: 128px; translate: -50% -50%;
   padding: 0; border: 0; background: none; border-radius: 50%;
-  filter: drop-shadow(0 3px 3px rgba(20, 8, 10, .5)) drop-shadow(0 10px 16px rgba(10, 15, 8, .4));
+  filter: drop-shadow(0 2px 2px rgba(30, 14, 16, .45)) drop-shadow(0 8px 14px rgba(25, 30, 18, .35));
   animation: sealBreath 3.4s ease-in-out infinite;
 }
-.seal svg { width: 100%; height: 100%; display: block; overflow: visible; }
-.seal-mono text { font-family: var(--serif); font-weight: 600; font-size: 44px; text-anchor: middle; letter-spacing: 0; }
+.seal img { width: 100%; height: 100%; display: block; }
 @keyframes sealBreath { 50% { scale: 1.035; } }
 .intro-hint {
   position: absolute; z-index: 6; left: 0; right: 0; bottom: calc(var(--vh) * 4.5 + env(safe-area-inset-bottom));
-  margin: 0; text-align: center; color: #dccaa3;
+  margin: 0; text-align: center; color: #f1e6cc; text-shadow: 0 1px 2px rgba(40, 48, 30, .55);
   font-size: .68rem; letter-spacing: .36em; text-transform: uppercase; font-weight: 600;
   animation: hint 2.6s ease-in-out infinite;
 }
