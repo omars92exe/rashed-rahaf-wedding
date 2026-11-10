@@ -215,6 +215,82 @@ setInterval(tick, 1000);
   requestAnimationFrame(frame);
 })();
 
+/* ---------- Satin ribbon ----------
+   Each half is a canvas. The ribbon ripples very slightly; satin catches the light where its surface
+   tilts toward it, so a soft highlight drifts across the width as the ripples pass. A faint lengthwise
+   weave and darker selvedges keep it reading as fabric, and it casts a soft shadow on the paper. */
+function satinRibbon() {
+  const halves = [$('#satinL canvas'), $('#satinR canvas')];
+  if (!halves[0]) return;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const BAND = 12;                                   // half the ribbon width, css px
+  let cw = 0, ch = 0, weave = null, imgs = [];
+  function size() {
+    const r = halves[0].getBoundingClientRect();
+    cw = Math.max(1, Math.round(r.width * dpr)); ch = Math.max(1, Math.round(r.height * dpr));
+    halves.forEach(c => { c.width = cw; c.height = ch; });
+    imgs = halves.map(c => c.getContext('2d').createImageData(cw, ch));
+    // lengthwise satin streaks: a value per row, drifting slowly along the ribbon
+    weave = new Float32Array(ch * 3);
+    for (let i = 0; i < weave.length; i++) weave[i] = Math.random() * 2 - 1;
+    for (let k = 0; k < 2; k++) for (let i = 1; i < weave.length - 1; i++) weave[i] = (weave[i - 1] + weave[i] * 2 + weave[i + 1]) / 4;
+  }
+  const C = [232, 216, 184];                         // champagne silk
+  function draw(t) {
+    const mid = ch / 2, band = BAND * dpr;
+    halves.forEach((c, hi) => {
+      const img = imgs[hi], d = img.data;
+      d.fill(0);
+      for (let x = 0; x < cw; x++) {
+        const gx = (x + hi * cw) / dpr;              // the two halves share one ribbon
+        const y0 = 1.3 * Math.sin(gx * 0.019 + t * 0.8) + 0.7 * Math.sin(gx * 0.047 - t * 1.25);
+        const slope = 1.3 * 0.019 * Math.cos(gx * 0.019 + t * 0.8) + 0.7 * 0.047 * Math.cos(gx * 0.047 - t * 1.25);
+        const half = band * (1 + 0.035 * Math.sin(gx * 0.013 + t * 0.6));
+        const cy = mid + y0 * dpr;
+        const hiV = 0.18 - slope * 9 + 0.32 * Math.sin(gx * 0.0085 - t * 0.55);   // where the sheen sits across the width
+        const top = Math.floor(cy - half - 1), bot = Math.ceil(cy + half + 1);
+        // shadow on the paper, a little below the ribbon
+        for (let y = Math.max(0, top); y < Math.min(ch, bot + 12 * dpr); y++) {
+          const dd = (y - (cy + half * 0.55)) / dpr;
+          const a = 0.34 * Math.exp(-(dd * dd) / 26);
+          const i = (y * cw + x) * 4;
+          d[i] = 30; d[i + 1] = 36; d[i + 2] = 22; d[i + 3] = a * 255;
+        }
+        for (let y = Math.max(0, top); y <= Math.min(ch - 1, bot); y++) {
+          const v = (y - cy) / half;                 // -1 top edge .. 1 bottom edge
+          const cover = Math.min(1, Math.max(0, (1 - Math.abs(v)) * half + 0.5));
+          if (cover <= 0) continue;
+          const tilt = v * 0.45 + slope * 2.2;       // gentle cupping plus the ripple
+          let b = 0.80 - tilt * 0.22;
+          const sv = (v - hiV) / 0.42;
+          const sheen = Math.exp(-sv * sv);
+          b += sheen * 0.30;
+          b *= 1 + 0.05 * weave[(y + Math.floor(gx * 0.02)) % weave.length];
+          if (Math.abs(v) > 0.84) b *= 0.86;          // woven selvedge
+          if (Math.abs(v) > 0.84 && Math.abs(v) < 0.9) b *= 1.08;
+          const i = (y * cw + x) * 4;
+          const sa = d[i + 3] / 255, ra = cover;
+          const R = Math.min(255, C[0] * b + sheen * 26), G = Math.min(255, C[1] * b + sheen * 24), B = Math.min(255, C[2] * b + sheen * 18);
+          // ribbon over its own shadow
+          d[i] = R * ra + d[i] * (1 - ra); d[i + 1] = G * ra + d[i + 1] * (1 - ra); d[i + 2] = B * ra + d[i + 2] * (1 - ra);
+          d[i + 3] = 255 * (ra + sa * (1 - ra));
+        }
+      }
+      c.getContext('2d').putImageData(img, 0, 0);
+    });
+  }
+  size();
+  addEventListener('resize', size);
+  if (reduceMotion) { draw(0); return; }
+  const t0 = performance.now();
+  (function frame(now) {
+    if (!document.getElementById('intro')) return; // stops once the envelope is gone
+    draw((now - t0) / 1000);
+    requestAnimationFrame(frame);
+  })(t0);
+}
+satinRibbon();
+
 /* ---------- Opening the envelope: tap the seal, or scroll/swipe ----------
    The seal lifts, the satin ribbon parts, the flap opens onto the site itself and the envelope slides away. */
 const intro = $('#intro');

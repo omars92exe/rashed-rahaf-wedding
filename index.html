@@ -10,7 +10,8 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#f6f1e6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%235c6b45'/%3E%3Ctext x='32' y='41' font-size='22' text-anchor='middle' fill='%23f6f1e6' font-family='serif'%3ER%26R%3C/text%3E%3C/svg%3E">
-<link rel="preload" as="image" href="assets/env-ivory.jpg">
+<link rel="preload" as="image" href="assets/env-pocket.jpg">
+<link rel="preload" as="image" href="assets/seal.png">
 <link rel="preload" as="image" href="assets/hero-palm.jpg">
 <link rel="preload" as="image" href="assets/calli-names.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,16 +25,6 @@
   <defs>
     <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
     <!-- soft-burgundy wax: poured edge + glossy relief -->
-    <filter id="wax" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="21" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G" result="shape"/>
-      <feGaussianBlur in="shape" stdDeviation="2" result="b"/>
-      <feSpecularLighting in="b" surfaceScale="4" specularConstant=".8" specularExponent="26" lighting-color="#fff2f0" result="spec">
-        <feDistantLight azimuth="225" elevation="50"/>
-      </feSpecularLighting>
-      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
-      <feComposite in="shape" in2="specIn" operator="arithmetic" k1="0" k2="1" k3=".42" k4="0"/>
-    </filter>
   </defs>
 </svg>
 
@@ -159,25 +150,13 @@
     </div>
     <div class="env-flap-shadow" id="envFlapShadow"></div>
     <div class="env-flap" id="envFlap">
-      <div class="env-flap-face front">
-        <svg class="env-flap-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M5 3 L50 92 L95 3" vector-effect="non-scaling-stroke"/></svg>
-      </div>
+      <div class="env-flap-face front"></div>
       <div class="env-flap-face back"></div>
     </div>
-    <div class="satin satin-l" id="satinL"></div>
-    <div class="satin satin-r" id="satinR"></div>
+    <div class="satin satin-l" id="satinL"><canvas></canvas></div>
+    <div class="satin satin-r" id="satinR"><canvas></canvas></div>
     <button class="seal" id="seal" type="button" aria-label="Open the invitation">
-      <svg viewBox="0 0 120 120" aria-hidden="true">
-        <g filter="url(#wax)"><circle cx="60" cy="60" r="44" fill="#77283a"/></g>
-        <circle cx="60" cy="60" r="33" fill="none" stroke="#4c1622" stroke-width="1.2" opacity=".6"/>
-        <circle cx="60" cy="60" r="35.2" fill="none" stroke="#f3d2d8" stroke-width=".6" opacity=".22"/>
-        <!-- interlocking RR monogram, pressed into the wax -->
-        <g class="seal-mono">
-          <text x="54.4" y="70.6" fill="#f6dbe0" opacity=".28">R</text><text x="67.4" y="77.6" fill="#f6dbe0" opacity=".28">R</text>
-          <text x="52.6" y="68.8" fill="#3d0f1a" opacity=".6">R</text><text x="65.6" y="75.8" fill="#3d0f1a" opacity=".6">R</text>
-          <text x="53.5" y="69.7" fill="#62202f">R</text><text x="66.5" y="76.7" fill="#62202f">R</text>
-        </g>
-      </svg>
+      <img src="assets/seal.png" alt="" width="300" height="300">
     </button>
     <p class="intro-hint" id="introHint">Tap the seal to open</p>
   </div>
