@@ -64,7 +64,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 
 /* ================= ARABIC CALLIGRAPHY (راشد ورهف) =================
    Two transparent layers used as masks, so they take any colour and the و can animate on its own. */
-.calli { position: relative; aspect-ratio: 1203 / 692; }
+.calli { position: relative; aspect-ratio: 971 / 807; }
 .calli i { position: absolute; inset: 0; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
 .calli-names { background: var(--olive-deep); -webkit-mask-image: url("assets/calli-names.png") !important; mask-image: url("assets/calli-names.png") !important; }
 .calli-waw { background: var(--burgundy); -webkit-mask-image: url("assets/calli-waw.png") !important; mask-image: url("assets/calli-waw.png") !important; }
@@ -72,30 +72,31 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 /* ================= THE ENVELOPE ================= */
 .intro { position: fixed; inset: 0; z-index: 60; display: flex; justify-content: center; pointer-events: none; }
 .env { position: relative; width: var(--col); height: 100%; perspective: 1600px; pointer-events: auto; }
-.env-pocket, .env-flap-face { background: #f1ebde url("assets/env-ivory.jpg") center / 520px; }
+/* deep green paper: the ivory paper texture multiplied over a forest green */
+.env-pocket, .env-flap-face { background: #3f5034 url("assets/env-ivory.jpg") center / 520px; background-blend-mode: multiply; }
 .env-pocket {
   position: absolute; inset: 0; z-index: 2;
   clip-path: polygon(0 0, 50% 49%, 100% 0, 100% 100%, 0 100%);
-  box-shadow: inset 0 0 90px rgba(110, 95, 60, .13);
+  box-shadow: inset 0 0 110px rgba(10, 22, 8, .38);
   will-change: transform;
 }
 .env-pocket::before { /* the two side folds, pressed into the paper */
   content: ""; position: absolute; inset: 0;
   background:
-    linear-gradient(to top left, transparent calc(50% - 1.5px), rgba(255, 255, 255, .55) calc(50% - .5px), rgba(120, 100, 70, .2) calc(50% + .5px), transparent calc(50% + 2px)) left bottom / 50% 51% no-repeat,
-    linear-gradient(to top right, transparent calc(50% - 1.5px), rgba(255, 255, 255, .55) calc(50% - .5px), rgba(120, 100, 70, .2) calc(50% + .5px), transparent calc(50% + 2px)) right bottom / 50% 51% no-repeat;
+    linear-gradient(to top left, transparent calc(50% - 1.5px), rgba(255, 255, 255, .13) calc(50% - .5px), rgba(0, 0, 0, .28) calc(50% + .5px), transparent calc(50% + 2px)) left bottom / 50% 51% no-repeat,
+    linear-gradient(to top right, transparent calc(50% - 1.5px), rgba(255, 255, 255, .13) calc(50% - .5px), rgba(0, 0, 0, .28) calc(50% + .5px), transparent calc(50% + 2px)) right bottom / 50% 51% no-repeat;
 }
-.env-calli { position: absolute; left: 50%; top: 59%; width: 66%; translate: -50% 0; }
-.env-calli i { mix-blend-mode: multiply; }
-.env-calli .calli-names { background: var(--olive); }
+.env-calli { position: absolute; left: 50%; top: 57%; width: 50%; translate: -50% 0; }
+.env-calli .calli-names { background: linear-gradient(160deg, #f1e4c6, #cfb88c 55%, #e8d8b4); }
+.env-calli .calli-waw { background: linear-gradient(160deg, #cf8e9a, #a4566a); }
 .env-date {
-  position: absolute; left: 0; right: 0; top: calc(59% + var(--col) * .66 * 692 / 1203 + 10px); margin: 0; text-align: center;
-  font-size: .86rem; font-weight: 500; letter-spacing: .42em; color: var(--olive-deep);
+  position: absolute; left: 0; right: 0; top: calc(57% + var(--col) * .5 * 807 / 971 + 12px); margin: 0; text-align: center;
+  font-size: .86rem; font-weight: 500; letter-spacing: .42em; color: #dccaa3;
 }
 .env-flap-shadow { /* the flap's shadow on the pocket: a static, blurred triangle (cheaper and steadier than drop-shadow) */
   position: absolute; left: -1%; right: -1%; top: 0; height: 52.6%; z-index: 2;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-  background: linear-gradient(rgba(70, 58, 36, 0) 40%, rgba(70, 58, 36, .26));
+  background: linear-gradient(rgba(5, 14, 4, 0) 40%, rgba(5, 14, 4, .5));
   filter: blur(9px);
 }
 .env-flap {
@@ -103,22 +104,22 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   transform-origin: 50% 0; transform-style: preserve-3d; will-change: transform;
 }
 .env-flap-face { position: absolute; inset: 0; clip-path: polygon(0 0, 100% 0, 50% 100%); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.env-flap-face.front { background-image: linear-gradient(rgba(255, 255, 255, .25), rgba(120, 100, 70, .08)), url("assets/env-ivory.jpg"); background-size: auto, 520px; }
-.env-flap-face.back { transform: rotateX(180deg); background: var(--sage) url("assets/linen-sage.jpg") center / 160px; }
+.env-flap-face.front { background-image: linear-gradient(rgba(255, 255, 255, .07), rgba(0, 0, 0, .1)), url("assets/env-ivory.jpg"); background-size: auto, 520px; }
+.env-flap-face.back { transform: rotateX(180deg); background: #efe6d2 url("assets/env-ivory.jpg") center / 520px; background-blend-mode: normal; }
 .env-flap-line { position: absolute; inset: 0; width: 100%; height: 100%; }
-.env-flap-line path { fill: none; stroke: var(--olive); stroke-opacity: .28; stroke-width: 1; }
+.env-flap-line path { fill: none; stroke: #d8c49a; stroke-opacity: .45; stroke-width: 1; }
 
-/* satin ribbon: smooth bands of light across a soft sage silk */
+/* satin ribbon: smooth bands of light across a champagne-beige silk */
 .satin {
   position: absolute; top: calc(50% - 15px); height: 30px; width: 50%; z-index: 4; will-change: transform;
   background:
-    linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, .38) 46%, rgba(255, 255, 255, .06) 54%, transparent 66%) 0 0 / 260% 100% no-repeat,
-    linear-gradient(180deg, #5f6c4a 0%, #8b9872 14%, #b7c2a0 30%, #95a17c 46%, #77845f 62%, #9eaa87 80%, #5b6846 100%);
-  box-shadow: 0 2px 3px rgba(40, 45, 25, .3), 0 8px 14px rgba(40, 45, 25, .16);
+    linear-gradient(100deg, transparent 30%, rgba(255, 252, 240, .5) 46%, rgba(255, 255, 255, .08) 54%, transparent 66%) 0 0 / 260% 100% no-repeat,
+    linear-gradient(180deg, #a08a63 0%, #d2bf98 14%, #f0e4c8 30%, #d9c7a2 46%, #bba67e 62%, #e0d0ad 80%, #9a845d 100%);
+  box-shadow: 0 2px 3px rgba(5, 12, 4, .45), 0 8px 16px rgba(5, 12, 4, .3);
   animation: sheen 5s ease-in-out infinite;
 }
 .satin::before, .satin::after { content: ""; position: absolute; left: 0; right: 0; height: 1px; background: rgba(255, 255, 255, .35); }
-.satin::before { top: 3px; } .satin::after { bottom: 3px; background: rgba(40, 45, 25, .25); }
+.satin::before { top: 3px; background: rgba(255, 250, 235, .55); } .satin::after { bottom: 3px; background: rgba(90, 70, 40, .3); }
 .satin-l { left: 0; } .satin-r { right: 0; animation-delay: -2.5s; }
 @keyframes sheen { 0% { background-position: 110% 0, 0 0; } 100% { background-position: -110% 0, 0 0; } }
 
@@ -126,7 +127,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .seal {
   position: absolute; z-index: 5; left: 50%; top: 50%; width: 118px; height: 118px; translate: -50% -50%;
   padding: 0; border: 0; background: none; border-radius: 50%;
-  filter: drop-shadow(0 3px 3px rgba(60, 20, 30, .35)) drop-shadow(0 10px 14px rgba(60, 30, 30, .22));
+  filter: drop-shadow(0 3px 3px rgba(20, 8, 10, .5)) drop-shadow(0 10px 16px rgba(10, 15, 8, .4));
   animation: sealBreath 3.4s ease-in-out infinite;
 }
 .seal svg { width: 100%; height: 100%; display: block; overflow: visible; }
@@ -134,7 +135,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 @keyframes sealBreath { 50% { scale: 1.035; } }
 .intro-hint {
   position: absolute; z-index: 6; left: 0; right: 0; bottom: calc(var(--vh) * 4.5 + env(safe-area-inset-bottom));
-  margin: 0; text-align: center; color: var(--olive);
+  margin: 0; text-align: center; color: #dccaa3;
   font-size: .68rem; letter-spacing: .36em; text-transform: uppercase; font-weight: 600;
   animation: hint 2.6s ease-in-out infinite;
 }
@@ -159,7 +160,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   filter: drop-shadow(0 12px 24px rgba(30, 50, 55, .3));
 }
 .hero-dear { margin: 0; font-family: var(--script); font-size: 1.5rem; line-height: 1.2; color: var(--burgundy); }
-.hero-calli { width: 96%; margin: 0 auto; }
+.hero-calli { width: 66%; margin: 0 auto; }
 .hero-names { margin: .1rem 0 0; font-weight: 500; font-size: .9rem; letter-spacing: .32em; text-transform: uppercase; color: var(--olive); }
 .hero-names em { font-family: var(--script); font-style: normal; text-transform: none; letter-spacing: 0; font-size: 1.5em; color: var(--burgundy); margin: 0 .1em; }
 .hero-invite { margin: .7rem 0 0; font-size: .62rem !important; color: var(--ink); }
@@ -344,6 +345,6 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .attire-k { margin: 6px 0 0; color: var(--sage); }
 .attire-t { margin: .3rem 0 0; font-size: 1.45rem; line-height: 1.25; color: var(--olive); }
 .attire-card .swatches { margin: 4px 0 14px; }
-.closing-calli { width: 78%; margin: 26px auto 0; }
+.closing-calli { width: 56%; margin: 26px auto 0; }
 .closing .closing-names { margin: .2rem 0 0; font-size: .95rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--olive); }
 .closing .closing-names em { font-family: var(--script); font-style: normal; text-transform: none; letter-spacing: 0; font-size: 1.5em; color: var(--burgundy); }

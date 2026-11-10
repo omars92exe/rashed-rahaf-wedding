@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.." || exit 1
 for layer in names waw; do
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
     --headless=new --disable-gpu --hide-scrollbars --default-background-color=00000000 \
-    --force-device-scale-factor=4 --window-size=340,260 \
+    --force-device-scale-factor=4 --window-size=360,280 \
     --screenshot="$PWD/assets/calli-$layer.png" \
     "file://$PWD/tools/calligraphy.html?layer=$layer"
 done

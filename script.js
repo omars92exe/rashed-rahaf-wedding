@@ -117,7 +117,7 @@ function buildOrnate() {
 /* ---------- Flower wreath around the gift note ---------- */
 function buildWreath() {
   const wreath = $('#wreath');
-  const kinds = ['olive', 'jasmine', 'rose-white', 'olive', 'rose-blush', 'jasmine', 'olive', 'bouquet'];
+  const kinds = ['olive', 'jasmine', 'rose-white', 'olive', 'bouquet-burgundy', 'jasmine', 'olive', 'bouquet'];
   const N = 16, R = 134;
   for (let k = 0; k < N; k++) {
     const a = (k / N) * Math.PI * 2 - Math.PI / 2;
