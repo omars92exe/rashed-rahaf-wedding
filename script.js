@@ -322,7 +322,9 @@ if (!hasGsap || reduceMotion) {
   // the ornate frame draws itself in
   const drawFrame = () => {
     const paths = $$('.ornate-svg .draw');
-    gsap.fromTo(paths, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.2, stagger: 0.04, ease: 'power2.inOut' });
+    // once drawn, drop the dash trick: browsers can mis-repaint pathLength dashes while scrolling and blank the lines
+    gsap.fromTo(paths, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.2, stagger: 0.04, ease: 'power2.inOut',
+      onComplete: () => gsap.set($$('.ornate-svg .draw'), { clearProps: 'strokeDasharray,strokeDashoffset' }) });
     gsap.fromTo('.ornate-svg use, .ornate-svg circle', { opacity: 0, scale: 0, transformOrigin: 'center', transformBox: 'fill-box' },
       { opacity: 1, scale: 1, duration: 0.8, stagger: 0.03, delay: 1, ease: 'back.out(2)' });
   };
@@ -347,8 +349,20 @@ if (!hasGsap || reduceMotion) {
   // the day marker gently beats
   gsap.to('.days .today', { scale: 1.08, duration: 0.8, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 }
-let lastW = innerWidth;
-addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; buildOrnate(); } });
+// keep the frame fitted whenever its box changes size (fonts loading, text, rotation); a rebuilt frame is fully visible
+if ('ResizeObserver' in window) {
+  let lastBox = '', raf = 0;
+  new ResizeObserver(([e]) => {
+    const box = Math.round(e.contentRect.width) + 'x' + Math.round(e.contentRect.height);
+    if (box === lastBox) return;
+    lastBox = box;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(buildOrnate);
+  }).observe($('.ornate'));
+} else {
+  let lastW = innerWidth;
+  addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; buildOrnate(); } });
+}
 
 /* ---------- Bank details ---------- */
 const bankSheet = $('#bankSheet');
