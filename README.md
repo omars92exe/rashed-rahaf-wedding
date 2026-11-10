@@ -3,7 +3,7 @@
 A phone-first invitation in sage, ivory and soft burgundy, structured like The Digital Yes "Fresco" demo but with its own artwork.
 
 1. **Envelope** — sage card blind-embossed with florals (`tools/envelope.py`), a beige wax seal with an interlocking RR in relief (`tools/seal.py`). Tap the seal or scroll: the seal lifts, the flap opens onto the site and the envelope slides away.
-2. **Hero** — a torn ivory card over Winslow Homer's palm and sea: the calligraphy is written in, then names, date, 6 PM, Secret Garden at W Dubai – The Palm. A personal link (`?to=Name`) adds "Dear Name," at the top.
+2. **Hero** — a torn ivory card over Winslow Homer's palm and sea: the calligraphy is written in, then names, date, 5 PM, Secret Garden at W Dubai – The Palm. A personal link (`?to=Name`) adds "Dear Name," at the top.
 3. **Countdown** in a sage linen frame with flowers that bloom in.
 4. **A Note from Us**, then a painted sea band that drifts like the tide.
 5. **The Celebration** — olive section with an ornate frame that draws itself, venue, time and map.
@@ -28,8 +28,9 @@ The Arabic names are set in Diwan Thuluth (a macOS font): `tools/make-calligraph
 
 ## Link preview (WhatsApp)
 
-`assets/og-image.jpg` is the picture shown when the link is shared. Built by `tools/og/make-og.sh` from the couple's photo
-(put it at `tools/og/couple.png`; it is lifted out with macOS subject lifting and kept out of git), `make-backdrop.py` and `og.html`.
+`assets/og-image.jpg` is the picture shown when the link is shared: the couple from their watercolour sketch on ivory
+linen with the site's florals and the names. Built by `tools/og/make-og.sh` from the sketch (put it at
+`tools/og/sketch.png`; it is lifted out with macOS subject lifting and kept out of git), `make-backdrop.py` and `og.html`.
 The tags in `index.html` point at `https://rashedandrahaf.wedding/assets/og-image.jpg` (WhatsApp needs full addresses).
 
 ## Files

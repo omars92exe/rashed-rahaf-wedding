@@ -14,3 +14,5 @@ tools/og/og@2x.png
 !.dev.vars.example
 .env*
 !.env.example
+tools/og/sketch.png
+tools/og/sketch-mask.png
