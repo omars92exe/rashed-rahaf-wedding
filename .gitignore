@@ -2,3 +2,8 @@
 .claude/
 node_modules/
 tools/out/
+# share-image working files (the source photo stays off the public site)
+tools/og/couple.png
+tools/og/couple-mask.png
+tools/og/backdrop.png
+tools/og/og@2x.png
