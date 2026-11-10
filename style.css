@@ -236,7 +236,8 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 
 /* ---------- gift ---------- */
 .wreath { position: relative; width: 320px; height: 320px; margin: 28px auto 0; display: grid; place-items: center; }
-.wreath img { position: absolute; left: 50%; top: 50%; pointer-events: none; filter: drop-shadow(0 3px 5px rgba(40, 50, 30, .22)); }
+.wreath-spot { position: absolute; width: 0; height: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.wreath-spot img { flex: none; max-width: none; pointer-events: none; filter: drop-shadow(0 3px 5px rgba(40, 50, 30, .22)); }
 .wreath-text { position: relative; max-width: 10.5em; margin: 0; font-size: 1.05rem; line-height: 1.55; }
 
 /* ---------- status note (copy button) ---------- */

@@ -148,8 +148,16 @@ function buildWreath() {
     img.className = 'bloom';
     const size = kinds[k % kinds.length] === 'olive' ? 74 : 60;
     img.style.width = `${size}px`;
-    img.style.transform = `translate(-50%, -50%) translate(${Math.cos(a) * R}px, ${Math.sin(a) * R}px) rotate(${(a * 180) / Math.PI + 90 + rand(-12, 12)}deg)`;
-    wreath.appendChild(img);
+    img.style.transform = `rotate(${((a * 180) / Math.PI + 90 + rand(-12, 12)).toFixed(1)}deg)`;
+    // each flower sits in a zero-size spot on the circle that centres it with flexbox. No percentage
+    // transforms: the bloom animation rewrites transforms, and reading one before the image has loaded
+    // (size 0) used to throw the flowers off the circle on phones
+    const spot = document.createElement('span');
+    spot.className = 'wreath-spot';
+    spot.style.left = `calc(50% + ${(Math.cos(a) * R).toFixed(1)}px)`;
+    spot.style.top = `calc(50% + ${(Math.sin(a) * R).toFixed(1)}px)`;
+    spot.appendChild(img);
+    wreath.appendChild(spot);
   }
 }
 buildWreath();
