@@ -253,7 +253,6 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .ca-f3 { width: 46%; left: -20%; top: 4%; rotate: -30deg; transform-origin: 0 0; }
 .ca-f4 { width: 40%; right: -16%; top: 16%; rotate: 20deg; transform-origin: 100% 0; }
 .closing-date { margin: .8rem 0 0; letter-spacing: .14em; }
-.made { margin: 2.4rem 0 0; font-size: .9rem; font-style: italic; color: var(--sage); }
 
 /* ---------- bank sheet ---------- */
 .sheet {
