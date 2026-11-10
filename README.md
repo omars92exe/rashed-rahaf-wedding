@@ -30,8 +30,7 @@ The Arabic names are set in Diwan Thuluth (a macOS font): `tools/make-calligraph
 
 `assets/og-image.jpg` is the picture shown when the link is shared. Built by `tools/og/make-og.sh` from the couple's photo
 (put it at `tools/og/couple.png`; it is lifted out with macOS subject lifting and kept out of git), `make-backdrop.py` and `og.html`.
-After the domain is set up, change the two `og:image` / `twitter:image` URLs in `index.html` to the full
-`https://<your-domain>/assets/og-image.jpg`, because WhatsApp ignores relative addresses.
+The tags in `index.html` point at `https://rashedandrahaf.wedding/assets/og-image.jpg` (WhatsApp needs full addresses).
 
 ## Files
 
