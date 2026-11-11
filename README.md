@@ -8,7 +8,7 @@ A phone-first invitation in sage, ivory and soft burgundy, structured like The D
 4. **A Note from Us**, then a painted sea band that drifts like the tide.
 5. **The Celebration** — olive section with an ornate frame that draws itself, venue, time and map.
 6. **The Evening** — the night's program as a timeline.
-7. **Dress Code** — the couple under a floral arch, gentlemen in a black suit and black bow tie.
+7. **Dress Code** — the couple under a floral arch, gentlemen in a formal suit.
 8. **Wedding Gift** — a flower wreath, bank details sheet with copy buttons, optional online gift link.
 9. **Closing** — arched palm painting, the calligraphy and a PDF download of the invitation.
 
