@@ -235,14 +235,6 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .hem { transform-origin: 50px 100px; animation: hem 3.2s ease-in-out infinite alternate; }
 @keyframes hem { from { transform: skewX(-2deg); } to { transform: skewX(2.5deg); } }
 
-/* ---------- gift ---------- */
-.wreath { position: relative; width: 320px; height: 320px; margin: 28px auto 0; display: grid; place-items: center; }
-.wreath-spot { position: absolute; width: 0; height: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-.wreath-spot img { flex: none; max-width: none; pointer-events: none; filter: drop-shadow(0 3px 5px rgba(40, 50, 30, .22)); }
-.wreath-text { position: relative; max-width: 10.5em; margin: 0; font-size: 1.05rem; line-height: 1.55; }
-
-/* ---------- status note (copy button) ---------- */
-.form-note { min-height: 1.4em; margin: .9rem 0 0; text-align: center; font-style: italic; color: var(--burgundy); }
 
 /* ---------- closing ---------- */
 .closing { position: relative; padding: 70px 24px calc(60px + env(safe-area-inset-bottom)); text-align: center; }
@@ -263,38 +255,6 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .welcome-sub { margin: .5rem 0 0; font-size: .66rem !important; color: var(--sage); }
 .welcome-confirm { margin: 1.6rem auto 0; max-width: 18em; font-size: 1.05rem; line-height: 1.5; color: var(--olive); }
 
-/* ---------- bank sheet ---------- */
-.sheet {
-  width: min(100vw, 480px); max-width: 100vw; margin: auto auto 0; padding: 30px 24px calc(28px + env(safe-area-inset-bottom));
-  border: 0; border-radius: 22px 22px 0 0; background: var(--ivory) url("assets/paper-ivory.jpg") center / 600px; color: var(--ink);
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, .25);
-}
-.sheet[open] { animation: sheetUp .45s cubic-bezier(.2, .8, .2, 1); }
-@keyframes sheetUp { from { transform: translateY(100%); } }
-.sheet::backdrop { background: rgba(40, 45, 30, .45); backdrop-filter: blur(3px); }
-.sheet h3 { margin: 0; font-weight: 400; font-size: 2rem; color: var(--olive); text-align: center; }
-.sheet-sub { margin: .2rem 0 1.4rem; text-align: center; font-style: italic; color: var(--sage); }
-.sheet-close { position: absolute; top: 10px; right: 12px; width: 42px; height: 42px; border: 0; background: none; font-size: 1.8rem; color: var(--sage); }
-.bank { margin: 0; }
-.bank div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: .9rem 0; border-top: 1px solid rgba(92, 107, 69, .2); }
-.bank dt { font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: var(--sage); }
-.bank dd { margin: .15rem 0 0; font-size: 1.05rem; word-break: break-all; }
-.bank button {
-  position: relative; overflow: hidden; flex: none; min-width: 7.4em; padding: .5rem .8rem;
-  border: 1px solid var(--olive); background: none; color: var(--olive);
-  font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; -webkit-tap-highlight-color: transparent;
-}
-/* copied: olive ink sweeps in from the left, "Copy" lifts away and "Copied" rises in, then it all eases back */
-.bank button::before {
-  content: ""; position: absolute; inset: 0; background: var(--olive);
-  transform: scaleX(0); transform-origin: 0 50%; transition: transform .55s cubic-bezier(.65, 0, .35, 1);
-}
-.bank button span { position: relative; display: block; transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .35s ease, color .35s ease; }
-.bank button .cp-b { position: absolute; left: 0; right: 0; top: 50%; color: var(--ivory); opacity: 0; transform: translateY(60%); }
-.bank button.copied::before { transform: scaleX(1); }
-.bank button.copied .cp-a { opacity: 0; transform: translateY(-110%); }
-.bank button.copied .cp-b { opacity: 1; transform: translateY(-50%); transition-delay: .12s; }
-@media (prefers-reduced-motion: reduce) { .bank button::before, .bank button span { transition: none; } }
 
 /* no animation library / reduced motion: show everything */
 .static .rv, .static .bloom, .static .ch, .static .tl-item { opacity: 1 !important; transform: none !important; filter: none !important; }

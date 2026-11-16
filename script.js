@@ -5,17 +5,6 @@ const CONFIG = {
   venueShort: 'W Dubai – The Palm, Dubai',
   venuePlace: 'West Crescent · Palm Jumeirah · Dubai',
   mapsUrl: 'https://maps.app.goo.gl/5YmUtDvq4DDznqqF9',
-  // Shown under "View bank details", each with a copy button.
-  bank: [
-    ['Account name', '[removed]'],
-    ['Bank', '[removed]'],
-    ['Account number', '[removed]'],
-    ['IBAN', '[removed]'],
-    ['SWIFT', '[removed]'],
-    ['Currency', 'AED'],
-  ],
-  // Optional online gift / payment page (a link from the couple's bank or a gift registry). '' hides the button.
-  giftLink: '',
 };
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -31,7 +20,6 @@ window.scrollTo(0, 0);
 $$('[data-venue-short]').forEach(el => { el.textContent = CONFIG.venueShort; el.innerHTML = el.innerHTML.replace(', ', ',<br>'); });
 $$('[data-venue-place]').forEach(el => (el.textContent = CONFIG.venuePlace));
 $('#mapLink').href = CONFIG.mapsUrl;
-if (CONFIG.giftLink) { $('#giftLink').href = CONFIG.giftLink; $('#giftLink').hidden = false; }
 
 // A personal invitation: ?to=Name greets the guest by name
 const guestName = (new URLSearchParams(location.search).get('to') || '').trim().slice(0, 60);
@@ -135,32 +123,6 @@ function paintOrnate() {
   });
 }
 
-/* ---------- Flower wreath around the gift note ---------- */
-function buildWreath() {
-  const wreath = $('#wreath');
-  const kinds = ['olive', 'jasmine', 'rose-white', 'olive', 'bouquet-burgundy', 'jasmine', 'olive', 'bouquet'];
-  const N = 16, R = 134;
-  for (let k = 0; k < N; k++) {
-    const a = (k / N) * Math.PI * 2 - Math.PI / 2;
-    const img = new Image();
-    img.src = `assets/${kinds[k % kinds.length]}.webp`;
-    img.alt = '';
-    img.className = 'bloom';
-    const size = kinds[k % kinds.length] === 'olive' ? 74 : 60;
-    img.style.width = `${size}px`;
-    img.style.transform = `rotate(${((a * 180) / Math.PI + 90 + rand(-12, 12)).toFixed(1)}deg)`;
-    // each flower sits in a zero-size spot on the circle that centres it with flexbox. No percentage
-    // transforms: the bloom animation rewrites transforms, and reading one before the image has loaded
-    // (size 0) used to throw the flowers off the circle on phones
-    const spot = document.createElement('span');
-    spot.className = 'wreath-spot';
-    spot.style.left = `calc(50% + ${(Math.cos(a) * R).toFixed(1)}px)`;
-    spot.style.top = `calc(50% + ${(Math.sin(a) * R).toFixed(1)}px)`;
-    spot.appendChild(img);
-    wreath.appendChild(spot);
-  }
-}
-buildWreath();
 
 /* ---------- Countdown ---------- */
 const target = new Date(CONFIG.date).getTime();
@@ -325,7 +287,7 @@ if (!hasGsap || reduceMotion) {
   gsap.set('.rv', { opacity: 0 });
 
   // flowers bloom into place around frames
-  $$('.cd-frame, .dress-art, .wreath, .closing-arch').forEach(box => {
+  $$('.cd-frame, .dress-art, .closing-arch').forEach(box => {
     gsap.from($$('.bloom', box), {
       opacity: 0, scale: 0.5, rotation: '-=25', duration: 1.4, stagger: 0.09, ease: 'back.out(1.6)',
       scrollTrigger: { trigger: box, start: 'top 80%', once: true },
@@ -388,45 +350,3 @@ if ('ResizeObserver' in window) {
   let lastW = innerWidth;
   addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; buildOrnate(); } });
 }
-
-/* ---------- Bank details ---------- */
-const bankSheet = $('#bankSheet');
-$('#bankList').innerHTML = CONFIG.bank.map(([k, v]) =>
-  `<div><span><dt>${k}</dt><dd>${v}</dd></span><button type="button" data-copy="${k === 'IBAN' ? v.replace(/\s/g, '') : v}" aria-label="Copy ${k}"><span class="cp-a">Copy</span><span class="cp-b" aria-hidden="true">Copied</span></button></div>`).join('');
-$('#openBank').addEventListener('click', () => { $('#copyNote').textContent = ''; bankSheet.showModal(); });
-// Copy that works on iPhone Safari and in in-app browsers (WhatsApp, Instagram), where the Clipboard API can
-// report success without copying. The selection trick runs first, inside the open dialog (a modal dialog makes
-// the rest of the page inert, so the helper field has to live in it), then the Clipboard API as a backup.
-function copyText(text) {
-  let ok = false;
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.setAttribute('readonly', '');
-  ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px;';
-  bankSheet.appendChild(ta);
-  ta.focus({ preventScroll: true });
-  ta.select();
-  ta.setSelectionRange(0, text.length);
-  try { ok = document.execCommand('copy'); } catch { ok = false; }
-  ta.remove();
-  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).catch(() => {});
-  return ok || !!(navigator.clipboard && window.isSecureContext);
-}
-bankSheet.addEventListener('click', e => {
-  if (e.target === bankSheet || e.target.closest('[data-close]')) return bankSheet.close();
-  const btn = e.target.closest('[data-copy]');
-  if (!btn) return;
-  const ok = copyText(btn.dataset.copy);
-  $$('[data-copy]', bankSheet).forEach(b => { if (b !== btn) b.classList.remove('copied'); });
-  $('#copyNote').textContent = '';
-  if (ok) {
-    // the button itself fills and says Copied (style.css), then eases back
-    btn.classList.add('copied');
-    clearTimeout(btn._t);
-    btn._t = setTimeout(() => btn.classList.remove('copied'), 2000);
-  } else {
-    // last resort: show the value selected so it can be copied by hand
-    $('#copyNote').textContent = btn.dataset.copy;
-    getSelection().selectAllChildren($('#copyNote'));
-  }
-});
